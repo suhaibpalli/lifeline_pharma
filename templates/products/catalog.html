@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Product Catalog - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Product Catalog</h1>
+        <p class="text-gray-600">Discover our wide range of medicines and health products</p>
+    </div>
+    
+    <!-- Search and Filters -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <form method="get" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <!-- Search -->
+                <div>
+                    {{ search_form.query.label_tag }}
+                    {{ search_form.query }}
+                </div>
+                
+                <!-- Category -->
+                <div>
+                    {{ search_form.category.label_tag }}
+                    {{ search_form.category }}
+                </div>
+                
+                <!-- Manufacturer -->
+                <div>
+                    {{ search_form.manufacturer.label_tag }}
+                    {{ search_form.manufacturer }}
+                </div>
+                
+                <!-- Price Range -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+                    <div class="flex space-x-2">
+                        {{ search_form.min_price }}
+                        {{ search_form.max_price }}
+                    </div>
+                </div>
+                
+                <!-- Sort -->
+                <div>
+                    {{ filter_form.sort.label_tag }}
+                    {{ filter_form.sort }}
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center">
+                        {{ search_form.in_stock }}
+                        <label for="{{ search_form.in_stock.id_for_label }}" class="ml-2 text-sm text-gray-900">
+                            In Stock Only
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="flex space-x-2">
+                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                        <i class="fas fa-search mr-2"></i>Search
+                    </button>
+                    <a href="{% url 'products:catalog' %}" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700">
+                        Clear
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Results Summary -->
+    <div class="flex items-center justify-between mb-6">
+        <div class="text-gray-600">
+            Showing {{ products|length }} of {{ total_products }} products
+        </div>
+        <div class="flex items-center space-x-4">
+            <span class="text-sm text-gray-600">View:</span>
+            <button class="p-2 text-gray-600 hover:text-blue-600" id="grid-view">
+                <i class="fas fa-th"></i>
+            </button>
+            <button class="p-2 text-gray-600 hover:text-blue-600" id="list-view">
+                <i class="fas fa-list"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Product Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6" id="product-grid">
+        {% for product in products %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <!-- Product Image -->
+                <div class="relative h-48 bg-gray-200 flex items-center justify-center">
+                    {% if product.primary_image %}
+                        <img src="data:image/jpeg;base64,{{ product.primary_image.image_data }}" 
+                             alt="{{ product.name }}" 
+                             class="w-full h-full object-cover">
+                    {% else %}
+                        <i class="fas fa-pills text-4xl text-gray-400"></i>
+                    {% endif %}
+                </div>
+                
+                <!-- Product Info -->
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ product.name }}</h3>
+                    <p class="text-sm text-gray-600 mb-2">{{ product.manufacturer.name }}</p>
+                    
+                    <!-- Price -->
+                    <div class="mb-3">
+                        <span class="text-lg font-bold text-blue-600">₹{{ product.user_price }}</span>
+                        {% if product.discount_percentage > 0 %}
+                            <span class="text-sm text-gray-500 line-through ml-2">₹{{ product.mrp_price }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Stock Status -->
+                    <div class="mb-3">
+                        {% if product.is_in_stock %}
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <i class="fas fa-check-circle mr-1"></i>In Stock
+                            </span>
+                        {% else %}
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                <i class="fas fa-times-circle mr-1"></i>Out of Stock
+                            </span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div class="flex space-x-2">
+                        <a href="{{ product.get_absolute_url }}" class="flex-1 bg-blue-600 text-white py-2 px-3 rounded hover:bg-blue-700 text-sm text-center">
+                            View Details
+                        </a>
+                        <button class="p-2 text-gray-600 hover:text-red-600 border border-gray-300 rounded hover:border-red-300">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-span-full text-center py-12">
+                <i class="fas fa-pills text-6xl text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">No products found</h3>
+                <p class="text-gray-500">Try adjusting your search criteria</p>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if is_paginated %}
+        <div class="mt-12 flex justify-center">
+            <nav class="flex items-center space-x-2">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" 
+                       class="px-3 py-2 text-sm text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-chevron-left mr-1"></i>Previous
+                    </a>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="px-3 py-2 text-sm bg-blue-600 text-white rounded">{{ num }}</span>
+                    {% else %}
+                        <a href="?page={{ num }}" 
+                           class="px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" 
+                       class="px-3 py-2 text-sm text-gray-600 hover:text-blue-600">
+                        Next<i class="fas fa-chevron-right ml-1"></i>
+                    </a>
+                {% endif %}
+            </nav>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

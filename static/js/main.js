@@ -40,7 +40,6 @@ function initializeSearch() {
             const query = this.value.trim();
             if (query.length > 2) {
                 // Implement search suggestions
-                // This will be enhanced when we add products
                 console.log('Searching for:', query);
             }
         });
@@ -59,17 +58,6 @@ function showLoading(element) {
 
 function hideLoading(element, originalContent) {
     element.innerHTML = originalContent;
-}
-
-// Helper to escape HTML entities
-function escapeHtml(str) {
-    if (typeof str !== 'string') return str;
-    return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
 }
 
 function showToast(message, type = 'info') {
@@ -94,6 +82,16 @@ function showToast(message, type = 'info') {
     }, 5000);
 }
 
+function escapeHtml(str) {
+    if (typeof str !== 'string') return str;
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 function getToastColor(type) {
     const colors = {
         'success': 'bg-green-100 border border-green-400 text-green-700',
@@ -102,4 +100,10 @@ function getToastColor(type) {
         'info': 'bg-blue-100 border border-blue-400 text-blue-700'
     };
     return colors[type] || colors['info'];
+}
+
+// Quick view function for product cards
+function quickView(productId) {
+    console.log('Quick view for product:', productId);
+    // Implement modal functionality here
 }

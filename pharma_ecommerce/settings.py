@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     # My Apps
     'apps.core',
     'apps.accounts',
-    # 'apps.products',
+    'apps.products',
     # 'apps.cart',
     # 'apps.orders',
     # 'apps.payments',

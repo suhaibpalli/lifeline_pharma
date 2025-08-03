@@ -21,14 +21,22 @@ def site_settings(request):
 
 def navigation_context(request):
     """Add navigation context"""
-    # We'll expand this when we have products and categories
+    # Import here to avoid circular imports
+    from apps.products.models import Category
+
+    try:
+        categories = Category.objects.filter(is_active=True, parent=None)[:6]
+    except:
+        categories = []
+
     navigation = {
         'main_menu': [
             {'name': 'Home', 'url': '/', 'active': request.resolver_match.url_name == 'home'},
             {'name': 'Products', 'url': '/products/', 'active': 'products' in request.path},
             {'name': 'About', 'url': '/about/', 'active': request.resolver_match.url_name == 'about'},
             {'name': 'Contact', 'url': '/contact/', 'active': request.resolver_match.url_name == 'contact'},
-        ]
+        ],
+        'categories': categories
     }
     
     return {'navigation': navigation}
