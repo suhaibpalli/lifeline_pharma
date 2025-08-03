@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8">My Profile</h1>
+        
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold">Profile Information</h2>
+                <a href="{% url 'accounts:profile_edit' %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-edit mr-2"></i>Edit Profile
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Name</label>
+                    <p class="mt-1 text-sm text-gray-900">{{ profile_user.get_full_name|default:"Not provided" }}</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <p class="mt-1 text-sm text-gray-900">{{ profile_user.email }}</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Phone</label>
+                    <p class="mt-1 text-sm text-gray-900">{{ profile_user.phone_number|default:"Not provided" }}</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Account Type</label>
+                    <p class="mt-1 text-sm text-gray-900">{{ profile_user.get_user_type_display }}</p>
+                </div>
+            </div>
+            
+            {% if user.user_type == 'PATIENT' and patient_profile %}
+                <div class="mt-6 border-t pt-6">
+                    <h3 class="text-lg font-semibold mb-4">Health Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                            <p class="mt-1 text-sm text-gray-900">{{ patient_profile.date_of_birth|default:"Not provided" }}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Gender</label>
+                            <p class="mt-1 text-sm text-gray-900">{{ patient_profile.get_gender_display|default:"Not provided" }}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Emergency Contact</label>
+                            <p class="mt-1 text-sm text-gray-900">{{ patient_profile.emergency_contact_name|default:"Not provided" }}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Emergency Phone</label>
+                            <p class="mt-1 text-sm text-gray-900">{{ patient_profile.emergency_contact_phone|default:"Not provided" }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            
+            {% if user.user_type == 'PHARMACY' and pharmacy_profile %}
+                <div class="mt-6 border-t pt-6">
+                    <h3 class="text-lg font-semibold mb-4">Business Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Business Name</label>
+                            <p class="mt-1 text-sm text-gray-900">{{ pharmacy_profile.business_name }}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">License Number</label>
+                            <p class="mt-1 text-sm text-gray-900">{{ pharmacy_profile.license_number }}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Status</label>
+                            <p class="mt-1 text-sm">
+                                {% if pharmacy_profile.is_approved %}
+                                    <span class="text-green-600 font-semibold">Approved</span>
+                                {% else %}
+                                    <span class="text-yellow-600 font-semibold">Pending Approval</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">City</label>
+                            <p class="mt-1 text-sm text-gray-900">{{ pharmacy_profile.city }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="mt-8">
+            <a href="{% url 'accounts:address_list' %}" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700">
+                <i class="fas fa-map-marker-alt mr-2"></i>Manage Addresses
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

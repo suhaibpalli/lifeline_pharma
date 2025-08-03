@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}{% if object %}Edit{% else %}Add{% endif %} Address - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8">{% if object %}Edit{% else %}Add{% endif %} Address</h1>
+        
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
+                <div>
+                    <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        Address Label *
+                    </label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="{{ form.address_type.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        Address Type *
+                    </label>
+                    {{ form.address_type }}
+                    {% if form.address_type.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.address_type.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="{{ form.address_line_1.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        Address Line 1 *
+                    </label>
+                    {{ form.address_line_1 }}
+                    {% if form.address_line_1.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.address_line_1.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="{{ form.address_line_2.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        Address Line 2
+                    </label>
+                    {{ form.address_line_2 }}
+                    {% if form.address_line_2.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.address_line_2.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="{{ form.city.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            City *
+                        </label>
+                        {{ form.city }}
+                        {% if form.city.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.city.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.state.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            State *
+                        </label>
+                        {{ form.state }}
+                        {% if form.state.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.state.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.pincode.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Pincode *
+                        </label>
+                        {{ form.pincode }}
+                        {% if form.pincode.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.pincode.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="{{ form.landmark.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        Landmark
+                    </label>
+                    {{ form.landmark }}
+                    {% if form.landmark.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.landmark.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="flex items-center">
+                    {{ form.is_default }}
+                    <label for="{{ form.is_default.id_for_label }}" class="ml-2 block text-sm text-gray-900">
+                        Set as default address
+                    </label>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                        <i class="fas fa-save mr-2"></i>{% if object %}Update{% else %}Add{% endif %} Address
+                    </button>
+                    <a href="{% url 'accounts:address_list' %}" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Pharmacy Registration - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-8">
+            <div class="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-store text-2xl text-green-600"></i>
+            </div>
+            <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+                Pharmacy Registration
+            </h2>
+            <p class="mt-2 text-sm text-gray-600">
+                Join our network and expand your business
+            </p>
+        </div>
+        
+        <div class="bg-white shadow rounded-lg p-8">
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+                
+                <!-- Personal Information -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Personal Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                First Name *
+                            </label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.first_name.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                Last Name *
+                            </label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.last_name.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                Email Address *
+                            </label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.email.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ form.phone_number.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                Phone Number
+                            </label>
+                            {{ form.phone_number }}
+                            {% if form.phone_number.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.phone_number.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Business Information -->
+                <div class="border-t border-gray-200 pt-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Business Information</h3>
+                    
+                    <div>
+                        <label for="{{ form.business_name.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Business Name *
+                        </label>
+                        {{ form.business_name }}
+                        {% if form.business_name.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.business_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <label for="{{ form.license_number.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                Pharmacy License Number *
+                            </label>
+                            {{ form.license_number }}
+                            {% if form.license_number.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.license_number.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ form.gst_number.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                GST Number
+                            </label>
+                            {{ form.gst_number }}
+                            {% if form.gst_number.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.gst_number.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <label for="{{ form.business_address.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Business Address *
+                        </label>
+                        {{ form.business_address }}
+                        {% if form.business_address.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.business_address.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        <div>
+                            <label for="{{ form.city.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                City *
+                            </label>
+                            {{ form.city }}
+                            {% if form.city.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.city.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ form.state.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                State *
+                            </label>
+                            {{ form.state }}
+                            {% if form.state.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.state.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ form.pincode.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                Pincode *
+                            </label>
+                            {{ form.pincode }}
+                            {% if form.pincode.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.pincode.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <label for="{{ form.license_document.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Pharmacy License Document *
+                        </label>
+                        {{ form.license_document }}
+                        <p class="mt-1 text-xs text-gray-500">Upload a clear image or PDF of your pharmacy license</p>
+                        {% if form.license_document.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.license_document.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Password -->
+                <div class="border-t border-gray-200 pt-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Account Security</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="{{ form.password1.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                Password *
+                            </label>
+                            {{ form.password1 }}
+                            {% if form.password1.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.password1.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ form.password2.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                Confirm Password *
+                            </label>
+                            {{ form.password2 }}
+                            {% if form.password2.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.password2.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Terms & Conditions -->
+                <div class="border-t border-gray-200 pt-6">
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-info-circle text-yellow-400"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-yellow-700">
+                                    <strong>Important:</strong> Your pharmacy registration will be reviewed by our team. 
+                                    You will receive an email notification once your account is approved.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <button type="submit" 
+                            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        <i class="fas fa-store mr-2"></i>
+                        Submit Registration
+                    </button>
+                </div>
+                
+                <div class="text-center">
+                    <a href="{% url 'accounts:register_choice' %}" class="text-sm text-green-600 hover:text-green-500">
+                        ← Back to registration options
+                    </a>
+                </div>
+                
+                <div class="text-center">
+                    <p class="text-sm text-gray-600">
+                        Already have an account? 
+                        <a href="{% url 'accounts:login' %}" class="text-green-600 hover:text-green-500 font-medium">
+                            Sign in
+                        </a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

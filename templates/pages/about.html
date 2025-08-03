@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-bold mb-8 text-center">About {{ site_name }}</h1>
+        
+        {% if page %}
+            <div class="prose max-w-none">
+                {{ page.content|linebreaks }}
+            </div>
+        {% else %}
+            <div class="text-center py-12">
+                <h2 class="text-2xl font-semibold mb-4">About content will be available soon</h2>
+                <p class="text-gray-600">We're working on our about page. Please check back later.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
