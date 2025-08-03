@@ -24,7 +24,7 @@ urlpatterns = [
     path('', include('apps.core.urls')),  # Homepage and basic pages
     path('accounts/', include('apps.accounts.urls')),
     path('products/', include('apps.products.urls')),
-    # path('cart/', include('apps.cart.urls')),
+    path('cart/', include('apps.cart.urls')),
     # path('orders/', include('apps.orders.urls')),
     # path('payments/', include('apps.payments.urls')),
     # path('dashboard/', include('apps.dashboard.urls')),
