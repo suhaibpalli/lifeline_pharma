@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+
+{% block title %}Track Order #{{ order.order_number }} - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8 text-center">Track Your Order</h1>
+        
+        <!-- Order Info Card -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center">
+                    <h3 class="font-semibold text-gray-700">Order Number</h3>
+                    <p class="text-xl font-bold text-blue-600">#{{ order.order_number }}</p>
+                </div>
+                
+                <div class="text-center">
+                    <h3 class="font-semibold text-gray-700">Order Date</h3>
+                    <p class="text-lg">{{ order.created_at|date:"d M, Y" }}</p>
+                </div>
+                
+                <div class="text-center">
+                    <h3 class="font-semibold text-gray-700">Estimated Delivery</h3>
+                    <p class="text-lg text-green-600">
+                        {% if order.estimated_delivery %}
+                            {{ order.estimated_delivery|date:"d M, Y" }}
+                        {% else %}
+                            3-5 business days
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tracking Timeline -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-6 text-center">Order Status</h2>
+            
+            <!-- Progress Bar -->
+            <div class="relative mb-8">
+                <div class="flex items-center justify-between">
+                    <div class="tracking-step {% if order.status == 'PENDING' or order.status == 'CONFIRMED' or order.status == 'PROCESSING' or order.status == 'SHIPPED' or order.status == 'OUT_FOR_DELIVERY' or order.status == 'DELIVERED' %}active{% endif %}">
+                        <div class="step-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <span class="step-text">Order Placed</span>
+                    </div>
+                    
+                    <div class="tracking-step {% if order.status == 'CONFIRMED' or order.status == 'PROCESSING' or order.status == 'SHIPPED' or order.status == 'OUT_FOR_DELIVERY' or order.status == 'DELIVERED' %}active{% endif %}">
+                        <div class="step-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <span class="step-text">Confirmed</span>
+                    </div>
+                    
+                    <div class="tracking-step {% if order.status == 'PROCESSING' or order.status == 'SHIPPED' or order.status == 'OUT_FOR_DELIVERY' or order.status == 'DELIVERED' %}active{% endif %}">
+                        <div class="step-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <span class="step-text">Processing</span>
+                    </div>
+                    
+                    <div class="tracking-step {% if order.status == 'SHIPPED' or order.status == 'OUT_FOR_DELIVERY' or order.status == 'DELIVERED' %}active{% endif %}">
+                        <div class="step-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <span class="step-text">Shipped</span>
+                    </div>
+                    
+                    <div class="tracking-step {% if order.status == 'OUT_FOR_DELIVERY' or order.status == 'DELIVERED' %}active{% endif %}">
+                        <div class="step-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <span class="step-text">Out for Delivery</span>
+                    </div>
+                    
+                    <div class="tracking-step {% if order.status == 'DELIVERED' %}active{% endif %}">
+                        <div class="step-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <span class="step-text">Delivered</span>
+                    </div>
+                </div>
+                
+                <!-- Progress Line -->
+                <div class="absolute top-6 left-0 w-full h-1 bg-gray-200 -z-10">
+                    <div class="h-full bg-blue-600 progress-line" style="width: {{ progress_percentage|default:16 }}%"></div>
+                </div>
+            </div>
+            
+            <!-- Current Status -->
+            <div class="text-center mb-6">
+                <h3 class="text-xl font-semibold mb-2">Current Status</h3>
+                <span class="order-status status-{{ order.status|lower }} px-4 py-2 rounded-full text-lg font-medium">
+                    {{ order.get_status_display }}
+                </span>
+            </div>
+        </div>
+        
+        <!-- Detailed Timeline -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-6">Detailed Timeline</h2>
+            
+            <div class="space-y-4">
+                {% for status in status_history %}
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                            <i class="fas fa-check text-white"></i>
+                        </div>
+                        
+                        <div class="flex-1">
+                            <h3 class="font-semibold">{{ status.get_status_display }}</h3>
+                            <p class="text-sm text-gray-600">{{ status.created_at|date:"d M, Y \a\t H:i" }}</p>
+                            {% if status.notes %}
+                                <p class="text-sm text-gray-700 mt-1">{{ status.notes }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Delivery Information -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Delivery Address -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">
+                    <i class="fas fa-map-marker-alt mr-2 text-blue-600"></i>Delivery Address
+                </h2>
+                
+                <div class="text-gray-700">
+                    <p class="font-medium">{{ order.delivery_address.name }}</p>
+                    <p>{{ order.delivery_address.address_line_1 }}</p>
+                    {% if order.delivery_address.address_line_2 %}
+                        <p>{{ order.delivery_address.address_line_2 }}</p>
+                    {% endif %}
+                    <p>{{ order.delivery_address.city }}, {{ order.delivery_address.state }}</p>
+                    <p>{{ order.delivery_address.pincode }}</p>
+                </div>
+            </div>
+            
+            <!-- Contact & Support -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">
+                    <i class="fas fa-headset mr-2 text-blue-600"></i>Need Help?
+                </h2>
+                
+                <div class="space-y-3">
+                    <div class="flex items-center">
+                        <i class="fas fa-phone text-blue-600 mr-3"></i>
+                        <div>
+                            <p class="font-medium">Call Support</p>
+                            <p class="text-sm text-gray-600">{{ site_phone|default:"+91-XXXXXXXXXX" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <i class="fas fa-envelope text-blue-600 mr-3"></i>
+                        <div>
+                            <p class="font-medium">Email Us</p>
+                            <p class="text-sm text-gray-600">{{ site_email|default:"support@example.com" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <i class="fas fa-clock text-blue-600 mr-3"></i>
+                        <div>
+                            <p class="font-medium">Support Hours</p>
+                            <p class="text-sm text-gray-600">Mon-Sun: 9 AM - 8 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="mt-8 text-center">
+            {% if user.is_authenticated and order.user == user %}
+                <a href="{{ order.get_absolute_url }}" 
+                   class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 mr-4">
+                    <i class="fas fa-eye mr-2"></i>View Full Order Details
+                </a>
+            {% endif %}
+            
+            <a href="{% url 'products:catalog' %}" 
+               class="border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50">
+                <i class="fas fa-pills mr-2"></i>Continue Shopping
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.tracking-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.step-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background-color: #e5e7eb;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.tracking-step.active .step-icon {
+    background-color: #2563eb;
+    color: white;
+}
+
+.step-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: center;
+    color: #6b7280;
+}
+
+.tracking-step.active .step-text {
+    color: #1f2937;
+}
+
+.progress-line {
+    transition: width 0.5s ease;
+}
+
+.order-status {
+    font-size: 0.875rem;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+}
+
+.status-pending { background-color: #fef3c7; color: #d97706; }
+.status-confirmed { background-color: #dbeafe; color: #2563eb; }
+.status-processing { background-color: #e0e7ff; color: #5b21b6; }
+.status-shipped { background-color: #fce7f3; color: #be185d; }
+.status-out_for_delivery { background-color: #fed7aa; color: #ea580c; }
+.status-delivered { background-color: #dcfce7; color: #16a34a; }
+.status-cancelled { background-color: #fee2e2; color: #dc2626; }
+
+@media (max-width: 768px) {
+    .tracking-step {
+        font-size: 0.75rem;
+    }
+    
+    .step-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1rem;
+    }
+}
+</style>
+{% endblock %}

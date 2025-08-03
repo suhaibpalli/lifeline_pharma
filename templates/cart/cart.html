@@ -118,9 +118,11 @@
                         </div>
                     </div>
                     
-                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 mt-6 font-semibold">
+                    <!-- In the Cart Summary section, replace the checkout button -->
+                    <a href="{% url 'orders:checkout' %}" 
+                       class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 mt-6 font-semibold text-center block">
                         <i class="fas fa-credit-card mr-2"></i>Proceed to Checkout
-                    </button>
+                    </a>
                     
                     <div class="mt-4 text-center">
                         <p class="text-sm text-gray-600">
