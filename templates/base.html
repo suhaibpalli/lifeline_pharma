@@ -8,11 +8,16 @@
     
     <title>{% block title %}{{ site_name }}{% endblock %}</title>
     
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Modern Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN with plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     
     <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Custom CSS -->
     {% load static %}
@@ -25,36 +30,61 @@
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        'lexend': ['Lexend', 'Inter', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    },
                     colors: {
                         primary: {
                             50: '#eff6ff',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8'
+                            100: '#dbeafe',
+                            500: '#0c7ff2',
+                            600: '#0968da',
+                            700: '#0858c2',
+                        },
+                        text: {
+                            primary: '#111418',
+                            secondary: '#60758a',
+                        },
+                        background: {
+                            subtle: '#f0f2f5',
+                            card: '#ffffff',
+                        },
+                        border: {
+                            light: '#dbe0e6',
                         }
+                    },
+                    borderRadius: {
+                        'lg': '0.75rem',
+                    },
+                    spacing: {
+                        '18': '4.5rem',
+                        '88': '22rem',
                     }
                 }
             }
         }
     </script>
 </head>
-<body class="bg-gray-50">
-    <!-- Header -->
-    {% include 'partials/header.html' %}
-    
-    <!-- Messages -->
-    {% if messages %}
-        {% include 'partials/messages.html' %}
-    {% endif %}
-    
-    <!-- Main Content -->
-    <main class="min-h-screen">
-        {% block content %}{% endblock %}
-    </main>
-    
-    <!-- Footer -->
-    {% include 'partials/footer.html' %}
-    
+<body class="bg-white font-lexend">
+    <div class="relative flex min-h-screen flex-col">
+        <!-- Header -->
+        {% include 'partials/header.html' %}
+        
+        <!-- Messages -->
+        {% if messages %}
+            {% include 'partials/messages.html' %}
+        {% endif %}
+        
+        <!-- Main Content -->
+        <main class="flex-1">
+            {% block content %}{% endblock %}
+        </main>
+        
+        <!-- Footer -->
+        {% include 'partials/footer.html' %}
+    </div>
+
     <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
 

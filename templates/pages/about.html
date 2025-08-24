@@ -3,20 +3,133 @@
 {% block title %}About Us - {{ site_name }}{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-12">
-    <div class="max-w-4xl mx-auto">
-        <h1 class="text-4xl font-bold mb-8 text-center">About {{ site_name }}</h1>
-        
-        {% if page %}
-            <div class="prose max-w-none">
-                {{ page.content|linebreaks }}
+<div class="bg-white">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-primary-600 to-primary-700 text-white py-16">
+        <div class="mx-auto px-6 lg:px-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight mb-6">
+                    About {{ site_name }}
+                </h1>
+                <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">
+                    Your trusted partner in healthcare, connecting patients with certified pharmacies across the country.
+                </p>
             </div>
-        {% else %}
-            <div class="text-center py-12">
-                <h2 class="text-2xl font-semibold mb-4">About content will be available soon</h2>
-                <p class="text-gray-600">We're working on our about page. Please check back later.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-16">
+        <div class="mx-auto px-6 lg:px-10">
+            <div class="max-w-4xl mx-auto">
+                {% if page %}
+                    <div class="prose prose-lg max-w-none">
+                        <div class="text-text-primary leading-relaxed space-y-6">
+                            {{ page.content|linebreaks }}
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- Default About Content -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                        <div>
+                            <h2 class="text-text-primary text-2xl md:text-3xl font-bold mb-6">
+                                Our Mission
+                            </h2>
+                            <p class="text-text-secondary leading-relaxed mb-6">
+                                We are committed to making healthcare accessible, affordable, and reliable for everyone. 
+                                Our platform connects patients with certified pharmacies, ensuring genuine medicines 
+                                reach your doorstep safely and efficiently.
+                            </p>
+                            <p class="text-text-secondary leading-relaxed">
+                                Founded with the vision of revolutionizing healthcare delivery, we leverage technology 
+                                to bridge the gap between patients and healthcare providers, making quality healthcare 
+                                just a click away.
+                            </p>
+                        </div>
+                        <div class="bg-background-subtle rounded-lg p-8">
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-primary-600 mb-2">1,500+</div>
+                                    <div class="text-text-secondary text-sm">Certified Pharmacies</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-primary-600 mb-2">500K+</div>
+                                    <div class="text-text-secondary text-sm">Happy Customers</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-primary-600 mb-2">10K+</div>
+                                    <div class="text-text-secondary text-sm">Medicines Available</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-primary-600 mb-2">100+</div>
+                                    <div class="text-text-secondary text-sm">Cities Served</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Our Values -->
+                    <section class="mb-16">
+                        <h2 class="text-text-primary text-2xl md:text-3xl font-bold text-center mb-12">
+                            Our Values
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-heart text-2xl"></i>
+                                </div>
+                                <h3 class="text-text-primary font-semibold mb-3">Patient First</h3>
+                                <p class="text-text-secondary text-sm leading-relaxed">
+                                    Every decision we make prioritizes patient health, safety, and satisfaction above all else.
+                                </p>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-shield-alt text-2xl"></i>
+                                </div>
+                                <h3 class="text-text-primary font-semibold mb-3">Trust & Transparency</h3>
+                                <p class="text-text-secondary text-sm leading-relaxed">
+                                    We maintain complete transparency in pricing, sourcing, and delivery to build lasting trust.
+                                </p>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-bolt text-2xl"></i>
+                                </div>
+                                <h3 class="text-text-primary font-semibold mb-3">Innovation</h3>
+                                <p class="text-text-secondary text-sm leading-relaxed">
+                                    We continuously innovate to improve healthcare accessibility and delivery efficiency.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Team Section -->
+                    <section class="bg-background-subtle rounded-lg p-8">
+                        <h2 class="text-text-primary text-2xl md:text-3xl font-bold text-center mb-8">
+                            Our Commitment
+                        </h2>
+                        <div class="max-w-3xl mx-auto text-center">
+                            <p class="text-text-secondary leading-relaxed mb-6">
+                                We are committed to ensuring that every medicine dispensed through our platform meets 
+                                the highest quality standards. Our team works tirelessly to verify pharmacy credentials, 
+                                monitor medicine authenticity, and provide exceptional customer service.
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                <a href="{% url 'core:contact' %}" 
+                                   class="bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors font-medium">
+                                    Get in Touch
+                                </a>
+                                <a href="{% url 'products:catalog' %}" 
+                                   class="border border-border-light text-text-primary px-6 py-3 rounded-lg hover:bg-background-subtle transition-colors font-medium">
+                                    Browse Medicines
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+                {% endif %}
             </div>
-        {% endif %}
-    </div>
+        </div>
+    </section>
 </div>
 {% endblock %}
