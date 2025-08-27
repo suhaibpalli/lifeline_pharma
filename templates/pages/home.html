@@ -5,29 +5,99 @@
 
 {% block content %}
 <div class="homepage">
-    <!-- Hero Section -->
-    <section class="relative">
-        <div class="bg-gradient-to-r from-primary-600 to-primary-700 text-white">
-            <div class="mx-auto px-6 lg:px-10 py-20 lg:py-32">
-                <div class="max-w-4xl mx-auto text-center">
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-6">
-                        Your Health, Our Priority
-                    </h1>
-                    <p class="text-lg md:text-xl font-normal leading-relaxed mb-8 opacity-90 max-w-2xl mx-auto">
-                        Order medicines online and get them delivered to your doorstep. Register your pharmacy to reach more customers.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <a href="{% url 'products:catalog' %}" 
-                           class="bg-white text-primary-600 px-8 py-3 md:py-4 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base font-bold">
-                            Order Medicines
-                        </a>
-                        <a href="#" 
-                           class="border-2 border-white text-white px-8 py-3 md:py-4 rounded-lg hover:bg-white hover:text-primary-600 transition-colors text-sm md:text-base font-bold">
-                            Register Pharmacy
-                        </a>
+    <!-- Hero Section with Carousel -->
+    <section class="relative overflow-hidden">
+        <div class="hero-carousel" {% if carousel_images.count == 1 %}data-single-slide="true"{% endif %}>
+            <!-- Carousel Images -->
+            <div class="carousel-container">
+                {% if carousel_images %}
+                    {% for image in carousel_images %}
+                        <div class="carousel-slide {% if forloop.first %}active{% endif %}">
+                            <img src="data:image/jpeg;base64,{{ image.image_data }}" 
+                                 alt="{{ image.title }}" 
+                                 class="carousel-image">
+                            <div class="carousel-overlay"></div>
+                            
+                            <!-- Content for this slide -->
+                            <div class="carousel-content">
+                                <div class="mx-auto px-6 lg:px-10 text-center text-white">
+                                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-6 drop-shadow-lg">
+                                        {{ image.title }}
+                                    </h1>
+                                    {% if image.subtitle %}
+                                        <p class="text-lg md:text-xl font-normal leading-relaxed mb-8 opacity-90 max-w-2xl mx-auto drop-shadow">
+                                            {{ image.subtitle }}
+                                        </p>
+                                    {% endif %}
+                                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                        {% if image.button_link %}
+                                            <a href="{{ image.button_link }}" 
+                                               class="bg-white text-primary-600 px-8 py-3 md:py-4 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base font-bold shadow-lg">
+                                                {{ image.button_text }}
+                                            </a>
+                                        {% else %}
+                                            <a href="{% url 'products:catalog' %}" 
+                                               class="bg-white text-primary-600 px-8 py-3 md:py-4 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base font-bold shadow-lg">
+                                                Order Medicines
+                                            </a>
+                                        {% endif %}
+                                        <a href="{% url 'core:about' %}" 
+                                           class="border-2 border-white text-white px-8 py-3 md:py-4 rounded-lg hover:bg-white hover:text-primary-600 transition-colors text-sm md:text-base font-bold">
+                                            Learn More
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Default slide if no images uploaded -->
+                    <div class="carousel-slide active">
+                        <div class="w-full h-full bg-gradient-to-r from-primary-600 to-primary-700"></div>
+                        <div class="carousel-overlay"></div>
+                        
+                        <div class="carousel-content">
+                            <div class="mx-auto px-6 lg:px-10 text-center text-white">
+                                <h1 class="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-6 drop-shadow-lg">
+                                    Your Health, Our Priority
+                                </h1>
+                                <p class="text-lg md:text-xl font-normal leading-relaxed mb-8 opacity-90 max-w-2xl mx-auto drop-shadow">
+                                    Order medicines online and get them delivered to your doorstep. Register your pharmacy to reach more customers.
+                                </p>
+                                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                    <a href="{% url 'products:catalog' %}" 
+                                       class="bg-white text-primary-600 px-8 py-3 md:py-4 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base font-bold shadow-lg">
+                                        Order Medicines
+                                    </a>
+                                    <a href="{% url 'core:about' %}" 
+                                       class="border-2 border-white text-white px-8 py-3 md:py-4 rounded-lg hover:bg-white hover:text-primary-600 transition-colors text-sm md:text-base font-bold">
+                                        Learn More
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
+            
+            <!-- Navigation Arrows (only show if multiple images) -->
+            {% if carousel_images.count > 1 %}
+                <button class="carousel-nav prev" onclick="changeSlide(-1)" aria-label="Previous slide">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-nav next" onclick="changeSlide(1)" aria-label="Next slide">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <!-- Dots Indicator -->
+                <div class="carousel-dots">
+                    {% for image in carousel_images %}
+                        <span class="dot {% if forloop.first %}active{% endif %}" 
+                              onclick="currentSlide({{ forloop.counter }})"
+                              aria-label="Go to slide {{ forloop.counter }}"></span>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </section>
 

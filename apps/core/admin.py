@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SiteConfiguration, ContactInquiry, DeliveryZone, Page
+from .models import SiteConfiguration, ContactInquiry, DeliveryZone, Page, CarouselImage
 
 @admin.register(SiteConfiguration)
 class SiteConfigurationAdmin(admin.ModelAdmin):
@@ -33,3 +33,29 @@ class PageAdmin(admin.ModelAdmin):
     list_filter = ['is_published', 'created_at']
     search_fields = ['title', 'content']
     prepopulated_fields = {'slug': ('title',)}
+
+@admin.register(CarouselImage)
+class CarouselImageAdmin(admin.ModelAdmin):
+    list_display = ['title', 'subtitle', 'is_active', 'order', 'created_at']
+    list_filter = ['is_active', 'created_at']
+    search_fields = ['title', 'subtitle']
+    list_editable = ['is_active', 'order']
+    ordering = ['order', '-created_at']
+
+    fieldsets = (
+        ('Image Content', {
+            'fields': ('title', 'subtitle', 'image_upload', 'button_text', 'button_link')
+        }),
+        ('Display Settings', {
+            'fields': ('is_active', 'order')
+        }),
+        ('System Fields', {
+            'fields': ('image_data',),
+            'classes': ('collapse',)
+        }),
+    )
+
+    readonly_fields = ['image_data']
+
+    # no special get_form/get_fieldsets overrides needed anymore
+    # model.save() handles conversion from image_upload -> image_data

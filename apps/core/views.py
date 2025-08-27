@@ -3,7 +3,7 @@ from django.views.generic import TemplateView, CreateView
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.http import JsonResponse
-from .models import ContactInquiry, Page, DeliveryZone
+from .models import CarouselImage, ContactInquiry, Page, DeliveryZone
 from .forms import ContactForm
 
 class HomeView(TemplateView):
@@ -13,8 +13,14 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page_title'] = 'Welcome to Pharma Store'
+        
+        # Get active carousel images
+        carousel_images = CarouselImage.objects.filter(is_active=True)
+        context['carousel_images'] = carousel_images
+        
         # We'll add featured products later
         return context
+
 
 class AboutView(TemplateView):
     """About us page"""

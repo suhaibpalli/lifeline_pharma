@@ -80,3 +80,80 @@ class Page(TimeStampedModel):
     
     def __str__(self):
         return self.title
+
+# apps/core/models.py
+from django.db import models
+# ... other imports ...
+
+class CarouselImage(TimeStampedModel):
+    """Carousel images for homepage"""
+    title = models.CharField(max_length=200)
+    subtitle = models.CharField(max_length=300, blank=True)
+
+    # NEW: accept an upload in admin / forms
+    image_upload = models.ImageField(
+        upload_to='carousel_uploads/',
+        null=True,
+        blank=True,
+        help_text='Upload source image (will be converted to base64)'
+    )
+
+    # Keep base64 storage for runtime usage
+    image_data = models.TextField(blank=True)  # Base64 encoded image
+    button_text = models.CharField(max_length=50, default="Learn More")
+    button_link = models.URLField(blank=True)
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        verbose_name = "Carousel Image"
+        verbose_name_plural = "Carousel Images"
+        ordering = ['order', '-created_at']
+
+    def __str__(self):
+        return self.title
+
+    def save_image_as_base64(self, image_file):
+        """Convert uploaded image to base64"""
+        import base64
+        from PIL import Image
+        from io import BytesIO
+
+        img = Image.open(image_file)
+
+        if img.mode in ('RGBA', 'P'):
+            img = img.convert('RGB')
+
+        img.thumbnail((1920, 800), Image.Resampling.LANCZOS)
+
+        img_io = BytesIO()
+        img.save(img_io, format='JPEG', quality=85, optimize=True)
+        img_io.seek(0)
+
+        image_data = base64.b64encode(img_io.read()).decode('utf-8')
+        self.image_data = image_data
+
+    def save(self, *args, **kwargs):
+        """
+        If an image_upload file was provided, convert it to base64 and
+        store in `image_data`. Optionally remove the uploaded file from storage.
+        """
+        if self.image_upload:
+            try:
+                # convert uploaded file to base64
+                self.save_image_as_base64(self.image_upload)
+            except Exception:
+                # don't block saving; but you may want to log the error
+                pass
+
+            # Optional: remove the uploaded file from storage (clean up),
+            # and set field to None so file won't be kept
+            try:
+                storage = self.image_upload.storage
+                storage.delete(self.image_upload.name)
+            except Exception:
+                pass
+
+            self.image_upload = None
+
+        super().save(*args, **kwargs)
