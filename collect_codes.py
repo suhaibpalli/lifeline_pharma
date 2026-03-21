@@ -107,7 +107,7 @@ if __name__ == '__main__':
     excluded_folders = [
         'migrations', '__pycache__', 'static',
         '.github', '.idea', '.vscode', 'lmsa',
-        '.next', 'node_modules', 'eerp',
+        '.next', 'node_modules', 'eerp', 'venv',
         'frontend',
         'academics',
         'videoconferencing',
@@ -118,7 +118,8 @@ if __name__ == '__main__':
         "frontend/lib/api/generated",
         "frontend/types/api.d.ts",
         'generated',
-        'frontend\types\api.ts'
+        'frontend\types\api.ts',
+        'staticfiles'
     ]
 
     # Call the function to combine files, output file goes into current executing directory

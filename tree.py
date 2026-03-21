@@ -37,7 +37,7 @@ if __name__ == '__main__':
     # Folder to print tree for
     root_folder = "."  # You may set this to any folder
     # List of folder names to exclude (updated per instruction)
-    exclude_list = ["eerp", "node_modules", ".next", ".git", "__pycache__",
+    exclude_list = ["eerp", "node_modules", ".next", ".git", "__pycache__", "venv", "staticfiles"
     # "backend", "ai-service",
     # "frontend"
     ]
