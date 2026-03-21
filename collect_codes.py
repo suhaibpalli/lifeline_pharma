@@ -106,7 +106,7 @@ if __name__ == '__main__':
     # Define list of folder names to exclude (use forward slashes for cross-platform compatibility)
     excluded_folders = [
         'migrations', '__pycache__', 'static',
-        '.github', '.idea', '.vscode', 'lmsa', 'templates',
+        '.github', '.idea', '.vscode', 'lmsa',
         '.next', 'node_modules', 'eerp',
         'frontend',
         'academics',

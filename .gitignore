@@ -80,3 +80,9 @@ Thumbs.db
 # Misc
 code_copy.py
 code_dump.txt
+
+
+collect_codes.py
+tree.py
+all_files_combined.txt
+tree_output.txt
