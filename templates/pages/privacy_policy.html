@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+
+{% block title %}Privacy Policy - {{ site_name }}{% endblock %}
+{% block meta_description %}Learn how {{ site_name }} protects your personal information and privacy. Our commitment to safeguarding your health data and personal details.{% endblock %}
+
+{% block content %}
+<div class="bg-surface">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-primary-600 to-primary-700 text-white py-16 md:py-20 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-20 left-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 right-20 w-96 h-96 bg-primary-400 rounded-full blur-3xl"></div>
+        </div>
+        <div class="mx-auto px-6 lg:px-10 max-w-4xl text-center relative z-10">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl mb-6">
+                <i class="fas fa-shield-alt text-4xl"></i>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-6">
+                Privacy Policy
+            </h1>
+            <p class="text-lg text-white/90 max-w-2xl mx-auto">
+                Your privacy matters to us. This policy explains how we collect, use, and protect your personal information.
+            </p>
+            <p class="text-sm text-white/70 mt-4">Last updated: {% now "F j, Y" %}</p>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="py-16 md:py-24">
+        <div class="mx-auto px-6 lg:px-10 max-w-4xl">
+            <!-- Table of Contents -->
+            <nav class="bg-white rounded-2xl border border-border p-6 mb-12 shadow-card">
+                <h2 class="text-lg font-semibold text-content-primary mb-4">Contents</h2>
+                <ul class="space-y-2">
+                    <li><a href="#information" class="text-primary-600 hover:text-primary-700">1. Information We Collect</a></li>
+                    <li><a href="#usage" class="text-primary-600 hover:text-primary-700">2. How We Use Your Information</a></li>
+                    <li><a href="#sharing" class="text-primary-600 hover:text-primary-700">3. Information Sharing</a></li>
+                    <li><a href="#protection" class="text-primary-600 hover:text-primary-700">4. Data Protection</a></li>
+                    <li><a href="#rights" class="text-primary-600 hover:text-primary-700">5. Your Rights</a></li>
+                    <li><a href="#cookies" class="text-primary-600 hover:text-primary-700">6. Cookies</a></li>
+                    <li><a href="#contact" class="text-primary-600 hover:text-primary-700">7. Contact Us</a></li>
+                </ul>
+            </nav>
+
+            {% if page %}
+                {{ page.content|linebreaks }}
+            {% else %}
+                <!-- Default Privacy Policy Content -->
+                <div class="prose prose-lg max-w-none">
+                    <section id="information" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">1. Information We Collect</h2>
+                        <div class="bg-white rounded-2xl border border-border p-8 space-y-6">
+                            <div>
+                                <h3 class="text-lg font-semibold text-content-primary mb-3 flex items-center gap-2">
+                                    <span class="w-8 h-8 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center text-sm font-bold">A</span>
+                                    Personal Information
+                                </h3>
+                                <p class="text-content-secondary leading-relaxed">
+                                    When you create an account or place an order, we collect information such as your name, email address, phone number, date of birth, gender, and delivery address. For pharmacy partners, we also collect business registration details, license numbers, and GST information.
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-semibold text-content-primary mb-3 flex items-center gap-2">
+                                    <span class="w-8 h-8 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center text-sm font-bold">B</span>
+                                    Health Information
+                                </h3>
+                                <p class="text-content-secondary leading-relaxed">
+                                    To process prescription orders, we may collect and store prescription images and related health information. This data is treated with heightened confidentiality and used solely for verifying and fulfilling your medical requirements.
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-semibold text-content-primary mb-3 flex items-center gap-2">
+                                    <span class="w-8 h-8 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center text-sm font-bold">C</span>
+                                    Payment Information
+                                </h3>
+                                <p class="text-content-secondary leading-relaxed">
+                                    We collect payment details including card numbers and UPI IDs only for transaction processing. We do not store complete card details on our servers. All payment information is processed through secure, encrypted payment gateways.
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-semibold text-content-primary mb-3 flex items-center gap-2">
+                                    <span class="w-8 h-8 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center text-sm font-bold">D</span>
+                                    Usage Data
+                                </h3>
+                                <p class="text-content-secondary leading-relaxed">
+                                    We automatically collect information about how you interact with our platform, including pages visited, search queries, time spent, and device information for analytics and service improvement.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="usage" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">2. How We Use Your Information</h2>
+                        <div class="bg-white rounded-2xl border border-border p-8">
+                            <ul class="space-y-4">
+                                <li class="flex items-start gap-3">
+                                    <span class="w-6 h-6 bg-success text-white rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span class="text-content-secondary"><strong class="text-content-primary">Order Processing:</strong> To process and deliver your medicine orders</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="w-6 h-6 bg-success text-white rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span class="text-content-secondary"><strong class="text-content-primary">Account Management:</strong> To create and manage your account</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="w-6 h-6 bg-success text-white rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span class="text-content-secondary"><strong class="text-content-primary">Prescription Verification:</strong> To verify and fulfill prescription-based orders</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="w-6 h-6 bg-success text-white rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span class="text-content-secondary"><strong class="text-content-primary">Customer Support:</strong> To assist with queries and resolve issues</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="w-6 h-6 bg-success text-white rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span class="text-content-secondary"><strong class="text-content-primary">Service Improvement:</strong> To improve our platform and user experience</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="w-6 h-6 bg-success text-white rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span class="text-content-secondary"><strong class="text-content-primary">Marketing:</strong> To send promotional communications (with your consent)</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section id="sharing" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">3. Information Sharing</h2>
+                        <div class="bg-white rounded-2xl border border-border p-8">
+                            <p class="text-content-secondary leading-relaxed mb-6">
+                                We do not sell your personal information. Your data is only shared in the following circumstances:
+                            </p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-surface-muted rounded-xl p-4">
+                                    <h4 class="font-semibold text-content-primary mb-2">Pharmacy Partners</h4>
+                                    <p class="text-sm text-content-secondary">To fulfill orders, your address and prescription details are shared with the dispensing pharmacy.</p>
+                                </div>
+                                <div class="bg-surface-muted rounded-xl p-4">
+                                    <h4 class="font-semibold text-content-primary mb-2">Delivery Partners</h4>
+                                    <p class="text-sm text-content-secondary">Contact and address information is shared for order delivery.</p>
+                                </div>
+                                <div class="bg-surface-muted rounded-xl p-4">
+                                    <h4 class="font-semibold text-content-primary mb-2">Service Providers</h4>
+                                    <p class="text-sm text-content-secondary">Trusted third parties for payment processing, analytics, and customer support.</p>
+                                </div>
+                                <div class="bg-surface-muted rounded-xl p-4">
+                                    <h4 class="font-semibold text-content-primary mb-2">Legal Requirements</h4>
+                                    <p class="text-sm text-content-secondary">When required by law or to protect our rights and safety.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="protection" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">4. Data Protection</h2>
+                        <div class="bg-gradient-to-br from-success/5 to-success/10 rounded-2xl border border-success/20 p-8">
+                            <div class="grid md:grid-cols-3 gap-6">
+                                <div class="text-center">
+                                    <div class="w-16 h-16 bg-success/10 text-success rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                        <i class="fas fa-lock text-2xl"></i>
+                                    </div>
+                                    <h4 class="font-semibold text-content-primary mb-2">256-bit Encryption</h4>
+                                    <p class="text-sm text-content-secondary">All data transmitted is secured with industry-standard SSL encryption.</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="w-16 h-16 bg-success/10 text-success rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                        <i class="fas fa-server text-2xl"></i>
+                                    </div>
+                                    <h4 class="font-semibold text-content-primary mb-2">Secure Storage</h4>
+                                    <p class="text-sm text-content-secondary">Data stored on secure servers with regular security audits.</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="w-16 h-16 bg-success/10 text-success rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                        <i class="fas fa-user-shield text-2xl"></i>
+                                    </div>
+                                    <h4 class="font-semibold text-content-primary mb-2">Access Controls</h4>
+                                    <p class="text-sm text-content-secondary">Strict access controls with role-based permissions.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="rights" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">5. Your Rights</h2>
+                        <div class="bg-white rounded-2xl border border-border p-8">
+                            <p class="text-content-secondary leading-relaxed mb-6">
+                                Under applicable data protection laws, you have the following rights:
+                            </p>
+                            <ul class="space-y-3">
+                                <li class="flex items-center gap-3">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <span class="text-content-secondary">Access your personal data</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <span class="text-content-secondary">Correct inaccurate data</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <span class="text-content-secondary">Request deletion of your data</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <span class="text-content-secondary">Withdraw consent for marketing</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <span class="text-content-secondary">Data portability</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section id="cookies" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">6. Cookies</h2>
+                        <div class="bg-white rounded-2xl border border-border p-8">
+                            <p class="text-content-secondary leading-relaxed mb-6">
+                                We use cookies to enhance your browsing experience. These include essential cookies for site functionality and analytics cookies to understand how you use our platform.
+                            </p>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="inline-flex items-center gap-2 px-4 py-2 bg-surface-muted rounded-full text-sm">
+                                    <i class="fas fa-cog text-content-secondary"></i> Essential
+                                </span>
+                                <span class="inline-flex items-center gap-2 px-4 py-2 bg-surface-muted rounded-full text-sm">
+                                    <i class="fas fa-chart-line text-content-secondary"></i> Analytics
+                                </span>
+                                <span class="inline-flex items-center gap-2 px-4 py-2 bg-surface-muted rounded-full text-sm">
+                                    <i class="fas fa-bullhorn text-content-secondary"></i> Marketing
+                                </span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="contact" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">7. Contact Us</h2>
+                        <div class="bg-primary-50 rounded-2xl border border-primary-100 p-8">
+                            <p class="text-content-secondary leading-relaxed mb-6">
+                                If you have any questions about this Privacy Policy or our data practices, please contact our Data Protection Officer:
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-6">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-primary-100 text-primary-600 rounded-xl flex items-center justify-center">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-content-secondary">Email</p>
+                                        <p class="font-semibold text-content-primary">abijith.apollo@gmail.com</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-primary-100 text-primary-600 rounded-xl flex items-center justify-center">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-content-secondary">Phone</p>
+                                        <p class="font-semibold text-content-primary">044 - 48633074</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-primary-100 text-primary-600 rounded-xl flex items-center justify-center">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-content-secondary">Address</p>
+                                        <p class="font-semibold text-content-primary">Virugambakkam, Chennai-600092</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}

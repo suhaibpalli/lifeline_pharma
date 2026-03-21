@@ -6,97 +6,149 @@ from django.http import JsonResponse
 from .models import CarouselImage, ContactInquiry, Page, DeliveryZone
 from .forms import ContactForm
 
+
 class HomeView(TemplateView):
     """Homepage view"""
-    template_name = 'pages/home.html'
-    
+
+    template_name = "pages/home.html"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Welcome to Pharma Store'
-        
+        context["page_title"] = "Welcome to Pharma Store"
+
         # Get active carousel images
         carousel_images = CarouselImage.objects.filter(is_active=True)
-        context['carousel_images'] = carousel_images
-        
+        context["carousel_images"] = carousel_images
+
         # We'll add featured products later
         return context
 
 
 class AboutView(TemplateView):
     """About us page"""
-    template_name = 'pages/about.html'
-    
+
+    template_name = "pages/about.html"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
-            about_page = Page.objects.get(slug='about-us', is_published=True)
-            context['page'] = about_page
+            about_page = Page.objects.get(slug="about-us", is_published=True)
+            context["page"] = about_page
         except Page.DoesNotExist:
-            context['page'] = None
+            context["page"] = None
         return context
+
 
 class ContactView(CreateView):
     """Contact us page with form"""
+
     model = ContactInquiry
     form_class = ContactForm
-    template_name = 'pages/contact.html'
-    success_url = reverse_lazy('core:contact_success')
-    
+    template_name = "pages/contact.html"
+    success_url = reverse_lazy("core:contact_success")
+
     def form_valid(self, form):
-        messages.success(self.request, 'Thank you for your message. We will get back to you soon!')
+        messages.success(
+            self.request, "Thank you for your message. We will get back to you soon!"
+        )
         return super().form_valid(form)
+
 
 class ContactSuccessView(TemplateView):
     """Contact form success page"""
-    template_name = 'pages/contact_success.html'
+
+    template_name = "pages/contact_success.html"
+
 
 class PageDetailView(TemplateView):
     """Generic page detail view for static pages"""
-    template_name = 'pages/page_detail.html'
-    
+
+    template_name = "pages/page_detail.html"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        slug = kwargs.get('slug')
+        slug = kwargs.get("slug")
         page = get_object_or_404(Page, slug=slug, is_published=True)
-        context['page'] = page
+        context["page"] = page
         return context
+
 
 def check_delivery_zone(request):
     """AJAX view to check if delivery is available for a pincode"""
-    if request.method == 'GET':
-        pincode = request.GET.get('pincode')
+    if request.method == "GET":
+        pincode = request.GET.get("pincode")
         if pincode:
             try:
                 zone = DeliveryZone.objects.filter(
                     pincode_start__lte=pincode,
                     pincode_end__gte=pincode,
-                    is_serviceable=True
+                    is_serviceable=True,
                 ).first()
-                
+
                 if zone:
-                    return JsonResponse({
-                        'serviceable': True,
-                        'delivery_charge': float(zone.delivery_charge),
-                        'estimated_days': zone.estimated_days,
-                        'zone_name': zone.name
-                    })
+                    return JsonResponse(
+                        {
+                            "serviceable": True,
+                            "delivery_charge": float(zone.delivery_charge),
+                            "estimated_days": zone.estimated_days,
+                            "zone_name": zone.name,
+                        }
+                    )
                 else:
-                    return JsonResponse({
-                        'serviceable': False,
-                        'message': 'Sorry, we do not deliver to this pincode yet.'
-                    })
+                    return JsonResponse(
+                        {
+                            "serviceable": False,
+                            "message": "Sorry, we do not deliver to this pincode yet.",
+                        }
+                    )
             except Exception as e:
-                return JsonResponse({
-                    'error': 'Unable to check delivery availability.'
-                })
-        
-    return JsonResponse({'error': 'Invalid request'})
+                return JsonResponse({"error": "Unable to check delivery availability."})
+
+    return JsonResponse({"error": "Invalid request"})
+
+
+class FAQView(TemplateView):
+    """FAQ page"""
+
+    template_name = "pages/faq.html"
+
+
+class PrivacyPolicyView(TemplateView):
+    """Privacy Policy page"""
+
+    template_name = "pages/privacy_policy.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            privacy_page = Page.objects.get(slug="privacy-policy", is_published=True)
+            context["page"] = privacy_page
+        except Page.DoesNotExist:
+            context["page"] = None
+        return context
+
+
+class TermsOfServiceView(TemplateView):
+    """Terms of Service page"""
+
+    template_name = "pages/terms_of_service.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            terms_page = Page.objects.get(slug="terms-of-service", is_published=True)
+            context["page"] = terms_page
+        except Page.DoesNotExist:
+            context["page"] = None
+        return context
+
 
 # Error handlers
 def custom_404(request, exception):
     """Custom 404 error page"""
-    return render(request, 'errors/404.html', status=404)
+    return render(request, "errors/404.html", status=404)
+
 
 def custom_500(request):
     """Custom 500 error page"""
-    return render(request, 'errors/500.html', status=500)
+    return render(request, "errors/500.html", status=500)

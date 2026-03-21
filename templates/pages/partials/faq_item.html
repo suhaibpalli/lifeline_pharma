@@ -1,0 +1,13 @@
+<div class="faq-item bg-white rounded-2xl border border-border overflow-hidden transition-all duration-300 hover:shadow-soft">
+    <button class="faq-question w-full flex items-center justify-between p-6 text-left">
+        <span class="text-lg font-semibold text-content-primary pr-4">{{ question }}</span>
+        <span class="faq-icon flex-shrink-0 w-8 h-8 bg-surface-muted rounded-full flex items-center justify-center text-content-secondary transition-transform duration-300">
+            <i class="fas fa-chevron-down text-sm"></i>
+        </span>
+    </button>
+    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+        <div class="px-6 pb-6 text-content-secondary leading-relaxed">
+            {{ answer }}
+        </div>
+    </div>
+</div>

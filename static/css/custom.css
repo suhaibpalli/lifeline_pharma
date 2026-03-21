@@ -1,37 +1,20 @@
-/* Custom styles for pharma store */
+/* ===================================
+   DESIGN SYSTEM - CUSTOM STYLES
+   =================================== */
 
 /* Loading spinner */
 .spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
+    border: 3px solid rgba(12, 127, 242, 0.1);
+    border-top: 3px solid var(--color-primary);
     border-radius: 50%;
     width: 40px;
     height: 40px;
-    animation: spin 2s linear infinite;
+    animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
-
-/* Custom button styles */
-.btn-primary {
-    @apply bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200;
-}
-
-.btn-secondary {
-    @apply bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-200;
-}
-
-/* Form styles */
-.form-input {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500;
-}
-
-/* Card styles */
-.card {
-    @apply bg-white rounded-lg shadow-md p-6;
 }
 
 /* Smooth scrolling */
@@ -42,26 +25,28 @@ html {
 /* Custom scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--color-surface-muted);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #888;
+    background: var(--color-content-tertiary);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: var(--color-content-secondary);
 }
 
 /* Hero Carousel Styles */
 .hero-carousel {
     position: relative;
-    height: 80vh;
+    height: 90vh;
     min-height: 600px;
+    max-height: 900px;
     overflow: hidden;
 }
 
@@ -78,7 +63,7 @@ html {
     width: 100%;
     height: 100%;
     opacity: 0;
-    transition: opacity 0.8s ease-in-out;
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1;
 }
 
@@ -87,11 +72,17 @@ html {
     z-index: 2;
 }
 
+.carousel-slide.active .carousel-image {
+    transform: scale(1);
+}
+
 .carousel-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
+    transform: scale(1.05);
+    transition: transform 8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .carousel-overlay {
@@ -100,7 +91,7 @@ html {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+    background: linear-gradient(135deg, rgba(9, 104, 218, 0.5), rgba(9, 104, 218, 0.7));
     z-index: 3;
 }
 
@@ -114,7 +105,7 @@ html {
     align-items: center;
     justify-content: center;
     z-index: 4;
-    padding: 20px;
+    padding: 24px;
 }
 
 /* Navigation Arrows */
@@ -122,38 +113,40 @@ html {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     border: none;
-    color: #1f2937;
-    width: 48px;
-    height: 48px;
+    color: var(--color-content-primary);
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 5;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(8px);
 }
 
 .carousel-nav:hover {
-    background: rgba(255, 255, 255, 1);
+    background: white;
     transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
 }
 
 .carousel-nav.prev {
-    left: 20px;
+    left: 24px;
 }
 
 .carousel-nav.next {
-    right: 20px;
+    right: 24px;
 }
 
 /* Dots Indicator */
 .carousel-dots {
     position: absolute;
-    bottom: 30px;
+    bottom: 32px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -165,16 +158,16 @@ html {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.5);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: 2px solid transparent;
 }
 
 .dot:hover,
 .dot.active {
-    background: rgba(255, 255, 255, 1);
-    transform: scale(1.2);
+    background: white;
+    transform: scale(1.3);
     border-color: rgba(255, 255, 255, 0.3);
 }
 
@@ -184,25 +177,174 @@ html {
     display: none;
 }
 
+/* Scroll animations */
+.scroll-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-animate.animate-fade-up {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger animation for lists */
+.stagger-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stagger-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Card hover effects */
+.card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Button hover effects */
+.btn-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-effect::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-effect:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* Loading states */
+.skeleton {
+    background: linear-gradient(90deg, var(--color-surface-muted) 25%, #e5e7eb 50%, var(--color-surface-muted) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Focus states for accessibility */
+*:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Button focus states */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Link hover transitions */
+a {
+    transition: color 0.2s ease;
+}
+
+/* Input transitions */
+input, select, textarea {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Image lazy loading */
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+img[loading="lazy"].loaded,
+img:not([loading="lazy"]) {
+    opacity: 1;
+}
+
+/* Toast animations */
+@keyframes toast-enter {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes toast-exit {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+.toast-enter {
+    animation: toast-enter 0.3s ease forwards;
+}
+
+.toast-exit {
+    animation: toast-exit 0.3s ease forwards;
+}
+
+/* Badge pulse for notifications */
+@keyframes badge-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.badge-pulse {
+    animation: badge-pulse 2s infinite;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .hero-carousel {
-        height: 70vh;
+        height: 80vh;
         min-height: 500px;
+        max-height: 700px;
     }
     
     .carousel-nav {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         font-size: 14px;
     }
     
     .carousel-nav.prev {
-        left: 15px;
+        left: 12px;
     }
     
     .carousel-nav.next {
-        right: 15px;
+        right: 12px;
     }
     
     .carousel-dots {
@@ -213,5 +355,36 @@ html {
     .dot {
         width: 10px;
         height: 10px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    body {
+        background: white;
+        color: black;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Can be extended for dark mode support */
     }
 }

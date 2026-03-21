@@ -10,7 +10,7 @@
         <div class="mx-auto px-6 lg:px-10">
             <div class="max-w-4xl mx-auto text-center">
                 <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight mb-6">
-                    Contact Us
+                    Contact Lifeline Healthcare
                 </h1>
                 <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">
                     We're here to help. Get in touch with our support team for any questions or assistance.
@@ -90,7 +90,7 @@
                     <!-- Contact Information -->
                     <div class="space-y-8">
                         <!-- Get in Touch Card -->
-                        <div class="bg-white border border-border-light rounded-lg p-8">
+                        <div class="bg-white border border-border rounded-lg p-8">
                             <h2 class="text-text-primary text-2xl font-bold mb-6">Get in Touch</h2>
                             
                             <div class="space-y-6">
@@ -101,9 +101,9 @@
                                     <div>
                                         <h3 class="text-text-primary font-semibold mb-1">Address</h3>
                                         <p class="text-text-secondary text-sm leading-relaxed">
-                                            123 Pharmacy Street<br>
-                                            City, State 123456<br>
-                                            India
+                                            No.18/24, Ground Floor,<br>
+                                            Sri Ayyappa Nagar 2nd Main road,<br>
+                                            Virugambakkam, Chennai-600092
                                         </p>
                                     </div>
                                 </div>
@@ -114,8 +114,8 @@
                                     </div>
                                     <div>
                                         <h3 class="text-text-primary font-semibold mb-1">Phone</h3>
-                                        <p class="text-text-secondary text-sm">{{ contact_phone|default:"+91-1234567890" }}</p>
-                                        <p class="text-text-secondary text-xs mt-1">Mon-Sat: 9AM-8PM</p>
+                                        <p class="text-text-secondary text-sm">044 - 48633074</p>
+                                        <p class="text-text-secondary text-sm">6381411751 / 9884433074</p>
                                     </div>
                                 </div>
                                 
@@ -125,8 +125,7 @@
                                     </div>
                                     <div>
                                         <h3 class="text-text-primary font-semibold mb-1">Email</h3>
-                                        <p class="text-text-secondary text-sm">{{ contact_email|default:"support@pharmastore.com" }}</p>
-                                        <p class="text-text-secondary text-xs mt-1">We'll respond within 24 hours</p>
+                                        <p class="text-text-secondary text-sm">abijith.apollo@gmail.com</p>
                                     </div>
                                 </div>
                             </div>
@@ -141,23 +140,23 @@
                             <p class="text-red-700 text-sm mb-3">
                                 For urgent medical assistance, please contact:
                             </p>
-                            <p class="text-red-800 font-semibold mb-2">Emergency Hotline: +91 9876543210</p>
-                            <p class="text-red-600 text-xs">Available 24/7 for emergency queries</p>
+                            <p class="text-red-800 font-semibold mb-2">Customer Care: 044 - 48633074 / 6381411751 / 9884433074</p>
+                            <p class="text-red-600 text-xs">Available during business hours</p>
                         </div>
 
                         <!-- FAQ Link -->
-                        <div class="bg-background-subtle rounded-lg p-6">
+                        <div class="bg-surface-muted rounded-lg p-6">
                             <h3 class="text-text-primary font-semibold mb-3">Have Questions?</h3>
                             <p class="text-text-secondary text-sm mb-4">
                                 Check out our frequently asked questions or browse our help center for quick answers.
                             </p>
                             <div class="flex gap-3">
-                                <a href="#" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                                <a href="{% url 'core:faq' %}" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
                                     View FAQ
                                 </a>
                                 <span class="text-border-light">|</span>
-                                <a href="#" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                                    Help Center
+                                <a href="tel:04448633074" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                                    Call Support
                                 </a>
                             </div>
                         </div>

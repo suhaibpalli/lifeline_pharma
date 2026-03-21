@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search Results for "{{ query }}" - Lifeline Healthcare{% endblock %}
+
+{% block content %}
+<div class="bg-surface">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-primary-600 to-primary-700 text-white py-12">
+        <div class="mx-auto px-6 lg:px-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-3xl md:text-4xl font-bold mb-4">
+                    Search Results
+                </h1>
+                <p class="text-lg text-white/90">
+                    {% if query %}
+                        Showing results for "<span class="font-semibold">{{ query }}</span>"
+                    {% else %}
+                        Find the medicines you're looking for
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Results -->
+    <section class="py-12">
+        <div class="mx-auto px-6 lg:px-10">
+            <div class="max-w-7xl mx-auto">
+                <!-- Search Form -->
+                <div class="mb-8">
+                    <form method="get" action="{% url 'products:search' %}" class="flex gap-4 max-w-2xl mx-auto">
+                        <div class="flex-1 relative">
+                            <input type="text" 
+                                   name="q"
+                                   value="{{ query }}"
+                                   placeholder="Search medicines, health products..." 
+                                   class="w-full px-6 py-4 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base">
+                            <button type="submit" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-content-secondary hover:text-primary-500 transition-colors">
+                                <i class="fas fa-search text-lg"></i>
+                            </button>
+                        </div>
+                        <button type="submit" class="bg-primary-500 text-white px-8 py-4 rounded-xl hover:bg-primary-600 transition-colors font-medium">
+                            Search
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Results Count -->
+                <div class="flex items-center justify-between mb-6">
+                    <p class="text-content-secondary">
+                        {% if total_results > 0 %}
+                            Found <span class="font-semibold text-content-primary">{{ total_results }}</span> product{{ total_results|pluralize }}
+                        {% else %}
+                            No products found
+                        {% endif %}
+                    </p>
+                </div>
+
+                {% if products %}
+                    <!-- Products Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {% for product in products %}
+                            {% include 'products/partials/product_card.html' with product=product %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if page_obj.has_other_pages %}
+                        <div class="mt-12 flex justify-center">
+                            <nav class="flex items-center gap-2">
+                                {% if page_obj.has_previous %}
+                                    <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}" 
+                                       class="px-4 py-2 border border-border rounded-lg hover:bg-surface-muted transition-colors">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% for num in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == num %}
+                                        <span class="px-4 py-2 bg-primary-500 text-white rounded-lg">{{ num }}</span>
+                                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                        <a href="?q={{ query }}&page={{ num }}" 
+                                           class="px-4 py-2 border border-border rounded-lg hover:bg-surface-muted transition-colors">
+                                            {{ num }}
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if page_obj.has_next %}
+                                    <a href="?q={{ query }}&page={{ page_obj.next_page_number }}" 
+                                       class="px-4 py-2 border border-border rounded-lg hover:bg-surface-muted transition-colors">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                {% endif %}
+                            </nav>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <!-- No Results -->
+                    <div class="text-center py-16">
+                        <div class="w-24 h-24 bg-surface-muted rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-search text-4xl text-content-tertiary"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-content-primary mb-4">No products found</h2>
+                        <p class="text-content-secondary mb-8 max-w-md mx-auto">
+                            We couldn't find any products matching your search. Try different keywords or browse our categories.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <a href="{% url 'products:catalog' %}" 
+                               class="inline-flex items-center justify-center gap-2 bg-primary-500 text-white px-6 py-3 rounded-xl hover:bg-primary-600 transition-colors font-medium">
+                                <i class="fas fa-th-large"></i>
+                                Browse Products
+                            </a>
+                            <a href="{% url 'core:contact' %}" 
+                               class="inline-flex items-center justify-center gap-2 border border-border text-content-primary px-6 py-3 rounded-xl hover:bg-surface-muted transition-colors font-medium">
+                                <i class="fas fa-headset"></i>
+                                Contact Support
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Popular Categories -->
+                    <div class="mt-12">
+                        <h3 class="text-xl font-bold text-content-primary mb-6 text-center">Popular Categories</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <a href="{% url 'products:catalog' %}?category=medicines" class="bg-surface-muted rounded-xl p-6 text-center hover:bg-primary-50 transition-colors">
+                                <i class="fas fa-capsules text-3xl text-primary-500 mb-3"></i>
+                                <p class="font-medium text-content-primary">Medicines</p>
+                            </a>
+                            <a href="{% url 'products:catalog' %}?category=wellness" class="bg-surface-muted rounded-xl p-6 text-center hover:bg-primary-50 transition-colors">
+                                <i class="fas fa-leaf text-3xl text-green-500 mb-3"></i>
+                                <p class="font-medium text-content-primary">Wellness</p>
+                            </a>
+                            <a href="{% url 'products:catalog' %}?category=equipment" class="bg-surface-muted rounded-xl p-6 text-center hover:bg-primary-50 transition-colors">
+                                <i class="fas fa-heartbeat text-3xl text-red-500 mb-3"></i>
+                                <p class="font-medium text-content-primary">Equipment</p>
+                            </a>
+                            <a href="{% url 'products:catalog' %}?category=supplements" class="bg-surface-muted rounded-xl p-6 text-center hover:bg-primary-50 transition-colors">
+                                <i class="fas fa-vial text-3xl text-yellow-500 mb-3"></i>
+                                <p class="font-medium text-content-primary">Supplements</p>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

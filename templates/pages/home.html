@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ site_name }} - Your Health, Our Priority{% endblock %}
+{% block title %}Lifeline Healthcare - Your Health, Our Priority{% endblock %}
 
 {% block content %}
 <div class="homepage">
@@ -20,30 +20,33 @@
                             
                             <!-- Content for this slide -->
                             <div class="carousel-content">
-                                <div class="mx-auto px-6 lg:px-10 text-center text-white">
-                                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-6 drop-shadow-lg">
+                                <div class="mx-auto px-6 lg:px-10 text-center text-white max-w-4xl">
+                                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-6 drop-shadow-lg animate-fade-up">
                                         {{ image.title }}
                                     </h1>
                                     {% if image.subtitle %}
-                                        <p class="text-lg md:text-xl font-normal leading-relaxed mb-8 opacity-90 max-w-2xl mx-auto drop-shadow">
+                                        <p class="text-lg md:text-xl font-normal leading-relaxed mb-8 opacity-90 max-w-2xl mx-auto drop-shadow animate-fade-up" style="animation-delay: 0.1s">
                                             {{ image.subtitle }}
                                         </p>
                                     {% endif %}
-                                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                    <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up" style="animation-delay: 0.2s">
                                         {% if image.button_link %}
                                             <a href="{{ image.button_link }}" 
-                                               class="bg-white text-primary-600 px-8 py-3 md:py-4 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base font-bold shadow-lg">
+                                               class="group bg-white text-primary-600 px-8 py-4 rounded-xl hover:bg-gray-50 transition-all duration-300 text-base font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                                                 {{ image.button_text }}
+                                                <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                                             </a>
                                         {% else %}
                                             <a href="{% url 'products:catalog' %}" 
-                                               class="bg-white text-primary-600 px-8 py-3 md:py-4 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base font-bold shadow-lg">
+                                               class="group bg-white text-primary-600 px-8 py-4 rounded-xl hover:bg-gray-50 transition-all duration-300 text-base font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                                                 Order Medicines
+                                                <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                                             </a>
                                         {% endif %}
                                         <a href="{% url 'core:about' %}" 
-                                           class="border-2 border-white text-white px-8 py-3 md:py-4 rounded-lg hover:bg-white hover:text-primary-600 transition-colors text-sm md:text-base font-bold">
+                                           class="group border-2 border-white text-white px-8 py-4 rounded-xl hover:bg-white hover:text-primary-600 transition-all duration-300 text-base font-bold">
                                             Learn More
+                                            <i class="fas fa-chevron-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                                         </a>
                                     </div>
                                 </div>
@@ -53,25 +56,27 @@
                 {% else %}
                     <!-- Default slide if no images uploaded -->
                     <div class="carousel-slide active">
-                        <div class="w-full h-full bg-gradient-to-r from-primary-600 to-primary-700"></div>
+                        <div class="w-full h-full bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800"></div>
                         <div class="carousel-overlay"></div>
                         
                         <div class="carousel-content">
-                            <div class="mx-auto px-6 lg:px-10 text-center text-white">
-                                <h1 class="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-6 drop-shadow-lg">
+                            <div class="mx-auto px-6 lg:px-10 text-center text-white max-w-4xl">
+                                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-6 drop-shadow-lg animate-fade-up">
                                     Your Health, Our Priority
                                 </h1>
-                                <p class="text-lg md:text-xl font-normal leading-relaxed mb-8 opacity-90 max-w-2xl mx-auto drop-shadow">
-                                    Order medicines online and get them delivered to your doorstep. Register your pharmacy to reach more customers.
+                                <p class="text-lg md:text-xl font-normal leading-relaxed mb-8 opacity-90 max-w-2xl mx-auto drop-shadow animate-fade-up" style="animation-delay: 0.1s">
+                                    Order genuine medicines from certified pharmacies and get them delivered safely to your doorstep. Register your pharmacy to reach more customers.
                                 </p>
-                                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up" style="animation-delay: 0.2s">
                                     <a href="{% url 'products:catalog' %}" 
-                                       class="bg-white text-primary-600 px-8 py-3 md:py-4 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base font-bold shadow-lg">
+                                       class="group bg-white text-primary-600 px-8 py-4 rounded-xl hover:bg-gray-50 transition-all duration-300 text-base font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                                         Order Medicines
+                                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                                     </a>
                                     <a href="{% url 'core:about' %}" 
-                                       class="border-2 border-white text-white px-8 py-3 md:py-4 rounded-lg hover:bg-white hover:text-primary-600 transition-colors text-sm md:text-base font-bold">
+                                       class="group border-2 border-white text-white px-8 py-4 rounded-xl hover:bg-white hover:text-primary-600 transition-all duration-300 text-base font-bold">
                                         Learn More
+                                        <i class="fas fa-chevron-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                                     </a>
                                 </div>
                             </div>
@@ -101,162 +106,292 @@
         </div>
     </section>
 
+    <!-- Trust Badges Bar -->
+    <section class="bg-white border-b border-border">
+        <div class="mx-auto px-6 lg:px-10 py-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                <div class="flex items-center justify-center gap-3 text-center">
+                    <div class="w-12 h-12 bg-success/10 text-success rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-shield-alt text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-sm font-semibold text-content-primary">100% Genuine</p>
+                        <p class="text-xs text-content-secondary">Certified Medicines</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center gap-3 text-center">
+                    <div class="w-12 h-12 bg-primary-100 text-primary-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-truck text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-sm font-semibold text-content-primary">Fast Delivery</p>
+                        <p class="text-xs text-content-secondary">Across India</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center gap-3 text-center">
+                    <div class="w-12 h-12 bg-accent-teal/10 text-accent-teal rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-user-md text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-sm font-semibold text-content-primary">Expert Support</p>
+                        <p class="text-xs text-content-secondary">Qualified Pharmacists</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center gap-3 text-center">
+                    <div class="w-12 h-12 bg-accent-amber/10 text-accent-amber rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-lock text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-sm font-semibold text-content-primary">Secure Payment</p>
+                        <p class="text-xs text-content-secondary">256-bit SSL</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Stats Section -->
-    <section class="py-12 bg-white">
+    <section class="py-16 bg-surface-muted">
         <div class="mx-auto px-6 lg:px-10">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
-                <div class="bg-background-subtle rounded-lg p-6 text-center">
-                    <p class="text-text-primary text-base font-medium mb-2">Certified Pharmacies</p>
-                    <p class="text-text-primary text-3xl font-bold">1,500+</p>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                <div class="bg-white rounded-2xl p-6 text-center shadow-card hover:shadow-hover transition-shadow duration-300">
+                    <div class="text-4xl md:text-5xl font-bold text-primary-600 mb-2">1,500+</div>
+                    <p class="text-sm text-content-secondary">Certified Pharmacies</p>
                 </div>
-                <div class="bg-background-subtle rounded-lg p-6 text-center">
-                    <p class="text-text-primary text-base font-medium mb-2">Happy Customers</p>
-                    <p class="text-text-primary text-3xl font-bold">500,000+</p>
+                <div class="bg-white rounded-2xl p-6 text-center shadow-card hover:shadow-hover transition-shadow duration-300">
+                    <div class="text-4xl md:text-5xl font-bold text-primary-600 mb-2">500K+</div>
+                    <p class="text-sm text-content-secondary">Happy Customers</p>
                 </div>
-                <div class="bg-background-subtle rounded-lg p-6 text-center">
-                    <p class="text-text-primary text-base font-medium mb-2">Medicines Available</p>
-                    <p class="text-text-primary text-3xl font-bold">10,000+</p>
+                <div class="bg-white rounded-2xl p-6 text-center shadow-card hover:shadow-hover transition-shadow duration-300">
+                    <div class="text-4xl md:text-5xl font-bold text-primary-600 mb-2">10,000+</div>
+                    <p class="text-sm text-content-secondary">Medicines Available</p>
                 </div>
-                <div class="bg-background-subtle rounded-lg p-6 text-center">
-                    <p class="text-text-primary text-base font-medium mb-2">Cities Served</p>
-                    <p class="text-text-primary text-3xl font-bold">100+</p>
+                <div class="bg-white rounded-2xl p-6 text-center shadow-card hover:shadow-hover transition-shadow duration-300">
+                    <div class="text-4xl md:text-5xl font-bold text-primary-600 mb-2">100+</div>
+                    <p class="text-sm text-content-secondary">Cities Served</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Categories Section -->
-    <section class="py-16 bg-white">
+    <section class="py-20 bg-white">
         <div class="mx-auto px-6 lg:px-10">
-            <h2 class="text-text-primary text-2xl md:text-3xl font-bold leading-tight tracking-tight text-center mb-12">
-                Explore Our Categories
-            </h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-                <div class="group cursor-pointer">
-                    <div class="bg-blue-100 rounded-lg aspect-square mb-4 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                        <i class="fas fa-pills text-4xl text-blue-600"></i>
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-content-primary mb-4">Shop by Category</h2>
+                <p class="text-content-secondary max-w-2xl mx-auto">Browse our extensive range of healthcare products organized into easy-to-find categories</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
+                <a href="{% url 'products:catalog' %}?category=medicines" class="group">
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 text-center transition-all duration-300 group-hover:shadow-card group-hover:-translate-y-1">
+                        <div class="w-16 h-16 bg-blue-500/10 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-capsules text-2xl"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-content-primary">Medicines</p>
                     </div>
-                    <p class="text-text-primary text-base font-medium text-center">Medicines</p>
-                </div>
-                <div class="group cursor-pointer">
-                    <div class="bg-green-100 rounded-lg aspect-square mb-4 flex items-center justify-center group-hover:bg-green-200 transition-colors">
-                        <i class="fas fa-leaf text-4xl text-green-600"></i>
+                </a>
+                <a href="{% url 'products:catalog' %}?category=wellness" class="group">
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 text-center transition-all duration-300 group-hover:shadow-card group-hover:-translate-y-1">
+                        <div class="w-16 h-16 bg-green-500/10 text-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-leaf text-2xl"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-content-primary">Wellness</p>
                     </div>
-                    <p class="text-text-primary text-base font-medium text-center">Wellness</p>
-                </div>
-                <div class="group cursor-pointer">
-                    <div class="bg-purple-100 rounded-lg aspect-square mb-4 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
-                        <i class="fas fa-stethoscope text-4xl text-purple-600"></i>
+                </a>
+                <a href="{% url 'products:catalog' %}?category=equipment" class="group">
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 text-center transition-all duration-300 group-hover:shadow-card group-hover:-translate-y-1">
+                        <div class="w-16 h-16 bg-purple-500/10 text-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-heartbeat text-2xl"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-content-primary">Equipment</p>
                     </div>
-                    <p class="text-text-primary text-base font-medium text-center">Equipment</p>
-                </div>
-                <div class="group cursor-pointer">
-                    <div class="bg-orange-100 rounded-lg aspect-square mb-4 flex items-center justify-center group-hover:bg-orange-200 transition-colors">
-                        <i class="fas fa-heart text-4xl text-orange-600"></i>
+                </a>
+                <a href="{% url 'products:catalog' %}?category=personal-care" class="group">
+                    <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-6 text-center transition-all duration-300 group-hover:shadow-card group-hover:-translate-y-1">
+                        <div class="w-16 h-16 bg-orange-500/10 text-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-spa text-2xl"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-content-primary">Personal Care</p>
                     </div>
-                    <p class="text-text-primary text-base font-medium text-center">Personal Care</p>
-                </div>
+                </a>
+                <a href="{% url 'products:catalog' %}?category=supplements" class="group">
+                    <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-2xl p-6 text-center transition-all duration-300 group-hover:shadow-card group-hover:-translate-y-1">
+                        <div class="w-16 h-16 bg-yellow-500/10 text-yellow-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-vial text-2xl"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-content-primary">Supplements</p>
+                    </div>
+                </a>
+                <a href="{% url 'products:catalog' %}?category=baby-care" class="group">
+                    <div class="bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl p-6 text-center transition-all duration-300 group-hover:shadow-card group-hover:-translate-y-1">
+                        <div class="w-16 h-16 bg-pink-500/10 text-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-baby text-2xl"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-content-primary">Baby Care</p>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
 
     <!-- How It Works Section -->
-    <section class="py-16 bg-background-subtle">
+    <section class="py-20 bg-surface-muted">
         <div class="mx-auto px-6 lg:px-10">
-            <h2 class="text-text-primary text-2xl md:text-3xl font-bold leading-tight tracking-tight text-center mb-12">
-                How It Works
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <!-- For Patients -->
-                <div class="bg-white rounded-lg border border-border-light p-6">
-                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-user text-xl"></i>
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-content-primary mb-4">How It Works</h2>
+                <p class="text-content-secondary max-w-2xl mx-auto">Get your medicines delivered in 3 simple steps</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto relative">
+                <!-- Connection Line (Desktop) -->
+                <div class="hidden md:block absolute top-16 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-primary-200 via-primary-400 to-primary-200"></div>
+                
+                <!-- Step 1 -->
+                <div class="text-center relative">
+                    <div class="w-16 h-16 bg-primary-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 relative z-10 shadow-lg shadow-primary-500/30">
+                        <i class="fas fa-search text-2xl"></i>
                     </div>
-                    <h3 class="text-text-primary text-lg font-bold mb-2">For Patients</h3>
-                    <p class="text-text-secondary text-sm leading-relaxed">
-                        Find and order medicines from certified pharmacies. Upload prescriptions and get genuine medicines delivered.
-                    </p>
+                    <span class="inline-block bg-primary-100 text-primary-600 text-sm font-bold px-3 py-1 rounded-full mb-4">Step 1</span>
+                    <h3 class="text-xl font-bold text-content-primary mb-3">Search or Browse</h3>
+                    <p class="text-content-secondary text-sm leading-relaxed max-w-xs mx-auto">Find your medicines by searching or browsing through our categories</p>
                 </div>
                 
-                <!-- For Pharmacies -->
-                <div class="bg-white rounded-lg border border-border-light p-6">
-                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-store text-xl"></i>
+                <!-- Step 2 -->
+                <div class="text-center relative">
+                    <div class="w-16 h-16 bg-primary-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 relative z-10 shadow-lg shadow-primary-500/30">
+                        <i class="fas fa-upload text-2xl"></i>
                     </div>
-                    <h3 class="text-text-primary text-lg font-bold mb-2">For Pharmacies</h3>
-                    <p class="text-text-secondary text-sm leading-relaxed">
-                        Register your pharmacy and reach a wider customer base. Manage inventory and orders efficiently.
-                    </p>
+                    <span class="inline-block bg-primary-100 text-primary-600 text-sm font-bold px-3 py-1 rounded-full mb-4">Step 2</span>
+                    <h3 class="text-xl font-bold text-content-primary mb-3">Upload Prescription</h3>
+                    <p class="text-content-secondary text-sm leading-relaxed max-w-xs mx-auto">For prescription medicines, upload a valid prescription from your doctor</p>
                 </div>
                 
-                <!-- Delivery -->
-                <div class="bg-white rounded-lg border border-border-light p-6">
-                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-truck text-xl"></i>
+                <!-- Step 3 -->
+                <div class="text-center relative">
+                    <div class="w-16 h-16 bg-primary-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 relative z-10 shadow-lg shadow-primary-500/30">
+                        <i class="fas fa-truck text-2xl"></i>
                     </div>
-                    <h3 class="text-text-primary text-lg font-bold mb-2">Fast Delivery</h3>
-                    <p class="text-text-secondary text-sm leading-relaxed">
-                        Fast and reliable delivery to your doorstep. Track your orders in real-time.
-                    </p>
+                    <span class="inline-block bg-primary-100 text-primary-600 text-sm font-bold px-3 py-1 rounded-full mb-4">Step 3</span>
+                    <h3 class="text-xl font-bold text-content-primary mb-3">Get Delivery</h3>
+                    <p class="text-content-secondary text-sm leading-relaxed max-w-xs mx-auto">Receive your genuine medicines at your doorstep</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Trust Indicators -->
-    <section class="py-16 bg-white">
+    <!-- For Pharmacies CTA -->
+    <section class="py-20 bg-gradient-to-br from-primary-600 to-primary-700 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC40Ij48cGF0aCBkPSJNMzYgMzRjMC0yLjIwOS0xLjc5MS00LTQtNHMtNCAxLjc5MS00IDQgMS43OTEgNCA0IDQgNC0xLjc5MSA0LTR6Ii8+PC9nPjwvZz48L3N2Zz4=')]"></div>
+        </div>
+        <div class="mx-auto px-6 lg:px-10 max-w-6xl relative z-10">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="text-white">
+                    <span class="inline-block bg-white/20 text-white text-sm font-semibold px-4 py-2 rounded-full mb-6">For Pharmacies</span>
+                    <h2 class="text-3xl md:text-4xl font-bold leading-tight mb-6">Reach More Customers & Grow Your Business</h2>
+                    <p class="text-white/90 mb-8 leading-relaxed">Join our network of verified pharmacies and expand your customer base. Manage orders efficiently, track inventory, and grow your business with {{ site_name }}.</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <span>Verified pharmacy network across India</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <span>Easy inventory and order management</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <span>Secure payments directly to your account</span>
+                        </li>
+                    </ul>
+                    <a href="{% url 'accounts:register_choice' %}" class="inline-flex items-center gap-2 bg-white text-primary-600 px-8 py-4 rounded-xl font-bold hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl">
+                        Register Your Pharmacy
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="hidden md:flex justify-center">
+                    <div class="relative">
+                        <div class="w-80 h-80 bg-white/10 rounded-3xl flex items-center justify-center backdrop-blur-sm">
+                            <div class="text-center text-white">
+                                <i class="fas fa-store text-6xl mb-4 opacity-80"></i>
+                                <p class="font-bold text-xl">Lifeline Healthcare</p>
+                                <p class="text-white/70">Partner Pharmacies</p>
+                            </div>
+                        </div>
+                        <div class="absolute -top-4 -right-4 w-24 h-24 bg-success rounded-2xl flex items-center justify-center shadow-lg">
+                            <div class="text-center text-white">
+                                <p class="font-bold text-2xl">+25%</p>
+                                <p class="text-xs">More Orders</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Download CTA -->
+    <section class="py-20 bg-white">
         <div class="mx-auto px-6 lg:px-10">
-            <h2 class="text-text-primary text-2xl md:text-3xl font-bold leading-tight tracking-tight text-center mb-12">
-                Why Choose Us
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-shield-alt text-2xl"></i>
+            <div class="bg-gradient-to-br from-surface-muted to-white rounded-3xl p-8 md:p-16 max-w-6xl mx-auto border border-border">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-content-primary mb-6">Get the App</h2>
+                        <p class="text-content-secondary mb-8 leading-relaxed">Download our app for a better experience. Order medicines, track orders, and get exclusive offers on the go.</p>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="#" class="inline-flex items-center gap-3 bg-content-primary text-white px-6 py-3 rounded-xl hover:bg-content-primary/90 transition-colors">
+                                <i class="fab fa-google-play text-2xl"></i>
+                                <div class="text-left">
+                                    <p class="text-xs opacity-70">GET IT ON</p>
+                                    <p class="font-semibold">Google Play</p>
+                                </div>
+                            </a>
+                            <a href="#" class="inline-flex items-center gap-3 bg-content-primary text-white px-6 py-3 rounded-xl hover:bg-content-primary/90 transition-colors">
+                                <i class="fab fa-apple text-2xl"></i>
+                                <div class="text-left">
+                                    <p class="text-xs opacity-70">Download on the</p>
+                                    <p class="font-semibold">App Store</p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
-                    <h3 class="text-text-primary font-semibold mb-2">100% Genuine</h3>
-                    <p class="text-text-secondary text-sm">All medicines sourced from authorized distributors</p>
-                </div>
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-shipping-fast text-2xl"></i>
+                    <div class="flex justify-center">
+                        <div class="relative">
+                            <div class="w-64 h-[500px] bg-gradient-to-b from-primary-500 to-primary-700 rounded-[3rem] p-3 shadow-2xl">
+                                <div class="w-full h-full bg-white rounded-[2.5rem] overflow-hidden">
+                                    <div class="h-8 bg-content-primary flex items-center justify-center">
+                                        <div class="w-20 h-6 bg-black rounded-full"></div>
+                                    </div>
+                                    <div class="p-4 flex flex-col items-center justify-center h-full text-center">
+                                        <i class="fas fa-pills text-6xl text-primary-500 mb-4"></i>
+                                        <p class="font-bold text-content-primary">Lifeline Healthcare</p>
+                                        <p class="text-xs text-content-secondary mt-2">Your Health Partner</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="text-text-primary font-semibold mb-2">Fast Delivery</h3>
-                    <p class="text-text-secondary text-sm">Same day delivery available in major cities</p>
-                </div>
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-user-md text-2xl"></i>
-                    </div>
-                    <h3 class="text-text-primary font-semibold mb-2">Expert Support</h3>
-                    <p class="text-text-secondary text-sm">Qualified pharmacists available for consultation</p>
-                </div>
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-lock text-2xl"></i>
-                    </div>
-                    <h3 class="text-text-primary font-semibold mb-2">Secure Payment</h3>
-                    <p class="text-text-secondary text-sm">Your payment information is always protected</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="py-16 bg-primary-600 text-white">
-        <div class="mx-auto px-6 lg:px-10 text-center">
+    <section class="py-20 bg-gradient-to-br from-primary-600 to-primary-700">
+        <div class="mx-auto px-6 lg:px-10 text-center text-white max-w-4xl">
             <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Get Started?</h2>
-            <p class="text-lg md:text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+            <p class="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
                 Join thousands of satisfied customers who trust us with their healthcare needs.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="{% url 'products:catalog' %}" 
-                   class="bg-white text-primary-600 px-8 py-3 rounded-lg hover:bg-gray-50 transition-colors font-bold">
+                   class="group bg-white text-primary-600 px-8 py-4 rounded-xl font-bold hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl">
                     Start Shopping
+                    <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                 </a>
                 <a href="{% url 'core:contact' %}" 
-                   class="border-2 border-white text-white px-8 py-3 rounded-lg hover:bg-white hover:text-primary-600 transition-colors font-bold">
+                   class="group border-2 border-white text-white px-8 py-4 rounded-xl font-bold hover:bg-white hover:text-primary-600 transition-all duration-300">
                     Contact Us
+                    <i class="fas fa-phone ml-2"></i>
                 </a>
             </div>
         </div>
