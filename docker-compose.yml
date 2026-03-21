@@ -1,0 +1,158 @@
+name: lifeline-pharma
+
+services:
+
+  # ──────────────────────────────────────
+  # Django + Gunicorn
+  # ──────────────────────────────────────
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime          # explicit — avoids accidental builder stage use
+      cache_from:
+        - type=local,src=/tmp/.buildx-cache
+      args:
+        BUILDKIT_INLINE_CACHE: "1"
+    image: lifeline-pharma-django:latest
+    container_name: pharma_django
+    env_file: .env
+    volumes:
+      - static_volume:/app/staticfiles
+      - ./logs:/app/logs
+    ports:
+      - "127.0.0.1:8000:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # reach bare-metal PostgreSQL
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - pharma_net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+  # ──────────────────────────────────────
+  # Redis — cache + sessions
+  # ──────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: pharma_redis
+    command: >
+      redis-server
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --save 60 1
+      --save 300 10
+      --appendonly no
+      --loglevel warning
+      --tcp-keepalive 300
+    volumes:
+      - /opt/pharma/redis-data:/data
+    ports:
+      - "127.0.0.1:6379:6379"
+    restart: unless-stopped
+    networks:
+      - pharma_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: 300M
+        reservations:
+          memory: 64M
+
+  # ──────────────────────────────────────
+  # MinIO — media / file storage
+  # ──────────────────────────────────────
+  minio:
+    image: minio/minio:latest
+    container_name: pharma_minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+      MINIO_BROWSER_REDIRECT_URL: ""   # disable redirect — access via SSH tunnel only
+    volumes:
+      - /opt/pharma/minio-data:/data
+    ports:
+      - "127.0.0.1:9000:9000"    # S3 API — Nginx proxies /media/ here
+      - "127.0.0.1:9001:9001"    # Admin console — SSH tunnel only
+    restart: unless-stopped
+    networks:
+      - pharma_net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 128M
+
+  # ──────────────────────────────────────
+  # Uptime Kuma — uptime monitoring
+  # ──────────────────────────────────────
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: pharma_uptime
+    volumes:
+      - /opt/pharma/uptime-kuma-data:/app/data
+    ports:
+      - "127.0.0.1:3001:3001"
+    restart: unless-stopped
+    networks:
+      - pharma_net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 64M
+
+# ──────────────────────────────────────
+# Volumes + Networks
+# ──────────────────────────────────────
+volumes:
+  static_volume:    # Django staticfiles — shared with Nginx via bind at deploy time
+
+networks:
+  pharma_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "172.20.0.0/16"   # fixed subnet, no random IP assignment

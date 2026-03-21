@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.core.cache import cache
 from .models import SiteConfiguration, ContactInquiry, DeliveryZone, Page, CarouselImage
 
 # Predefined configuration keys
@@ -43,8 +44,15 @@ class SiteConfigurationAdmin(admin.ModelAdmin):
         return []
 
     def has_add_permission(self, request):
-        # Allow adding new configurations
         return True
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        cache.delete("site_settings_dict")
+
+    def delete_model(self, request, obj):
+        super().delete_model(request, obj)
+        cache.delete("site_settings_dict")
 
 
 @admin.register(ContactInquiry)

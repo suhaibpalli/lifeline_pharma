@@ -7,6 +7,18 @@ from .models import CarouselImage, ContactInquiry, Page, DeliveryZone
 from .forms import ContactForm
 
 
+class StaticPageMixin:
+    page_slug = None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.page_slug:
+            context["page"] = Page.objects.filter(
+                slug=self.page_slug, is_published=True
+            ).first()
+        return context
+
+
 class HomeView(TemplateView):
     """Homepage view"""
 
@@ -24,19 +36,11 @@ class HomeView(TemplateView):
         return context
 
 
-class AboutView(TemplateView):
+class AboutView(StaticPageMixin, TemplateView):
     """About us page"""
 
     template_name = "pages/about.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        try:
-            about_page = Page.objects.get(slug="about-us", is_published=True)
-            context["page"] = about_page
-        except Page.DoesNotExist:
-            context["page"] = None
-        return context
+    page_slug = "about-us"
 
 
 class ContactView(CreateView):
@@ -113,34 +117,48 @@ class FAQView(TemplateView):
     template_name = "pages/faq.html"
 
 
-class PrivacyPolicyView(TemplateView):
+class PrivacyPolicyView(StaticPageMixin, TemplateView):
     """Privacy Policy page"""
 
     template_name = "pages/privacy_policy.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        try:
-            privacy_page = Page.objects.get(slug="privacy-policy", is_published=True)
-            context["page"] = privacy_page
-        except Page.DoesNotExist:
-            context["page"] = None
-        return context
+    page_slug = "privacy-policy"
 
 
-class TermsOfServiceView(TemplateView):
+class TermsOfServiceView(StaticPageMixin, TemplateView):
     """Terms of Service page"""
 
     template_name = "pages/terms_of_service.html"
+    page_slug = "terms-of-service"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        try:
-            terms_page = Page.objects.get(slug="terms-of-service", is_published=True)
-            context["page"] = terms_page
-        except Page.DoesNotExist:
-            context["page"] = None
-        return context
+
+# Health check endpoint
+def health_check(request):
+    """Used by Docker HEALTHCHECK and Uptime Kuma."""
+    from django.db import connection
+    from django.core.cache import cache
+
+    checks = {}
+    status = 200
+
+    # Database
+    try:
+        connection.ensure_connection()
+        checks["db"] = "ok"
+    except Exception as e:
+        checks["db"] = f"error: {e}"
+        status = 503
+
+    # Cache / Redis
+    try:
+        cache.set("health_check", "ok", timeout=5)
+        assert cache.get("health_check") == "ok"
+        checks["cache"] = "ok"
+    except Exception as e:
+        checks["cache"] = f"error: {e}"
+
+    return JsonResponse(
+        {"status": "ok" if status == 200 else "degraded", **checks}, status=status
+    )
 
 
 # Error handlers

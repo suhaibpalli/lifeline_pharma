@@ -7,35 +7,25 @@ def read_selected_code_files_to_txt(
     output_file='all_content.txt'
 ):
     """
-    Read all .py, .html, .js, .ts, .tsx, .json, .mjs, .env, .env.local, .yml, .yaml files in root_dir recursively,
-    excluding specified files and folders and docker-related files, and write their contents to output_file.
+    Read all .py, .html, .js, .ts, .tsx, .json, .mjs, .env, .sh, .yml, .yaml files and Dockerfiles
+    in root_dir recursively, excluding specified files and folders, and write their contents to output_file.
     """
     # Set of file extensions to include (extension must include dot)
     code_extensions = {
         '.py', '.html', '.js', '.ts', '.tsx',
         '.json', '.mjs', '.env', '.production',
-        '.yml', '.yaml', '.css'
+        '.yml', '.yaml', '.css', '.sh'
     }
-    # Filenames to include regardless of extension (e.g. .env.local)
-    # Dockerfile and docker-compose files are deliberately NOT included
+    # Filenames to include regardless of extension (case-insensitive checks)
     special_include_filenames = {
-        '.env.local'
-    }
-
-    # Patterns for docker-related filenames to explicitly exclude
-    docker_exclude_names = {
-        'dockerfile',
+        'Dockerfile',
         'docker-compose.yml',
-        'docker-compose.yaml'
+        'docker-compose.yaml',
+        'entrypoint.sh'
     }
 
     exclude_files = exclude_files or []
     exclude_folders = exclude_folders or []
-
-    # Add dockerfile and docker-compose to excluded files (if not present)
-    for docker_name in docker_exclude_names:
-        if docker_name not in (f.lower() for f in exclude_files):
-            exclude_files.append(docker_name)
 
     # Normalize excluded folder paths to use os.sep for cross-platform compatibility
     exclude_folders_normalized = set(
@@ -55,21 +45,23 @@ def read_selected_code_files_to_txt(
                    os.path.normpath(os.path.join(rel_subdir, d)) not in exclude_folders_normalized
             ]
             for file in files:
-                # Always exclude dockerfile and docker-compose files (case insensitive)
                 file_lower = file.lower()
-                if file in exclude_files or file_lower in docker_exclude_names:
+                
+                # Check if it should be excluded
+                if file in exclude_files or file_lower in {f.lower() for f in exclude_files}:
                     continue
+                
                 _, ext = os.path.splitext(file)
                 include_this = False
+                
                 if ext.lower() in code_extensions:
+                    include_this = True
+                elif file_lower.startswith('.env'):
                     include_this = True
                 elif file in special_include_filenames:
                     include_this = True
                 elif file_lower in {name.lower() for name in special_include_filenames}:
                     include_this = True
-                # Last check: skip Dockerfile and docker-compose again, even if extension matches
-                if file_lower in docker_exclude_names:
-                    continue
 
                 if not include_this:
                     continue
@@ -94,26 +86,19 @@ if __name__ == '__main__':
     excluded_files = [
         'manage.py', 'LICENSE', 'collect_codes.py', 'all_files_combined.txt', '.pylintrc',
         'CODE_OF_CONDUCT.md', 'CONTRIBUTING.md', 'README.md', 'TODO.md', 
-        # Exclude specific template files
-        # '400.html', '403.html', '404.html', '500.html', 'error_handler_base.html',
-        # 'invoices.html', 'invoice_detail.html', 'privacy.html', 'term.html',
         'package-lock.json', 'tree.py', 'tree_output.txt',
-        # Dockerfile and docker compose files should be excluded explicitly for redundancy
-        'Dockerfile', 'docker-compose.yml', 'docker-compose.yaml',
         'api.ts'
     ]
 
     # Define list of folder names to exclude (use forward slashes for cross-platform compatibility)
     excluded_folders = [
-        'migrations', '__pycache__', 'static',
+        '__pycache__', 'static',
         '.github', '.idea', '.vscode', 'lmsa',
         '.next', 'node_modules', 'eerp', 'venv',
         'frontend',
         'academics',
         'videoconferencing',
         "admissions",
-        # 'hr',
-        # "backend",
         "ai-service",
         "frontend/lib/api/generated",
         "frontend/types/api.d.ts",

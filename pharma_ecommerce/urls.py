@@ -14,18 +14,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from apps.core.views import health_check
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('apps.core.urls')),  # Homepage and basic pages
-    path('accounts/', include('apps.accounts.urls')),
-    path('products/', include('apps.products.urls')),
-    path('cart/', include('apps.cart.urls')),
-    path('orders/', include('apps.orders.urls')),
+    path("admin/", admin.site.urls),
+    path("health/", health_check, name="health_check"),
+    path("", include("apps.core.urls")),  # Homepage and basic pages
+    path("accounts/", include("apps.accounts.urls")),
+    path("products/", include("apps.products.urls")),
+    path("cart/", include("apps.cart.urls")),
+    path("orders/", include("apps.orders.urls")),
     # path('payments/', include('apps.payments.urls')),
     # path('dashboard/', include('apps.dashboard.urls')),
     # path('admin-panel/', include('apps.admin_panel.urls')),
@@ -37,5 +40,5 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # # Custom error pages
-handler404 = 'apps.core.views.custom_404'
-handler500 = 'apps.core.views.custom_500'
+handler404 = "apps.core.views.custom_404"
+handler500 = "apps.core.views.custom_500"

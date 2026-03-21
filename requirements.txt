@@ -5,4 +5,8 @@ pillow==11.3.0
 python-decouple==3.8
 sqlparse==0.5.3
 tzdata==2025.2
-gunicorn
+gunicorn==24.0.0
+psycopg==3.3.3
+psycopg-binary==3.3.3
+django-redis==5.4.0
+redis==5.2.1
