@@ -1,0 +1,306 @@
+{% extends 'base.html' %}
+
+{% block title %}Terms of Service - {{ site_name }}{% endblock %}
+{% block meta_description %}Read the Terms of Service for {{ site_name }}. Understand the rules, responsibilities, and conditions for using our online pharmacy platform.{% endblock %}
+
+{% block content %}
+<div class="bg-surface">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-primary-600 to-primary-700 text-white py-16 md:py-20 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-20 left-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 right-20 w-96 h-96 bg-primary-400 rounded-full blur-3xl"></div>
+        </div>
+        <div class="mx-auto px-6 lg:px-10 max-w-4xl text-center relative z-10">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl mb-6">
+                <i class="fas fa-file-contract text-4xl"></i>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-6">
+                Terms of Service
+            </h1>
+            <p class="text-lg text-white/90 max-w-2xl mx-auto">
+                Please read these terms carefully before using our platform. By using Lifeline Healthcare, you agree to these terms.
+            </p>
+            <p class="text-sm text-white/70 mt-4">Last updated: {% now "F j, Y" %}</p>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="py-16 md:py-24">
+        <div class="mx-auto px-6 lg:px-10 max-w-4xl">
+            <!-- Table of Contents -->
+            <nav class="bg-white rounded-2xl border border-border p-6 mb-12 shadow-card">
+                <h2 class="text-lg font-semibold text-content-primary mb-4">Contents</h2>
+                <ul class="space-y-2">
+                    <li><a href="#acceptance" class="text-primary-600 hover:text-primary-700">1. Acceptance of Terms</a></li>
+                    <li><a href="#services" class="text-primary-600 hover:text-primary-700">2. Services Description</a></li>
+                    <li><a href="#account" class="text-primary-600 hover:text-primary-700">3. User Account</a></li>
+                    <li><a href="#orders" class="text-primary-600 hover:text-primary-700">4. Orders & Payment</a></li>
+                    <li><a href="#prescriptions" class="text-primary-600 hover:text-primary-700">5. Prescription Requirements</a></li>
+                    <li><a href="#delivery" class="text-primary-600 hover:text-primary-700">6. Delivery & Shipping</a></li>
+                    <li><a href="#returns" class="text-primary-600 hover:text-primary-700">7. Returns & Refunds</a></li>
+                    <li><a href="#pharmacies" class="text-primary-600 hover:text-primary-700">8. Pharmacy Partner Terms</a></li>
+                    <li><a href="#liability" class="text-primary-600 hover:text-primary-700">9. Limitation of Liability</a></li>
+                    <li><a href="#governing" class="text-primary-600 hover:text-primary-700">10. Governing Law</a></li>
+                </ul>
+            </nav>
+
+            {% if page %}
+                {{ page.content|linebreaks }}
+            {% else %}
+                <!-- Default Terms of Service Content -->
+                <div class="prose prose-lg max-w-none">
+                    <section id="acceptance" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">1. Acceptance of Terms</h2>
+                        <div class="bg-white rounded-2xl border border-border p-8">
+                            <p class="text-content-secondary leading-relaxed mb-4">
+                                Welcome to Lifeline Healthcare. By accessing or using our website, mobile application, or services (collectively, the "Platform"), you agree to be bound by these Terms of Service ("Terms").
+                            </p>
+                            <p class="text-content-secondary leading-relaxed mb-4">
+                                If you do not agree to these Terms, please do not use our Platform. By continuing to use Lifeline Healthcare, you acknowledge that you have read, understood, and agree to be bound by these Terms.
+                            </p>
+                            <div class="bg-accent-amber/10 border border-accent-amber/20 rounded-xl p-4 mt-6">
+                                <p class="text-sm text-content-secondary flex items-start gap-2">
+                                    <i class="fas fa-exclamation-triangle text-accent-amber mt-0.5"></i>
+                                    <span>These Terms may be updated from time to time. Continued use of the Platform after any changes constitutes acceptance of the updated Terms.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="services" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">2. Services Description</h2>
+                        <div class="bg-white rounded-2xl border border-border p-8">
+                            <p class="text-content-secondary leading-relaxed mb-6">
+                                Lifeline Healthcare operates as an online pharmacy aggregator and delivery platform connecting patients with certified pharmacies. Our services include:
+                            </p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="flex items-start gap-3">
+                                    <span class="w-6 h-6 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-pills"></i>
+                                    </span>
+                                    <span class="text-content-secondary">Medicine ordering and delivery</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="w-6 h-6 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-prescription"></i>
+                                    </span>
+                                    <span class="text-content-secondary">Prescription verification</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="w-6 h-6 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-store"></i>
+                                    </span>
+                                    <span class="text-content-secondary">Pharmacy partner network</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="w-6 h-6 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-truck"></i>
+                                    </span>
+                                    <span class="text-content-secondary">Order tracking</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="account" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">3. User Account</h2>
+                        <div class="bg-white rounded-2xl border border-border p-8">
+                            <div class="space-y-6">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-content-primary mb-3">3.1 Account Registration</h3>
+                                    <p class="text-content-secondary leading-relaxed">
+                                        To use our services, you must register for an account. You agree to provide accurate, current, and complete information during registration and to update such information to keep it accurate, current, and complete.
+                                    </p>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-content-primary mb-3">3.2 Account Security</h3>
+                                    <p class="text-content-secondary leading-relaxed">
+                                        You are responsible for safeguarding your account credentials. You agree not to disclose your password to any third party and to notify us immediately of any unauthorized use of your account.
+                                    </p>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-content-primary mb-3">3.3 Account Restrictions</h3>
+                                    <p class="text-content-secondary leading-relaxed">
+                                        You agree not to use the account of another user without permission. Users under 18 years of age must have parental or guardian consent to use our services.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="orders" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">4. Orders & Payment</h2>
+                        <div class="bg-white rounded-2xl border border-border p-8">
+                            <div class="space-y-6">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-content-primary mb-3">4.1 Order Acceptance</h3>
+                                    <p class="text-content-secondary leading-relaxed">
+                                        All orders are subject to availability and confirmation of the order price. We reserve the right to refuse or cancel any order for any reason, including but not limited to product availability, pricing errors, or issues with payment verification.
+                                    </p>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-content-primary mb-3">4.2 Pricing</h3>
+                                    <p class="text-content-secondary leading-relaxed">
+                                        Prices for products are as displayed on the Platform and are subject to change. All prices are in Indian Rupees (₹) and include applicable taxes. We strive to ensure accurate pricing, but errors may occur.
+                                    </p>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-content-primary mb-3">4.3 Payment Terms</h3>
+                                    <p class="text-content-secondary leading-relaxed">
+                                        We accept Cash on Delivery (COD), Credit/Debit Cards, UPI, Net Banking, and select wallets. Payment must be received before shipment unless COD is selected.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="prescriptions" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">5. Prescription Requirements</h2>
+                        <div class="bg-accent-rose/5 rounded-2xl border border-accent-rose/20 p-8">
+                            <div class="flex items-start gap-4 mb-6">
+                                <div class="w-12 h-12 bg-accent-rose/10 text-accent-rose rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-file-medical text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-content-primary mb-2">Prescription Medicines</h3>
+                                    <p class="text-content-secondary leading-relaxed">
+                                        For medicines marked as prescription-required (Rx), you must upload a valid prescription from a registered medical practitioner. Our pharmacists will verify the prescription before dispensing.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl p-4">
+                                <h4 class="font-semibold text-content-primary mb-2">Valid prescriptions must include:</h4>
+                                <ul class="space-y-2 text-content-secondary text-sm">
+                                    <li class="flex items-center gap-2"><i class="fas fa-check text-success"></i> Patient's full name and age</li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-check text-success"></i> Doctor's name and registration number</li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-check text-success"></i> Date of prescription</li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-check text-success"></i> Medicine name, dosage, and duration</li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-check text-success"></i> Doctor's signature and stamp</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="delivery" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">6. Delivery & Shipping</h2>
+                        <div class="bg-white rounded-2xl border border-border p-8">
+                            <p class="text-content-secondary leading-relaxed mb-6">
+                                Delivery timelines are estimates and may vary based on location, availability, and circumstances beyond our control. Standard delivery typically takes 3-7 business days.
+                            </p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-surface-muted rounded-xl p-4">
+                                    <h4 class="font-semibold text-content-primary mb-2">Delivery Charges</h4>
+                                    <p class="text-sm text-content-secondary">
+                                        Free delivery for orders above ₹499. Standard charges of ₹29-99 apply for orders below this threshold.
+                                    </p>
+                                </div>
+                                <div class="bg-surface-muted rounded-xl p-4">
+                                    <h4 class="font-semibold text-content-primary mb-2">Delivery Areas</h4>
+                                    <p class="text-sm text-content-secondary">
+                                        We deliver to most pincodes across India. Check availability at checkout by entering your pincode.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="returns" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">7. Returns & Refunds</h2>
+                        <div class="bg-white rounded-2xl border border-border p-8">
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-3">
+                                    <span class="w-6 h-6 bg-success text-white rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <div>
+                                        <h4 class="font-semibold text-content-primary">Returnable Items</h4>
+                                        <p class="text-sm text-content-secondary">Unopened and undamaged medicines may be returned within 7 days of delivery.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="w-6 h-6 bg-error text-white rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-times"></i>
+                                    </span>
+                                    <div>
+                                        <h4 class="font-semibold text-content-primary">Non-Returnable Items</h4>
+                                        <p class="text-sm text-content-secondary">Opened medicines, temperature-sensitive products, and items that have been used cannot be returned.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="w-6 h-6 bg-info text-white rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-undo"></i>
+                                    </span>
+                                    <div>
+                                        <h4 class="font-semibold text-content-primary">Refund Timeline</h4>
+                                        <p class="text-sm text-content-secondary">Refunds are processed within 5-7 business days after inspection of returned items.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="pharmacies" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">8. Pharmacy Partner Terms</h2>
+                        <div class="bg-white rounded-2xl border border-border p-8">
+                            <p class="text-content-secondary leading-relaxed mb-6">
+                                Pharmacies registered on our Platform must comply with all applicable laws, hold valid licenses, and maintain quality standards as prescribed by regulatory authorities.
+                            </p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-surface-muted rounded-xl p-4">
+                                    <h4 class="font-semibold text-content-primary mb-2">Requirements</h4>
+                                    <ul class="space-y-1 text-sm text-content-secondary">
+                                        <li>• Valid drug license</li>
+                                        <li>• GST registration</li>
+                                        <li>• Physical store verification</li>
+                                        <li>• Quality compliance</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-surface-muted rounded-xl p-4">
+                                    <h4 class="font-semibold text-content-primary mb-2">Obligations</h4>
+                                    <ul class="space-y-1 text-sm text-content-secondary">
+                                        <li>• Dispense genuine medicines</li>
+                                        <li>• Verify prescriptions</li>
+                                        <li>• Maintain storage conditions</li>
+                                        <li>• Timely order fulfillment</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="liability" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">9. Limitation of Liability</h2>
+                        <div class="bg-white rounded-2xl border border-border p-8">
+                            <p class="text-content-secondary leading-relaxed mb-4">
+                                To the fullest extent permitted by law, {{ site_name }} shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the Platform or services.
+                            </p>
+                            <p class="text-content-secondary leading-relaxed">
+                                Our total liability for any claim shall not exceed the amount paid by you for the specific order giving rise to such claim.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section id="governing" class="mb-12 scroll-mt-24">
+                        <h2 class="text-2xl md:text-3xl font-bold text-content-primary mb-6">10. Governing Law</h2>
+                        <div class="bg-white rounded-2xl border border-border p-8">
+                            <p class="text-content-secondary leading-relaxed mb-4">
+                                These Terms shall be governed by and construed in accordance with the laws of India. Any disputes arising from these Terms shall be subject to the exclusive jurisdiction of the courts in Chennai, Tamil Nadu.
+                            </p>
+                            <div class="bg-surface-muted rounded-xl p-4">
+                                <h4 class="font-semibold text-content-primary mb-2">Contact Information</h4>
+                                <p class="text-sm text-content-secondary">
+                                    For questions about these Terms, please contact us at:<br>
+                                    Email: abijith.apollo@gmail.com<br>
+                                    Phone: 044 - 48633074 / 6381411751 / 9884433074<br>
+                                    Address: No.18/24, Ground Floor, Sri Ayyappa Nagar 2nd Main road, Virugambakkam, Chennai-600092
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}
