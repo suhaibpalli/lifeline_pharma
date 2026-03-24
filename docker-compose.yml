@@ -18,8 +18,8 @@ services:
     container_name: pharma_django
     env_file: .env
     volumes:
-      - static_volume:/app/staticfiles
-      - ./logs:/app/logs
+      - /opt/pharma/staticfiles:/app/staticfiles
+      - /opt/pharma/logs:/app/logs
     ports:
       - "127.0.0.1:8000:8000"
     extra_hosts:
@@ -145,11 +145,8 @@ services:
           memory: 64M
 
 # ──────────────────────────────────────
-# Volumes + Networks
+# Networks
 # ──────────────────────────────────────
-volumes:
-  static_volume:    # Django staticfiles — shared with Nginx via bind at deploy time
-
 networks:
   pharma_net:
     driver: bridge

@@ -60,6 +60,9 @@ RUN mkdir -p /app/staticfiles /app/logs && \
 # Copy project code
 COPY --chown=pharma:pharma . .
 
+# Make entrypoint executable
+RUN chmod +x entrypoint.sh
+
 # Switch to non-root
 USER pharma
 
