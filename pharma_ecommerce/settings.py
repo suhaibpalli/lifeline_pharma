@@ -165,7 +165,7 @@ if USE_MINIO:
     AWS_S3_REGION_NAME = MINIO_REGION_NAME
     AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL = None
-    AWS_S3_CUSTOM_DOMAIN = None
+    AWS_S3_CUSTOM_DOMAIN = config("AWS_S3_CUSTOM_DOMAIN", default=None)
 
     # Media files - serve via MinIO
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
@@ -173,8 +173,13 @@ if USE_MINIO:
     # Static files - serve via MinIO
     STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
 
-    # Media URL for templates (use public URL for browser access)
-    MEDIA_URL = f"{MINIO_PUBLIC_URL}/{MINIO_BUCKET_NAME}/"
+    # Media URL for templates
+    # Use AWS_S3_CUSTOM_DOMAIN if set (e.g., media.lifelinehealthcare.in)
+    # Otherwise fall back to MINIO_PUBLIC_URL
+    if AWS_S3_CUSTOM_DOMAIN:
+        MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+    else:
+        MEDIA_URL = f"{MINIO_PUBLIC_URL}/{MINIO_BUCKET_NAME}/"
 else:
     # Local development storage
     MEDIA_URL = "/media/"
