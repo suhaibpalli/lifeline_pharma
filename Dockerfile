@@ -30,9 +30,7 @@ RUN npm install
 # (required for all Tailwind utility classes used in templates)
 RUN npx tailwindcss -i ./static/src/input.css -o ./static/css/tailwind.min.css --minify
 
-# Build custom.css with custom styles only (not full Tailwind)
-# (custom animations, design system, etc.)
-RUN npx tailwindcss -i ./static/src/input.css -o ./static/css/custom.css --minify
+# custom.css already exists with custom styles - just copy it (no Tailwind rebuild needed)
 
 # ─────────────────────────────────────────────
 # Stage 2: Runtime — lean final image
