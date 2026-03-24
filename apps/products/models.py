@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
 from django.urls import reverse
-from apps.core.models import TimeStampedModel
+from apps.core.models import TimeStampedModel, get_default_storage
 
 User = get_user_model()
 
@@ -35,7 +35,12 @@ class Category(TimeStampedModel):
     parent = models.ForeignKey(
         "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
     )
-    image = models.ImageField(upload_to=category_upload_to, null=True, blank=True)
+    image = models.ImageField(
+        upload_to=category_upload_to,
+        storage=get_default_storage(),
+        null=True,
+        blank=True,
+    )
     icon = models.CharField(max_length=50, blank=True)
     is_active = models.BooleanField(default=True)
     sort_order = models.PositiveIntegerField(default=0)
@@ -82,7 +87,12 @@ class Manufacturer(TimeStampedModel):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField(blank=True)
-    logo = models.ImageField(upload_to=manufacturer_upload_to, null=True, blank=True)
+    logo = models.ImageField(
+        upload_to=manufacturer_upload_to,
+        storage=get_default_storage(),
+        null=True,
+        blank=True,
+    )
     website_url = models.URLField(blank=True)
     contact_email = models.EmailField(blank=True)
     is_active = models.BooleanField(default=True)
@@ -227,7 +237,12 @@ class ProductImage(TimeStampedModel):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name="images"
     )
-    image = models.ImageField(upload_to=product_upload_to, null=True, blank=True)
+    image = models.ImageField(
+        upload_to=product_upload_to,
+        storage=get_default_storage(),
+        null=True,
+        blank=True,
+    )
     alt_text = models.CharField(max_length=255, blank=True)
     is_primary = models.BooleanField(default=False)
     sort_order = models.PositiveIntegerField(default=0)

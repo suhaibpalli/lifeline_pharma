@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
-from apps.core.models import TimeStampedModel
+from apps.core.models import TimeStampedModel, get_default_storage
 from .managers import CustomUserManager
 
 
@@ -91,7 +91,10 @@ class PatientProfile(TimeStampedModel):
     allergies = models.JSONField(default=list, blank=True)
     current_medications = models.JSONField(default=list, blank=True)
     profile_image = models.ImageField(
-        upload_to=patient_profile_upload_to, null=True, blank=True
+        upload_to=patient_profile_upload_to,
+        storage=get_default_storage(),
+        null=True,
+        blank=True,
     )
 
     class Meta:
@@ -116,10 +119,16 @@ class PharmacyProfile(TimeStampedModel):
     state = models.CharField(max_length=100)
     pincode = models.CharField(max_length=6)
     license_document = models.FileField(
-        upload_to=pharmacy_document_upload_to, null=True, blank=True
+        upload_to=pharmacy_document_upload_to,
+        storage=get_default_storage(),
+        null=True,
+        blank=True,
     )
     gst_certificate = models.FileField(
-        upload_to=pharmacy_document_upload_to, null=True, blank=True
+        upload_to=pharmacy_document_upload_to,
+        storage=get_default_storage(),
+        null=True,
+        blank=True,
     )
     is_approved = models.BooleanField(default=False)
     approved_by = models.ForeignKey(

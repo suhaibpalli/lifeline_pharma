@@ -167,21 +167,20 @@ if USE_MINIO:
     AWS_DEFAULT_ACL = None
     AWS_S3_CUSTOM_DOMAIN = config("AWS_S3_CUSTOM_DOMAIN", default=None)
 
-    # Media files - serve via MinIO
+    # Use S3 storage - explicitly import to ensure it's used
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-
-    # Static files - serve via MinIO
     STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
 
     # Media URL for templates
-    # Use AWS_S3_CUSTOM_DOMAIN if set (e.g., media.lifelinehealthcare.in)
-    # Otherwise fall back to MINIO_PUBLIC_URL
     if AWS_S3_CUSTOM_DOMAIN:
         MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
     else:
         MEDIA_URL = f"{MINIO_PUBLIC_URL}/{MINIO_BUCKET_NAME}/"
+
+    MEDIA_ROOT = None  # Disable local storage
 else:
     # Local development storage
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
 

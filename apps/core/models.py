@@ -97,6 +97,22 @@ def carousel_upload_to(instance, filename):
     return f"carousel/{instance.id or 'new'}/{filename}"
 
 
+# Lazy storage - resolves at runtime when USE_MINIO is available
+def get_default_storage():
+    from django.conf import settings
+
+    if hasattr(settings, "USE_MINIO") and settings.USE_MINIO:
+        from storages.backends.s3boto3 import S3Boto3Storage
+
+        bucket_name = getattr(settings, "AWS_S3_STORAGE_BUCKET_NAME", None) or getattr(
+            settings, "MINIO_BUCKET_NAME", "lifeline-media"
+        )
+        return S3Boto3Storage(bucket_name=bucket_name)
+    from django.core.files.storage import FileSystemStorage
+
+    return FileSystemStorage()
+
+
 class CarouselImage(TimeStampedModel):
     """Carousel images for homepage"""
 
@@ -104,12 +120,17 @@ class CarouselImage(TimeStampedModel):
     subtitle = models.CharField(max_length=300, blank=True)
     image = models.ImageField(
         upload_to=carousel_upload_to,
+        storage=get_default_storage(),
         null=True,
         blank=True,
         help_text="Upload carousel image",
     )
     button_text = models.CharField(max_length=50, default="Learn More")
-    button_link = models.CharField(max_length=255, blank=True, help_text="Relative or absolute URL (e.g., /products/ or https://lifelinehealthcare.in/products/)")
+    button_link = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Relative or absolute URL (e.g., /products/ or https://lifelinehealthcare.in/products/)",
+    )
     is_active = models.BooleanField(default=True)
     order = models.PositiveIntegerField(default=0)
 
