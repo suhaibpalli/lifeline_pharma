@@ -27,7 +27,7 @@ exec gunicorn pharma_ecommerce.wsgi:application \
     --worker-class sync \
     --worker-connections 1000 \
     --timeout "${GUNICORN_TIMEOUT:-120}" \
-    --keepalive 5 \
+    --keep-alive 5 \
     --max-requests 1000 \
     --max-requests-jitter 100 \
     --access-logfile - \
