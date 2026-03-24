@@ -12,6 +12,7 @@
             <div class="carousel-container">
                 {% if carousel_images %}
                     {% for image in carousel_images %}
+                        {% if image.image %}
                         <div class="carousel-slide {% if forloop.first %}active{% endif %}">
                             <img src="{{ image.image.url }}" 
                                  alt="{{ image.title }}" 
@@ -52,6 +53,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                     {% endfor %}
                 {% else %}
                     <!-- Default slide if no images uploaded -->

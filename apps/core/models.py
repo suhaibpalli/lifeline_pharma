@@ -109,7 +109,7 @@ class CarouselImage(TimeStampedModel):
         help_text="Upload carousel image",
     )
     button_text = models.CharField(max_length=50, default="Learn More")
-    button_link = models.URLField(blank=True)
+    button_link = models.CharField(max_length=255, blank=True, help_text="Relative or absolute URL (e.g., /products/ or https://lifelinehealthcare.in/products/)")
     is_active = models.BooleanField(default=True)
     order = models.PositiveIntegerField(default=0)
 
