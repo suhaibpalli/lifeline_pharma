@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third Party Apps
     "widget_tweaks",
+    "storages",
     # My Apps
     "apps.core",
     "apps.accounts",
@@ -142,9 +143,42 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Media files
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+# Media files - MinIO/S3 Storage
+USE_MINIO = config("USE_MINIO", default=str(not DEBUG).lower(), cast=bool)
+
+if USE_MINIO:
+    # MinIO/S3 Storage Configuration
+    MINIO_BUCKET_NAME = config("MINIO_BUCKET_NAME", default="lifeline-media")
+    # Backend URL (for Django to connect to MinIO)
+    MINIO_ENDPOINT_URL = config("MINIO_ENDPOINT_URL", default="http://localhost:9000")
+    # Public URL (for browser to access media files)
+    MINIO_PUBLIC_URL = config("MINIO_PUBLIC_URL", default="http://localhost:9000")
+    MINIO_ACCESS_KEY = config("MINIO_ACCESS_KEY")
+    MINIO_SECRET_KEY = config("MINIO_SECRET_KEY")
+    MINIO_REGION_NAME = config("MINIO_REGION_NAME", default="us-east-1")
+
+    # AWS S3 Storage Backend for Django
+    AWS_S3_ACCESS_KEY_ID = MINIO_ACCESS_KEY
+    AWS_S3_SECRET_ACCESS_KEY = MINIO_SECRET_KEY
+    AWS_S3_STORAGE_BUCKET_NAME = MINIO_BUCKET_NAME
+    AWS_S3_ENDPOINT_URL = MINIO_ENDPOINT_URL
+    AWS_S3_REGION_NAME = MINIO_REGION_NAME
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = None
+    AWS_S3_CUSTOM_DOMAIN = None
+
+    # Media files - serve via MinIO
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+    # Static files - serve via MinIO
+    STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
+
+    # Media URL for templates (use public URL for browser access)
+    MEDIA_URL = f"{MINIO_PUBLIC_URL}/{MINIO_BUCKET_NAME}/"
+else:
+    # Local development storage
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

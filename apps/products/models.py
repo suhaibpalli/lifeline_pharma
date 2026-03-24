@@ -4,9 +4,26 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
 from django.urls import reverse
 from apps.core.models import TimeStampedModel
-import uuid
 
 User = get_user_model()
+
+
+def category_upload_to(instance, filename):
+    """Generate upload path for category images"""
+    ext = filename.split(".")[-1]
+    return f"categories/{instance.id or 'new'}/{filename}"
+
+
+def manufacturer_upload_to(instance, filename):
+    """Generate upload path for manufacturer logos"""
+    ext = filename.split(".")[-1]
+    return f"manufacturers/{instance.id or 'new'}/{filename}"
+
+
+def product_upload_to(instance, filename):
+    """Generate upload path for product images"""
+    ext = filename.split(".")[-1]
+    return f"products/{instance.product.id or 'new'}/{filename}"
 
 
 class Category(TimeStampedModel):
@@ -18,8 +35,8 @@ class Category(TimeStampedModel):
     parent = models.ForeignKey(
         "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
     )
-    image = models.TextField(blank=True)  # Base64 encoded image
-    icon = models.CharField(max_length=50, blank=True)  # FontAwesome icon class
+    image = models.ImageField(upload_to=category_upload_to, null=True, blank=True)
+    icon = models.CharField(max_length=50, blank=True)
     is_active = models.BooleanField(default=True)
     sort_order = models.PositiveIntegerField(default=0)
 
@@ -65,7 +82,7 @@ class Manufacturer(TimeStampedModel):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField(blank=True)
-    logo = models.TextField(blank=True)  # Base64 encoded logo
+    logo = models.ImageField(upload_to=manufacturer_upload_to, null=True, blank=True)
     website_url = models.URLField(blank=True)
     contact_email = models.EmailField(blank=True)
     is_active = models.BooleanField(default=True)
@@ -108,24 +125,17 @@ class Product(TimeStampedModel):
         Manufacturer, on_delete=models.CASCADE, related_name="products"
     )
 
-    # Product Details
     description = models.TextField()
     short_description = models.TextField(max_length=500, blank=True)
     composition = models.TextField(blank=True)
-    dosage_form = models.CharField(
-        max_length=100, blank=True
-    )  # Tablet, Capsule, Syrup, etc.
-    strength = models.CharField(max_length=100, blank=True)  # 500mg, 10ml, etc.
-    pack_size = models.CharField(
-        max_length=100, blank=True
-    )  # 10 tablets, 100ml bottle, etc.
+    dosage_form = models.CharField(max_length=100, blank=True)
+    strength = models.CharField(max_length=100, blank=True)
+    pack_size = models.CharField(max_length=100, blank=True)
 
-    # Prescription Requirements
     prescription_required = models.CharField(
         max_length=3, choices=PRESCRIPTION_CHOICES, default="OTC"
     )
 
-    # Pricing
     mrp_price = models.DecimalField(max_digits=10, decimal_places=2)
     patient_price = models.DecimalField(max_digits=10, decimal_places=2)
     pharmacy_price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -133,21 +143,17 @@ class Product(TimeStampedModel):
         max_digits=10, decimal_places=2, blank=True, null=True
     )
 
-    # Inventory
     stock_quantity = models.PositiveIntegerField(default=0)
     low_stock_threshold = models.PositiveIntegerField(default=10)
     track_inventory = models.BooleanField(default=True)
 
-    # Product Status
     is_active = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
 
-    # SEO Fields
     meta_title = models.CharField(max_length=60, blank=True)
     meta_description = models.CharField(max_length=160, blank=True)
     meta_keywords = models.TextField(blank=True)
 
-    # Analytics
     view_count = models.PositiveIntegerField(default=0)
 
     class Meta:
@@ -162,7 +168,6 @@ class Product(TimeStampedModel):
         if not self.slug:
             self.slug = slugify(f"{self.name}-{self.manufacturer.name}")
 
-        # Auto-generate short description if not provided
         if not self.short_description and self.description:
             self.short_description = self.description[:500]
 
@@ -222,8 +227,7 @@ class ProductImage(TimeStampedModel):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name="images"
     )
-    image_data = models.TextField()  # Base64 encoded image
-    thumbnail_data = models.TextField(blank=True)  # Base64 encoded thumbnail
+    image = models.ImageField(upload_to=product_upload_to, null=True, blank=True)
     alt_text = models.CharField(max_length=255, blank=True)
     is_primary = models.BooleanField(default=False)
     sort_order = models.PositiveIntegerField(default=0)
@@ -237,13 +241,11 @@ class ProductImage(TimeStampedModel):
         return f"{self.product.name} - Image {self.id}"
 
     def save(self, *args, **kwargs):
-        # Ensure only one primary image per product
         if self.is_primary:
             ProductImage.objects.filter(product=self.product, is_primary=True).exclude(
                 id=self.id
             ).update(is_primary=False)
 
-        # If this is the first image, make it primary
         if not self.product.images.exists():
             self.is_primary = True
 
@@ -273,7 +275,7 @@ class ProductReview(TimeStampedModel):
         verbose_name = "Product Review"
         verbose_name_plural = "Product Reviews"
         ordering = ["-created_at"]
-        unique_together = ["product", "user"]  # One review per user per product
+        unique_together = ["product", "user"]
 
     def __str__(self):
         return f"{self.product.name} - {self.user.email} ({self.rating} stars)"
@@ -293,7 +295,7 @@ class Stock(TimeStampedModel):
         Product, on_delete=models.CASCADE, related_name="stock_movements"
     )
     movement_type = models.CharField(max_length=10, choices=STOCK_MOVEMENT_TYPES)
-    quantity = models.IntegerField()  # Positive for IN, negative for OUT
+    quantity = models.IntegerField()
     batch_number = models.CharField(max_length=50, blank=True)
     expiry_date = models.DateField(blank=True, null=True)
     supplier = models.CharField(max_length=200, blank=True)

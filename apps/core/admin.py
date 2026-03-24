@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.core.cache import cache
 from .models import SiteConfiguration, ContactInquiry, DeliveryZone, Page, CarouselImage
 
-# Predefined configuration keys
 SITE_CONFIG_KEYS = [
     ("site_name", "Site Name", "text"),
     ("site_tagline", "Site Tagline", "text"),
@@ -38,8 +37,7 @@ class SiteConfigurationAdmin(admin.ModelAdmin):
     value_preview.short_description = "Value"
 
     def get_readonly_fields(self, request, obj=None):
-        if obj:  # Editing existing object
-            # Make key readonly after creation to prevent issues
+        if obj:
             return ["key"]
         return []
 
@@ -106,17 +104,11 @@ class CarouselImageAdmin(admin.ModelAdmin):
                 "fields": (
                     "title",
                     "subtitle",
-                    "image_upload",
+                    "image",
                     "button_text",
                     "button_link",
                 )
             },
         ),
         ("Display Settings", {"fields": ("is_active", "order")}),
-        ("System Fields", {"fields": ("image_data",), "classes": ("collapse",)}),
     )
-
-    readonly_fields = ["image_data"]
-
-    # no special get_form/get_fieldsets overrides needed anymore
-    # model.save() handles conversion from image_upload -> image_data

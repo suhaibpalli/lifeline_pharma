@@ -23,7 +23,7 @@
             <!-- Main Image -->
             <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden">
                 {% if product.primary_image %}
-                    <img src="data:image/jpeg;base64,{{ product.primary_image.image_data }}" 
+                    <img src="{{ product.primary_image.image.url }}" 
                          alt="{{ product.name }}" 
                          class="w-full h-full object-cover"
                          id="main-image">
@@ -38,10 +38,10 @@
             {% if product.images.count > 1 %}
                 <div class="flex space-x-2 overflow-x-auto">
                     {% for image in product.images.all %}
-                        <img src="data:image/jpeg;base64,{{ image.thumbnail_data|default:image.image_data }}" 
+                        <img src="{{ image.image.url }}" 
                              alt="{{ image.alt_text|default:product.name }}" 
                              class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-transparent hover:border-blue-500 flex-shrink-0"
-                             onclick="changeMainImage('data:image/jpeg;base64,{{ image.image_data }}')">
+                             onclick="changeMainImage('{{ image.image.url }}')">
                     {% endfor %}
                 </div>
             {% endif %}

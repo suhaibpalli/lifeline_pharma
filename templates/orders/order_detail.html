@@ -65,7 +65,7 @@
                             <div class="p-6 flex items-center space-x-4">
                                 <!-- Product Image -->
                                 {% if item.product.primary_image %}
-                                    <img src="data:image/jpeg;base64,{{ item.product.primary_image.image_data }}" 
+                                    <img src="{{ item.product.primary_image.image.url }}" 
                                          alt="{{ item.product.name }}" 
                                          class="w-20 h-20 object-cover rounded">
                                 {% else %}
@@ -133,7 +133,7 @@
                     <div class="bg-white rounded-lg shadow-md p-6">
                         <h2 class="text-xl font-semibold mb-4">Uploaded Prescription</h2>
                         <div class="border rounded-lg p-4">
-                            <img src="data:image/jpeg;base64,{{ order.prescription_image }}" 
+                            <img src="{{ order.prescription_image.url }}" 
                                  alt="Prescription" 
                                  class="max-w-full h-auto rounded">
                         </div>

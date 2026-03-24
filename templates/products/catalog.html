@@ -94,7 +94,7 @@
                 <!-- Product Image -->
                 <div class="relative h-48 bg-gray-200 flex items-center justify-center">
                     {% if product.primary_image %}
-                        <img src="data:image/jpeg;base64,{{ product.primary_image.image_data }}" 
+                        <img src="{{ product.primary_image.image.url }}" 
                              alt="{{ product.name }}" 
                              class="w-full h-full object-cover">
                     {% else %}

@@ -41,7 +41,7 @@
                                 {% for item in order.items.all|slice:":3" %}
                                     <div class="flex items-center space-x-3">
                                         {% if item.product.primary_image %}
-                                            <img src="data:image/jpeg;base64,{{ item.product.primary_image.image_data }}" 
+                                            <img src="{{ item.product.primary_image.image.url }}" 
                                                  alt="{{ item.product.name }}" 
                                                  class="w-16 h-16 object-cover rounded">
                                         {% else %}

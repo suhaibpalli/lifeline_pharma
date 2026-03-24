@@ -13,7 +13,7 @@
                 {% if carousel_images %}
                     {% for image in carousel_images %}
                         <div class="carousel-slide {% if forloop.first %}active{% endif %}">
-                            <img src="data:image/jpeg;base64,{{ image.image_data }}" 
+                            <img src="{{ image.image.url }}" 
                                  alt="{{ image.title }}" 
                                  class="carousel-image">
                             <div class="carousel-overlay"></div>
