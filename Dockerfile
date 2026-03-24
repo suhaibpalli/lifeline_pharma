@@ -65,7 +65,12 @@ RUN mkdir -p /app/staticfiles /app/logs && \
 
 COPY --chown=pharma:pharma . .
 
+# Copy BOTH CSS files from builder
+COPY --from=builder --chown=pharma:pharma /build/static/css/tailwind.min.css /app/static/css/tailwind.min.css
 COPY --from=builder --chown=pharma:pharma /build/static/css/custom.css /app/static/css/custom.css
+
+# Debug: verify files exist
+RUN ls -la /app/static/css/ || echo "Directory not found"
 
 RUN chmod +x entrypoint.sh
 
