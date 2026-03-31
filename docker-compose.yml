@@ -15,7 +15,7 @@ services:
       args:
         BUILDKIT_INLINE_CACHE: "1"
     image: lifeline-pharma-django:latest
-    container_name: pharma_django
+    container_name: pharma-django
     env_file: .env
     volumes:
       - /opt/pharma/staticfiles:/app/staticfiles

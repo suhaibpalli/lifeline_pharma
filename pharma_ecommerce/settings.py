@@ -156,6 +156,7 @@ if USE_MINIO:
     MINIO_ACCESS_KEY = config("MINIO_ACCESS_KEY")
     MINIO_SECRET_KEY = config("MINIO_SECRET_KEY")
     MINIO_REGION_NAME = config("MINIO_REGION_NAME", default="us-east-1")
+    MINIO_SECURE = config("MINIO_SECURE", default=False, cast=bool)
 
     # AWS S3 Storage Backend for Django
     AWS_S3_ACCESS_KEY_ID = MINIO_ACCESS_KEY
@@ -171,11 +172,18 @@ if USE_MINIO:
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
     STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
 
-    # Media URL for templates
+    # Media URL for templates - handle custom domain with or without bucket
     if AWS_S3_CUSTOM_DOMAIN:
-        MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+        # Check if domain already includes bucket path
+        if "/" in AWS_S3_CUSTOM_DOMAIN:
+            MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+        else:
+            MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{MINIO_BUCKET_NAME}/"
     else:
-        MEDIA_URL = f"{MINIO_PUBLIC_URL}/{MINIO_BUCKET_NAME}/"
+        protocol = "https" if MINIO_SECURE else "http"
+        MEDIA_URL = (
+            f"{protocol}://{MINIO_PUBLIC_URL.split('://')[-1]}/{MINIO_BUCKET_NAME}/"
+        )
 
     MEDIA_ROOT = None  # Disable local storage
 else:
