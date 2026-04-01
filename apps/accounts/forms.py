@@ -1,9 +1,31 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from .models import CustomUser, PatientProfile, PharmacyProfile, Address
 import uuid
+
+
+class CustomPasswordResetForm(PasswordResetForm):
+    """Custom password reset form that only allows verified users."""
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not CustomUser.objects.filter(email=email).exists():
+            raise ValidationError("No account found with this email address.")
+        
+        user = CustomUser.objects.get(email=email)
+        if not user.is_verified:
+            raise ValidationError("This account is not verified yet. Please verify your email first.")
+        
+        return email
+
+    def get_users(self, email):
+        """Given an email, return matching user(s) who should receive a reset.
+        We only want users who are both active AND verified.
+        """
+        active_users = super().get_users(email)
+        return [u for u in active_users if getattr(u, 'is_verified', False)]
 
 
 class CustomUserCreationForm(UserCreationForm):
