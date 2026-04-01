@@ -49,14 +49,6 @@
                             <label class="block text-sm font-medium text-gray-700">Gender</label>
                             <p class="mt-1 text-sm text-gray-900">{{ patient_profile.get_gender_display|default:"Not provided" }}</p>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Emergency Contact</label>
-                            <p class="mt-1 text-sm text-gray-900">{{ patient_profile.emergency_contact_name|default:"Not provided" }}</p>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Emergency Phone</label>
-                            <p class="mt-1 text-sm text-gray-900">{{ patient_profile.emergency_contact_phone|default:"Not provided" }}</p>
-                        </div>
                     </div>
                 </div>
             {% endif %}

@@ -77,6 +77,19 @@
                 </p>
             </div>
         </form>
+
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <h3 class="text-sm font-semibold text-amber-900">Didn't get the verification email?</h3>
+            <p class="mt-1 text-sm text-amber-800">
+                If your account is not verified yet, request a fresh verification link here.
+            </p>
+            <a
+                href="{% url 'accounts:resend_verification' %}{% if resend_form.initial.email %}?email={{ resend_form.initial.email|urlencode }}{% endif %}"
+                class="mt-3 inline-block text-sm font-medium text-blue-600 hover:text-blue-500"
+            >
+                Resend verification email
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}

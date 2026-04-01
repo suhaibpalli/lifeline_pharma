@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Order #{{ order.order_number }} - {{ site_name }}{% endblock %}
 
@@ -43,7 +44,8 @@
                 </button>
                 
                 {% if order.status == 'DELIVERED' %}
-                    <a href="#" class="border border-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-50">
+                    <a href="#" class="border border-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-50"
+                       onclick="requestReturn('{{ order.order_number }}'); return false;">
                         <i class="fas fa-undo mr-2"></i>Return/Exchange
                     </a>
                 {% endif %}
@@ -310,13 +312,57 @@
 .status-refunded { background-color: #f3f4f6; color: #6b7280; }
 
 @media print {
-    .no-print { display: none !important; }
+    /* Hide unnecessary parts */
+    nav, header, footer, .navbar, .site-header, .site-footer,
+    .breadcrumb, .top-bar, .main-nav, .mobile-menu,
+    .order-actions, .order-header .flex, .no-print,
+    .need-help, .side-column {
+        display: none !important;
+    }
+    
+    /* Reset container for print */
     body { background: white !important; }
-    .container { max-width: none !important; margin: 0 !important; padding: 0 !important; }
+    .container { 
+        max-width: 100% !important; 
+        margin: 0 !important; 
+        padding: 0 !important; 
+    }
+    #invoice-print {
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+    }
+    
+    /* Show only main content */
+    .grid { display: block !important; }
+    .lg\:col-span-2 { width: 100% !important; }
+    .lg\:col-span-1 { display: none !important; }
+    
+    /* Make it look like A4 */
+    .bg-white { 
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+    }
 }
 </style>
 {% endblock %}
 
 {% block extra_js %}
 <script src="{% static 'js/orders.js' %}"></script>
+<script>
+function requestReturn(orderNumber) {
+    const reason = prompt('Please state your reason for return:');
+    if (!reason) return;
+    fetch(`/orders/${orderNumber}/return/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRFToken': '{{ csrf_token }}' },
+        body: `reason=${encodeURIComponent(reason)}`
+    })
+    .then(r => r.json())
+    .then(data => {
+        alert(data.message);
+        if (data.success) location.reload();
+    });
+}
+</script>
 {% endblock %}

@@ -1,3 +1,4 @@
+{% load static %}
 <footer class="bg-content-primary text-white">
     <!-- Main Footer -->
     <div class="mx-auto px-6 lg:px-10">
@@ -5,14 +6,10 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                 <!-- Company Info -->
                 <div class="lg:col-span-1">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-primary-500 rounded-xl flex items-center justify-center">
-                            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white">
-                                <path d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z" fill="currentColor"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold">Lifeline Healthcare</h3>
-                    </div>
+                    <a href="{% url 'core:home' %}" class="flex items-center mb-6 group">
+                        <img src="{% static 'images/logo.png' %}" alt="{{ site_name }}" class="h-20 w-auto object-contain transition-transform group-hover:scale-102">
+                        <span class="sr-only">{{ site_name }}</span>
+                    </a>
                     <p class="text-white/70 mb-6 leading-relaxed">Your trusted online pharmacy for genuine medicines delivered to your doorstep.</p>
                     <div class="flex gap-4">
                         <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-colors duration-250" aria-label="Facebook">

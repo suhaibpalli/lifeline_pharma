@@ -26,6 +26,11 @@ urlpatterns = [
     
     # Verification URLs
     path('verify-email/<str:token>/', views.verify_email, name='verify_email'),
+    path(
+        'resend-verification/',
+        views.ResendVerificationView.as_view(),
+        name='resend_verification',
+    ),
     
     # AJAX URLs
     path('check-email/', views.check_email_exists, name='check_email'),

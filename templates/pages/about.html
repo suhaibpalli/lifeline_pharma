@@ -25,7 +25,7 @@
                 {% if page %}
                     <div class="prose prose-lg max-w-none">
                         <div class="text-text-primary leading-relaxed space-y-6">
-                            {{ page.content|linebreaks }}
+                            {{ page.content|safe|linebreaks }}
                         </div>
                     </div>
                 {% else %}

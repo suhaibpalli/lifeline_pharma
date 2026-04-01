@@ -38,6 +38,11 @@
         </div>
         
         <div class="space-y-4">
+            <a href="{% url 'accounts:resend_verification' %}{% if pending_verification_email %}?email={{ pending_verification_email|urlencode }}{% endif %}" 
+               class="w-full border border-blue-300 text-blue-700 py-2 px-4 rounded-md hover:bg-blue-50 transition-colors inline-block">
+                Resend Verification Email
+            </a>
+
             <a href="{% url 'accounts:login' %}" 
                class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors inline-block">
                 Go to Login

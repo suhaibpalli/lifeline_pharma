@@ -85,8 +85,6 @@ class PatientProfile(TimeStampedModel):
     )
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
-    emergency_contact_name = models.CharField(max_length=100, blank=True)
-    emergency_contact_phone = models.CharField(max_length=15, blank=True)
     medical_conditions = models.JSONField(default=list, blank=True)
     allergies = models.JSONField(default=list, blank=True)
     current_medications = models.JSONField(default=list, blank=True)

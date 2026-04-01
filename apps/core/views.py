@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, CreateView
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from .models import CarouselImage, ContactInquiry, Page, DeliveryZone
 from .forms import ContactForm
 
@@ -111,24 +111,27 @@ def check_delivery_zone(request):
     return JsonResponse({"error": "Invalid request"})
 
 
+def chrome_devtools_manifest(request):
+    """Silence Chrome DevTools well-known probe in local development."""
+    return HttpResponse(status=204)
+
+
 class FAQView(TemplateView):
     """FAQ page"""
 
     template_name = "pages/faq.html"
 
 
-class PrivacyPolicyView(StaticPageMixin, TemplateView):
+class PrivacyPolicyView(TemplateView):
     """Privacy Policy page"""
 
     template_name = "pages/privacy_policy.html"
-    page_slug = "privacy-policy"
 
 
-class TermsOfServiceView(StaticPageMixin, TemplateView):
+class TermsOfServiceView(TemplateView):
     """Terms of Service page"""
 
     template_name = "pages/terms_of_service.html"
-    page_slug = "terms-of-service"
 
 
 # Health check endpoint

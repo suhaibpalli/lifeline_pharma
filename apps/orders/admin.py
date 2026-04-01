@@ -34,10 +34,17 @@ class OrderAdmin(admin.ModelAdmin):
             'fields': ('order_number', 'user', 'status', 'payment_status')
         }),
         ('Pricing', {
-            'fields': ('subtotal', 'tax_amount', 'delivery_charge', 'discount_amount', 'total_amount')
+            'fields': (
+                'subtotal',
+                'tax_amount',
+                'delivery_charge',
+                'discount_amount',
+                'total_amount',
+                'applied_coupon_code',
+            )
         }),
         ('Payment', {
-            'fields': ('payment_method', 'payment_id')
+            'fields': ('payment_method', 'payment_id', 'razorpay_order_id')
         }),
         ('Delivery', {
             'fields': ('delivery_address', 'delivery_phone', 'estimated_delivery', 'actual_delivery')

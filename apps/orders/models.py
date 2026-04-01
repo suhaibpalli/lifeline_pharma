@@ -60,6 +60,7 @@ class Order(TimeStampedModel):
     delivery_charge = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    applied_coupon_code = models.CharField(max_length=20, blank=True)
 
     # Payment Information
     payment_method = models.CharField(
@@ -68,6 +69,9 @@ class Order(TimeStampedModel):
     payment_id = models.CharField(
         max_length=100, blank=True
     )  # Transaction ID from payment gateway
+    razorpay_order_id = models.CharField(
+        max_length=100, blank=True
+    )  # Razorpay order ID
 
     # Delivery Information
     delivery_address = models.JSONField()  # Store complete address as JSON
@@ -128,7 +132,10 @@ class Order(TimeStampedModel):
     @property
     def can_be_cancelled(self):
         """Check if order can be cancelled"""
-        return self.status in ["PENDING", "CONFIRMED"] and self.payment_status != "PAID"
+        return self.status in ["PENDING", "CONFIRMED"] and self.payment_status not in [
+            "PAID",
+            "FAILED",
+        ]
 
     @property
     def is_delivered(self):

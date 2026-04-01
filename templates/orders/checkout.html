@@ -3,6 +3,22 @@
 
 {% block title %}Checkout - {{ site_name }}{% endblock %}
 
+{% block extra_js %}
+<!-- Razorpay SDK -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="{% static 'js/checkout.js' %}"></script>
+
+<script>
+  window.RAZORPAY_KEY_ID = "{{ razorpay_key_id }}";
+  window.INITIATE_URL = "{% url 'orders:initiate_razorpay_order' %}";
+  window.VERIFY_URL = "{% url 'orders:verify_razorpay_payment' %}";
+  window.FAILED_URL = "{% url 'orders:razorpay_payment_failed' %}";
+  window.APPLY_COUPON_URL = "{% url 'orders:apply_coupon' %}";
+  window.REMOVE_COUPON_URL = "{% url 'orders:remove_coupon' %}";
+  window.CSRF_TOKEN = "{{ csrf_token }}";
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-6xl mx-auto">
@@ -53,7 +69,7 @@
                             </div>
                             
                             <div class="mt-4">
-                                <a href="{% url 'accounts:address_create' %}" 
+                                <a href="{% url 'accounts:address_add' %}" 
                                    class="text-blue-600 hover:underline text-sm">
                                     <i class="fas fa-plus mr-1"></i>Add New Address
                                 </a>
@@ -62,7 +78,7 @@
                             <div class="text-center py-8">
                                 <i class="fas fa-map-marker-alt text-4xl text-gray-300 mb-4"></i>
                                 <p class="text-gray-600 mb-4">No delivery address found</p>
-                                <a href="{% url 'accounts:address_create' %}" 
+                                <a href="{% url 'accounts:address_add' %}" 
                                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
                                     Add Delivery Address
                                 </a>
@@ -102,34 +118,35 @@
                     </div>
                     
                     <!-- Prescription Upload (if required) -->
-                    {% if cart_items|length > 0 %}
-                        {% for item in cart_items %}
-                            {% if item.product.prescription_required == 'RX' %}
-                                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-                                    <h2 class="text-xl font-semibold mb-4 text-yellow-800">
-                                        <i class="fas fa-file-medical mr-2"></i>Prescription Required
-                                    </h2>
-                                    <p class="text-yellow-700 mb-4">
-                                        Your order contains prescription medicines. Please upload a valid prescription.
-                                    </p>
-                                    
-                                    <div class="mb-4">
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Upload Prescription *
-                                        </label>
-                                        {{ form.prescription_image }}
-                                    </div>
-                                    
-                                    <div class="text-xs text-gray-600">
-                                        <p>• Prescription should be clear and readable</p>
-                                        <p>• Doctor's signature and stamp must be visible</p>
-                                        <p>• Accepted formats: JPG, PNG, PDF</p>
-                                    </div>
+                    {% with has_prescription_items=False %}
+                    {% for item in cart_items %}
+                        {% if item.product.prescription_required == 'RX' %}
+                            {% with has_prescription_items=True %}
+                            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                                <h2 class="text-xl font-semibold mb-4 text-yellow-800">
+                                    <i class="fas fa-file-medical mr-2"></i>Prescription Required
+                                </h2>
+                                <p class="text-yellow-700 mb-4">
+                                    Your order contains prescription medicines. Please upload a valid prescription.
+                                </p>
+                                
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Upload Prescription *
+                                    </label>
+                                    {{ form.prescription_image }}
                                 </div>
-                                {% break %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
+                                
+                                <div class="text-xs text-gray-600">
+                                    <p>• Prescription should be clear and readable</p>
+                                    <p>• Doctor's signature and stamp must be visible</p>
+                                    <p>• Accepted formats: JPG, PNG, PDF</p>
+                                </div>
+                            </div>
+                            {% endwith %}
+                        {% endif %}
+                    {% endfor %}
+                    {% endwith %}
                     
                     <!-- Order Notes -->
                     <div class="bg-white rounded-lg shadow-md p-6">
@@ -261,8 +278,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'js/checkout.js' %}"></script>
 {% endblock %}

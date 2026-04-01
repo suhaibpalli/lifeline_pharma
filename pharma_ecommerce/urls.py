@@ -19,10 +19,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from apps.core.views import health_check
+from apps.core.views import chrome_devtools_manifest, health_check
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path(
+        ".well-known/appspecific/com.chrome.devtools.json",
+        chrome_devtools_manifest,
+        name="chrome_devtools_manifest",
+    ),
     path("health/", health_check, name="health_check"),
     path("", include("apps.core.urls")),  # Homepage and basic pages
     path("accounts/", include("apps.accounts.urls")),

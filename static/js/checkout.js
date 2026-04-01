@@ -1,178 +1,168 @@
-// Checkout functionality
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // Coupon functionality
-    const applyCouponBtn = document.getElementById('apply-coupon');
-    const removeCouponBtn = document.getElementById('remove-coupon');
-    const couponCodeInput = document.getElementById('coupon-code');
-    
-    if (applyCouponBtn) {
-        applyCouponBtn.addEventListener('click', applyCoupon);
-    }
-    
-    if (removeCouponBtn) {
-        removeCouponBtn.addEventListener('click', removeCoupon);
-    }
-    
-    // Form submission
+document.addEventListener('DOMContentLoaded', function () {
     const checkoutForm = document.getElementById('checkout-form');
-    if (checkoutForm) {
-        checkoutForm.addEventListener('submit', function(e) {
-            if (!validateCheckoutForm()) {
-                e.preventDefault();
+    const loadingOverlay = document.getElementById('loading-overlay');
+
+    // Coupon logic
+    const applyBtn = document.getElementById('apply-coupon');
+    const removeBtn = document.getElementById('remove-coupon');
+    const couponInput = document.getElementById('coupon-code');
+
+    if (applyBtn) {
+        applyBtn.addEventListener('click', async function () {
+            const code = couponInput.value.trim();
+            if (!code) return showCouponMsg('Enter a coupon code', 'error');
+            const res = await fetch(window.APPLY_COUPON_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': window.CSRF_TOKEN },
+                body: JSON.stringify({ coupon_code: code }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                showCouponMsg(data.message, 'success');
+                document.getElementById('discount-row').classList.remove('hidden');
+                document.getElementById('discount-amount').textContent = '−₹' + data.discount.toFixed(2);
+                document.getElementById('delivery-charge').textContent = data.delivery_charge > 0
+                    ? '₹' + data.delivery_charge.toFixed(2) : 'FREE';
+                document.getElementById('total-amount').textContent = '₹' + data.total.toFixed(2);
+                document.getElementById('applied-coupon').classList.remove('hidden');
+                document.getElementById('applied-coupon-code').textContent = code.toUpperCase();
             } else {
-                showLoading();
+                showCouponMsg(data.message, 'error');
             }
         });
     }
-});
 
-// Apply coupon
-function applyCoupon() {
-    const couponCode = document.getElementById('coupon-code').value.trim();
-    
-    if (!couponCode) {
-        showCouponMessage('Please enter a coupon code', 'error');
-        return;
-    }
-    
-    fetch('/orders/apply-coupon/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        body: JSON.stringify({
-            coupon_code: couponCode
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showCouponMessage(data.message, 'success');
-            updatePricing(data);
-            showAppliedCoupon(couponCode);
-        } else {
-            showCouponMessage(data.message, 'error');
-        }
-    })
-    .catch(error => {
-        showCouponMessage('Error applying coupon', 'error');
-    });
-}
-
-// Remove coupon
-function removeCoupon() {
-    fetch('/orders/remove-coupon/', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': getCookie('csrftoken')
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showCouponMessage(data.message, 'success');
-            updatePricing(data);
-            hideAppliedCoupon();
-        }
-    })
-    .catch(error => {
-        showCouponMessage('Error removing coupon', 'error');
-    });
-}
-
-// Update pricing display
-function updatePricing(data) {
-    const deliveryCharge = document.getElementById('delivery-charge');
-    const discountRow = document.getElementById('discount-row');
-    const discountAmount = document.getElementById('discount-amount');
-    const totalAmount = document.getElementById('total-amount');
-    
-    if (deliveryCharge) {
-        deliveryCharge.textContent = data.delivery_charge > 0 ? `₹${data.delivery_charge}` : 'FREE';
-    }
-    
-    if (data.discount > 0) {
-        discountRow.classList.remove('hidden');
-        discountAmount.textContent = `-₹${data.discount}`;
-    } else {
-        discountRow.classList.add('hidden');
-    }
-    
-    if (totalAmount) {
-        totalAmount.textContent = `₹${data.total}`;
-    }
-}
-
-// Show coupon message
-function showCouponMessage(message, type) {
-    const messageDiv = document.getElementById('coupon-message');
-    messageDiv.textContent = message;
-    messageDiv.className = `mt-2 text-sm ${type === 'success' ? 'text-green-600' : 'text-red-600'}`;
-    messageDiv.classList.remove('hidden');
-    
-    setTimeout(() => {
-        messageDiv.classList.add('hidden');
-    }, 5000);
-}
-
-// Show applied coupon
-function showAppliedCoupon(code) {
-    const appliedCouponDiv = document.getElementById('applied-coupon');
-    const appliedCouponCode = document.getElementById('applied-coupon-code');
-    const couponCodeInput = document.getElementById('coupon-code');
-    
-    appliedCouponCode.textContent = code;
-    appliedCouponDiv.classList.remove('hidden');
-    couponCodeInput.value = '';
-}
-
-// Hide applied coupon
-function hideAppliedCoupon() {
-    const appliedCouponDiv = document.getElementById('applied-coupon');
-    appliedCouponDiv.classList.add('hidden');
-}
-
-// Validate checkout form
-function validateCheckoutForm() {
-    const addressSelected = document.querySelector('input[name="address"]:checked');
-    const paymentMethodSelected = document.querySelector('input[name="payment_method"]:checked');
-    
-    if (!addressSelected) {
-        showToast('Please select a delivery address', 'error');
-        return false;
-    }
-    
-    if (!paymentMethodSelected) {
-        showToast('Please select a payment method', 'error');
-        return false;
-    }
-    
-    return true;
-}
-
-// Show loading overlay
-function showLoading() {
-    const overlay = document.getElementById('loading-overlay');
-    if (overlay) {
-        overlay.classList.remove('hidden');
-        overlay.classList.add('flex');
-    }
-}
-
-// Get CSRF token
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+    if (removeBtn) {
+        removeBtn.addEventListener('click', async function () {
+            const res = await fetch(window.REMOVE_COUPON_URL, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': window.CSRF_TOKEN },
+            });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('applied-coupon').classList.add('hidden');
+                document.getElementById('discount-row').classList.add('hidden');
+                document.getElementById('total-amount').textContent = '₹' + data.total.toFixed(2);
+                document.getElementById('delivery-charge').textContent = data.delivery_charge > 0
+                    ? '₹' + data.delivery_charge.toFixed(2) : 'FREE';
+                couponInput.value = '';
+                showCouponMsg('Coupon removed', 'info');
             }
+        });
+    }
+
+    function showCouponMsg(msg, type) {
+        const el = document.getElementById('coupon-message');
+        el.textContent = msg;
+        el.className = 'mt-2 text-sm ' + (type === 'success' ? 'text-green-600' : type === 'error' ? 'text-red-600' : 'text-gray-600');
+        el.classList.remove('hidden');
+    }
+
+    // Form submission
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value;
+
+            if (paymentMethod === 'ONLINE') {
+                await handleRazorpayPayment();
+            } else {
+                loadingOverlay.classList.remove('hidden');
+                loadingOverlay.classList.add('flex');
+                checkoutForm.submit();
+            }
+        });
+    }
+
+    // Razorpay flow
+    async function handleRazorpayPayment() {
+        loadingOverlay.classList.remove('hidden');
+        loadingOverlay.classList.add('flex');
+
+        const formData = new FormData(checkoutForm);
+
+        try {
+            const res = await fetch(window.INITIATE_URL, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': window.CSRF_TOKEN },
+                body: formData,
+            });
+            const data = await res.json();
+
+            if (!data.success) {
+                loadingOverlay.classList.add('hidden');
+                loadingOverlay.classList.remove('flex');
+                alert(data.message || 'Failed to initiate payment. Please try again.');
+                return;
+            }
+
+            loadingOverlay.classList.add('hidden');
+            loadingOverlay.classList.remove('flex');
+
+            const options = {
+                key: data.key_id,
+                amount: data.amount,
+                currency: data.currency,
+                name: 'Lifeline Healthcare',
+                description: 'Order Payment',
+                order_id: data.razorpay_order_id,
+                prefill: data.prefill,
+                theme: { color: '#2563EB' },
+                handler: async function (response) {
+                    await verifyPayment(response, data.order_number);
+                },
+                modal: {
+                    ondismiss: async function () {
+                        await markFailed(data.order_number);
+                        alert('Payment was cancelled. Your cart is unchanged, so you can retry checkout.');
+                    },
+                },
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+
+        } catch (err) {
+            loadingOverlay.classList.add('hidden');
+            loadingOverlay.classList.remove('flex');
+            alert('Network error. Please try again.');
         }
     }
-    return cookieValue;
-}
+
+    async function verifyPayment(response, orderNumber) {
+        loadingOverlay.classList.remove('hidden');
+        loadingOverlay.classList.add('flex');
+        try {
+            const res = await fetch(window.VERIFY_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': window.CSRF_TOKEN },
+                body: JSON.stringify({
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_signature: response.razorpay_signature,
+                    order_number: orderNumber,
+                }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                window.location.href = data.redirect_url;
+            } else {
+                loadingOverlay.classList.add('hidden');
+                loadingOverlay.classList.remove('flex');
+                alert(data.message || 'Payment verification failed.');
+            }
+        } catch (err) {
+            loadingOverlay.classList.add('hidden');
+            loadingOverlay.classList.remove('flex');
+            alert('Verification error. Contact support with your payment ID.');
+        }
+    }
+
+    async function markFailed(orderNumber) {
+        await fetch(window.FAILED_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': window.CSRF_TOKEN },
+            body: JSON.stringify({ order_number: orderNumber }),
+        });
+    }
+});

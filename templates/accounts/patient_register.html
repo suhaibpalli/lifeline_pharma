@@ -88,27 +88,6 @@
                     </div>
                 </div>
                 
-                <!-- Emergency Contact -->
-                <div>
-                    <label for="{{ form.emergency_contact_name.id_for_label }}" class="block text-sm font-medium text-gray-700">
-                        Emergency Contact Name
-                    </label>
-                    {{ form.emergency_contact_name }}
-                    {% if form.emergency_contact_name.errors %}
-                        <p class="mt-1 text-sm text-red-600">{{ form.emergency_contact_name.errors.0 }}</p>
-                    {% endif %}
-                </div>
-                
-                <div>
-                    <label for="{{ form.emergency_contact_phone.id_for_label }}" class="block text-sm font-medium text-gray-700">
-                        Emergency Contact Phone
-                    </label>
-                    {{ form.emergency_contact_phone }}
-                    {% if form.emergency_contact_phone.errors %}
-                        <p class="mt-1 text-sm text-red-600">{{ form.emergency_contact_phone.errors.0 }}</p>
-                    {% endif %}
-                </div>
-                
                 <!-- Password -->
                 <div>
                     <label for="{{ form.password1.id_for_label }}" class="block text-sm font-medium text-gray-700">

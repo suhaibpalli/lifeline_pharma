@@ -12,3 +12,4 @@ psycopg-binary==3.3.3
 django-redis==5.4.0
 redis==5.2.1
 boto3==1.42.73
+razorpay==1.4.2
