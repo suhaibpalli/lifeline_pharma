@@ -39,13 +39,24 @@ from .forms import (
 logger = logging.getLogger(__name__)
 
 
-class RegisterChoiceView(TemplateView):
+class AnonymousOnlyMixin:
+    """Redirect authenticated users away from login and registration screens."""
+
+    redirect_url = reverse_lazy("accounts:profile")
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect(self.redirect_url)
+        return super().dispatch(request, *args, **kwargs)
+
+
+class RegisterChoiceView(AnonymousOnlyMixin, TemplateView):
     """User type selection view"""
 
     template_name = "accounts/register_choice.html"
 
 
-class PatientRegistrationView(CreateView):
+class PatientRegistrationView(AnonymousOnlyMixin, CreateView):
     """Patient registration view"""
 
     model = CustomUser
@@ -79,7 +90,7 @@ class PatientRegistrationView(CreateView):
         return super().form_invalid(form)
 
 
-class PharmacyRegistrationView(CreateView):
+class PharmacyRegistrationView(AnonymousOnlyMixin, CreateView):
     """Pharmacy registration view"""
 
     model = CustomUser
@@ -106,7 +117,7 @@ class PharmacyRegistrationView(CreateView):
         return super().form_invalid(form)
 
 
-class RegistrationSuccessView(TemplateView):
+class RegistrationSuccessView(AnonymousOnlyMixin, TemplateView):
     """Registration success page"""
 
     template_name = "accounts/registration_success.html"
@@ -119,15 +130,12 @@ class RegistrationSuccessView(TemplateView):
         return context
 
 
-class CustomLoginView(TemplateView):
+class CustomLoginView(AnonymousOnlyMixin, TemplateView):
     """Custom login view"""
 
     template_name = "accounts/login.html"
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return self._redirect_user(request.user)
-
         form = CustomAuthenticationForm()
         resend_form = ResendVerificationForm(
             initial={"email": request.GET.get("email", "")}
@@ -339,7 +347,7 @@ def verify_email(request, token):
         return redirect(resend_url)
 
 
-class ResendVerificationView(TemplateView):
+class ResendVerificationView(AnonymousOnlyMixin, TemplateView):
     """Resend account verification email."""
 
     template_name = "accounts/resend_verification.html"
