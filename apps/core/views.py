@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, CreateView
 from django.contrib import messages
+from django.conf import settings
 from django.urls import reverse_lazy
 from django.http import HttpResponse, JsonResponse
 from .models import CarouselImage, ContactInquiry, Page, DeliveryZone
@@ -114,6 +115,22 @@ def check_delivery_zone(request):
 def chrome_devtools_manifest(request):
     """Silence Chrome DevTools well-known probe in local development."""
     return HttpResponse(status=204)
+
+
+def robots_txt(request):
+    """Serve crawler rules and sitemap location."""
+    site_url = settings.SITE_URL.rstrip("/")
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /admin/",
+        "Disallow: /accounts/",
+        "Disallow: /cart/",
+        "Disallow: /orders/",
+        "",
+        f"Sitemap: {site_url}/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
 
 
 class FAQView(TemplateView):

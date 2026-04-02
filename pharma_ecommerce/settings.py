@@ -40,11 +40,13 @@ ALLOWED_HOSTS = config(
 # Application definition
 
 INSTALLED_APPS = [
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "django.contrib.sitemaps",
     "django.contrib.staticfiles",
     # Third Party Apps
     "widget_tweaks",
@@ -59,6 +61,109 @@ INSTALLED_APPS = [
     # 'apps.dashboard',
     # 'apps.admin_panel',
 ]
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Lifeline Admin",
+    "site_header": "Lifeline Healthcare",
+    "site_brand": "Lifeline Admin",
+    "site_logo": "images/logo.png",
+    # "login_logo": "images/logo.png",
+    "site_logo_classes": "img-circle elevation-2",
+    "welcome_sign": "Welcome to Lifeline Healthcare Admin",
+    "copyright": "Lifeline Healthcare",
+    "search_model": [
+        "accounts.CustomUser",
+        "products.Product",
+        "orders.Order",
+        "orders.Coupon",
+        "orders.RazorpayWebhookEvent",
+    ],
+    "topmenu_links": [
+        {"name": "Dashboard", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Storefront", "url": "/", "new_window": True},
+        {"model": "orders.Order"},
+        {"model": "products.Product"},
+        {"app": "orders"},
+    ],
+    "usermenu_links": [
+        {"name": "View Site", "url": "/", "new_window": True},
+    ],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+    "order_with_respect_to": [
+        "orders",
+        "products",
+        "accounts",
+        "core",
+        "cart",
+    ],
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "accounts.CustomUser": "fas fa-user",
+        "accounts.Address": "fas fa-map-marker-alt",
+        "products.Category": "fas fa-layer-group",
+        "products.Manufacturer": "fas fa-industry",
+        "products.Product": "fas fa-capsules",
+        "products.ProductImage": "fas fa-image",
+        "orders.Order": "fas fa-shopping-bag",
+        "orders.OrderItem": "fas fa-box-open",
+        "orders.OrderRefund": "fas fa-undo-alt",
+        "orders.Coupon": "fas fa-tags",
+        "orders.CouponUsage": "fas fa-ticket-alt",
+        "orders.RazorpayWebhookEvent": "fas fa-plug",
+        "core.SiteConfiguration": "fas fa-cog",
+        "core.CarouselImage": "fas fa-images",
+        "core.ContactInquiry": "fas fa-envelope",
+        "cart.Cart": "fas fa-shopping-cart",
+        "cart.Wishlist": "fas fa-heart",
+    },
+    "custom_links": {
+        "orders": [
+            {
+                "name": "Open Storefront",
+                "url": "/",
+                "icon": "fas fa-external-link-alt",
+                "permissions": ["orders.view_order"],
+            }
+        ]
+    },
+    # "show_ui_builder": True,
+    "changeform_format": "horizontal_tabs",
+    "related_modal_active": True,
+    "custom_css": "css/custom.css",
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+    "dark_mode_theme": None,
+    "navbar": "navbar-white navbar-light",
+    "no_navbar_border": False,
+    "accent": "accent-info",
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-info",
+    "brand_text_colour": "navbar-white",
+    "sidebar": "sidebar-dark-info",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme_colour": "navbar-info",
+    "button_classes": {
+        "primary": "btn-info",
+        "secondary": "btn-outline-secondary",
+        "info": "btn-outline-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success",
+    },
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

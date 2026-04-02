@@ -171,6 +171,8 @@ html {
     border-color: rgba(255, 255, 255, 0.3);
 }
 
+/* Login logo constraints */
+
 /* Hide navigation when only one slide */
 .hero-carousel[data-single-slide="true"] .carousel-nav,
 .hero-carousel[data-single-slide="true"] .carousel-dots {
@@ -387,4 +389,46 @@ img:not([loading="lazy"]) {
     :root {
         /* Can be extended for dark mode support */
     }
+}
+
+/* Jazzmin Admin Login Logo Fix */
+.login-page .login-box .login-logo img {
+    max-width: 200px !important;
+    height: auto !important;
+    margin: 0 auto 10px auto !important;
+    display: block;
+}
+
+.login-page .login-box .login-logo {
+    margin-bottom: 5px !important;
+}
+
+.login-page .login-logo .logo-dark {
+    display: none !important;
+}
+
+html[data-bs-theme="dark"] .login-page .login-logo .logo-light {
+    display: none !important;
+}
+
+html[data-bs-theme="dark"] .login-page .login-logo .logo-dark {
+    display: block !important;
+}
+
+/* Ensure the welcome sign doesn't overlap */
+.login-box-msg {
+    padding: 0 20px 15px 20px !important;
+    font-weight: 600;
+}
+
+/* Sidebar logo fix */
+.brand-link .brand-image {
+    max-height: 38px !important;
+    width: auto !important;
+    object-fit: contain;
+}
+
+/* Hide Jazzmin version branding from admin footer */
+.main-footer .float-end.d-none.d-sm-inline {
+    display: none !important;
 }
