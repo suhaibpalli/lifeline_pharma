@@ -1,5 +1,5 @@
 import json
-import os
+import logging
 import razorpay
 from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect
@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.conf import settings
@@ -19,7 +19,14 @@ from django.views.decorators.csrf import csrf_exempt
 from apps.cart.models import Cart
 from apps.cart.utils import get_or_create_cart
 from apps.accounts.models import Address
-from .models import Order, OrderItem, OrderStatusHistory, Coupon, CouponUsage
+from .models import (
+    Coupon,
+    CouponUsage,
+    Order,
+    OrderItem,
+    OrderStatusHistory,
+    RazorpayWebhookEvent,
+)
 from .forms import CheckoutForm, CouponForm
 from .utils import (
     calculate_delivery_charge,
@@ -28,6 +35,8 @@ from .utils import (
     get_applied_coupon_data,
     mark_order_payment_failed,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def get_coupon_for_order(order):
@@ -506,9 +515,10 @@ def razorpay_webhook(request):
     if request.method != "POST":
         return JsonResponse({"status": "ignored"}, status=405)
 
+    webhook_event = None
     try:
-        payload = request.body
-        webhook_secret = os.environ.get("RAZORPAY_WEBHOOK_SECRET", "")
+        payload = request.body.decode("utf-8")
+        webhook_secret = settings.RAZORPAY_WEBHOOK_SECRET
 
         if not webhook_secret and not settings.DEBUG:
             return JsonResponse({"status": "webhook secret not configured"}, status=500)
@@ -528,6 +538,22 @@ def razorpay_webhook(request):
 
         event = json.loads(payload)
         event_type = event.get("event")
+        event_id = request.headers.get("X-Razorpay-Event-Id", "").strip()
+
+        if not event_id:
+            return JsonResponse({"status": "missing event id"}, status=400)
+
+        if not event_type:
+            return JsonResponse({"status": "missing event type"}, status=400)
+
+        try:
+            webhook_event = RazorpayWebhookEvent.objects.create(
+                event_id=event_id,
+                event_type=event_type,
+                payload=event,
+            )
+        except IntegrityError:
+            return JsonResponse({"status": "duplicate ignored"})
 
         payload_data = event.get("payload", {})
 
@@ -571,7 +597,13 @@ def razorpay_webhook(request):
                     order, notes="Payment failed via Razorpay webhook"
                 )
 
+        if webhook_event:
+            webhook_event.mark_processed(notes="Event handled successfully")
+
         return JsonResponse({"status": "processed"})
 
     except Exception as e:
+        if webhook_event:
+            webhook_event.mark_failed(str(e))
+        logger.exception("Razorpay webhook processing failed")
         return JsonResponse({"status": "error", "message": str(e)}, status=500)

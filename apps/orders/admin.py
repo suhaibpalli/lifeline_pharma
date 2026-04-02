@@ -9,6 +9,7 @@ from .models import (
     Coupon,
     CouponUsage,
     OrderRefund,
+    RazorpayWebhookEvent,
 )
 
 
@@ -187,3 +188,17 @@ class OrderRefundAdmin(admin.ModelAdmin):
     list_filter = ["refund_type", "status", "created_at"]
     search_fields = ["order__order_number"]
     readonly_fields = ["created_at", "updated_at"]
+
+
+@admin.register(RazorpayWebhookEvent)
+class RazorpayWebhookEventAdmin(admin.ModelAdmin):
+    list_display = [
+        "event_id",
+        "event_type",
+        "processing_status",
+        "processed_at",
+        "created_at",
+    ]
+    list_filter = ["event_type", "processing_status", "created_at"]
+    search_fields = ["event_id", "event_type", "notes"]
+    readonly_fields = ["created_at", "updated_at", "processed_at", "payload", "notes"]

@@ -1,15 +1,16 @@
 import json
+import os
 from decimal import Decimal
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
-from django.urls import reverse
+from django.urls import resolve, reverse
 from django.utils import timezone
 
 from apps.accounts.models import Address
 from apps.cart.models import Cart, CartItem
-from apps.orders.models import Coupon, CouponUsage, Order, OrderItem
+from apps.orders.models import Coupon, CouponUsage, Order, OrderItem, RazorpayWebhookEvent
 from apps.products.models import Category, Manufacturer, Product
 
 User = get_user_model()
@@ -110,6 +111,11 @@ class RazorpayFlowTestCase(TestCase):
         self.assertContains(response, reverse("orders:initiate_razorpay_order"))
         self.assertContains(response, reverse("orders:verify_razorpay_payment"))
         self.assertContains(response, reverse("orders:razorpay_payment_failed"))
+
+    def test_webhook_url_resolves_to_webhook_view(self):
+        match = resolve("/orders/webhook/")
+
+        self.assertEqual(match.view_name, "orders:razorpay_webhook")
 
     @patch("apps.orders.views.razorpay.Client")
     def test_initiate_razorpay_order_creates_pending_order_and_stores_coupon_code(
@@ -212,6 +218,7 @@ class RazorpayFlowTestCase(TestCase):
                 }
             ),
             content_type="application/json",
+            HTTP_X_RAZORPAY_EVENT_ID="evt_test_123",
         )
 
         self.assertEqual(response.status_code, 200)
@@ -223,6 +230,103 @@ class RazorpayFlowTestCase(TestCase):
         self.assertEqual(self.cart.items.count(), 0)
         self.assertTrue(
             CouponUsage.objects.filter(order=order, coupon=self.coupon).exists()
+        )
+        self.assertTrue(
+            RazorpayWebhookEvent.objects.filter(
+                event_id="evt_test_123", processing_status="PROCESSED"
+            ).exists()
+        )
+
+    @patch.dict(os.environ, {}, clear=False)
+    @patch("apps.orders.views.razorpay.Client")
+    @override_settings(DEBUG=False, RAZORPAY_WEBHOOK_SECRET="webhook_secret")
+    def test_signed_webhook_uses_string_payload_for_signature_verification(
+        self, mock_client
+    ):
+        order = self.create_pending_online_order(coupon_code=self.coupon.code)
+        mock_client.return_value.utility.verify_webhook_signature.return_value = None
+
+        body = json.dumps(
+            {
+                "event": "payment.captured",
+                "payload": {
+                    "payment": {
+                        "entity": {
+                            "id": "pay_signed_123",
+                            "order_id": order.razorpay_order_id,
+                        }
+                    }
+                },
+            }
+        )
+
+        response = self.client.post(
+            reverse("orders:razorpay_webhook"),
+            data=body,
+            content_type="application/json",
+            HTTP_X_RAZORPAY_SIGNATURE="sig_123",
+            HTTP_X_RAZORPAY_EVENT_ID="evt_signed_123",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        args = mock_client.return_value.utility.verify_webhook_signature.call_args[0]
+        self.assertIsInstance(args[0], str)
+        self.assertEqual(args[0], body)
+        self.assertTrue(
+            RazorpayWebhookEvent.objects.filter(
+                event_id="evt_signed_123", processing_status="PROCESSED"
+            ).exists()
+        )
+
+    @override_settings(DEBUG=True)
+    def test_webhook_requires_event_id_header(self):
+        response = self.client.post(
+            reverse("orders:razorpay_webhook"),
+            data=json.dumps({"event": "payment.captured", "payload": {}}),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["status"], "missing event id")
+
+    @override_settings(DEBUG=True)
+    def test_duplicate_webhook_event_is_ignored_idempotently(self):
+        order = self.create_pending_online_order(coupon_code=self.coupon.code)
+        body = json.dumps(
+            {
+                "event": "payment.captured",
+                "payload": {
+                    "payment": {
+                        "entity": {
+                            "id": "pay_dupe_123",
+                            "order_id": order.razorpay_order_id,
+                        }
+                    }
+                },
+            }
+        )
+
+        first_response = self.client.post(
+            reverse("orders:razorpay_webhook"),
+            data=body,
+            content_type="application/json",
+            HTTP_X_RAZORPAY_EVENT_ID="evt_duplicate_123",
+        )
+        second_response = self.client.post(
+            reverse("orders:razorpay_webhook"),
+            data=body,
+            content_type="application/json",
+            HTTP_X_RAZORPAY_EVENT_ID="evt_duplicate_123",
+        )
+
+        self.assertEqual(first_response.status_code, 200)
+        self.assertEqual(second_response.status_code, 200)
+        self.assertEqual(second_response.json()["status"], "duplicate ignored")
+        self.assertEqual(
+            RazorpayWebhookEvent.objects.filter(event_id="evt_duplicate_123").count(), 1
+        )
+        self.assertEqual(
+            CouponUsage.objects.filter(order=order, coupon=self.coupon).count(), 1
         )
 
     @override_settings(DEBUG=False)

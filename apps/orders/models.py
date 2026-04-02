@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.urls import reverse
+from django.utils import timezone
 from apps.core.models import TimeStampedModel, get_default_storage
 from apps.products.models import Product
 from apps.accounts.models import Address
@@ -344,3 +345,41 @@ class CouponUsage(TimeStampedModel):
 
     def __str__(self):
         return f"{self.coupon.code} used in Order #{self.order.order_number}"
+
+
+class RazorpayWebhookEvent(TimeStampedModel):
+    """Store Razorpay webhook events for idempotent processing."""
+
+    PROCESSING_STATUS_CHOICES = [
+        ("PENDING", "Pending"),
+        ("PROCESSED", "Processed"),
+        ("FAILED", "Failed"),
+    ]
+
+    event_id = models.CharField(max_length=255, unique=True)
+    event_type = models.CharField(max_length=100)
+    payload = models.JSONField(default=dict)
+    processing_status = models.CharField(
+        max_length=20, choices=PROCESSING_STATUS_CHOICES, default="PENDING"
+    )
+    processed_at = models.DateTimeField(null=True, blank=True)
+    notes = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name = "Razorpay Webhook Event"
+        verbose_name_plural = "Razorpay Webhook Events"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.event_type} ({self.event_id})"
+
+    def mark_processed(self, notes=""):
+        self.processing_status = "PROCESSED"
+        self.processed_at = timezone.now()
+        self.notes = notes
+        self.save(update_fields=["processing_status", "processed_at", "notes", "updated_at"])
+
+    def mark_failed(self, notes):
+        self.processing_status = "FAILED"
+        self.notes = notes
+        self.save(update_fields=["processing_status", "notes", "updated_at"])

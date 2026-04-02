@@ -1,5 +1,6 @@
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from django.utils import timezone
 from .models import Order, OrderStatusHistory
 
 
@@ -9,8 +10,10 @@ def sync_order_status_from_history(sender, instance, created, **kwargs):
     if created:
         latest = instance.order.status_history.first()
         if latest:
-            instance.order.status = latest.status
-            instance.order.save(update_fields=["status"])
+            Order.objects.filter(pk=instance.order_id).update(
+                status=latest.status,
+                updated_at=timezone.now(),
+            )
 
 
 @receiver(pre_save, sender=Order)
