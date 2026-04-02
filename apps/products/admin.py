@@ -4,10 +4,8 @@ from .models import (
     Category,
     Manufacturer,
     Product,
-    ProductImage,
     ProductReview,
     Stock,
-    ProductTag,
 )
 
 
@@ -71,13 +69,6 @@ class ManufacturerAdmin(admin.ModelAdmin):
         return "-"
 
     logo_thumbnail.short_description = "Logo"
-
-
-class ProductImageInline(admin.TabularInline):
-    model = ProductImage
-    fields = ["image", "alt_text", "is_primary", "sort_order"]
-    readonly_fields = ["created_at"]
-    extra = 1
 
 
 class StockInline(admin.TabularInline):
@@ -160,35 +151,10 @@ class ProductAdmin(admin.ModelAdmin):
         ),
     )
 
-    inlines = [ProductImageInline, StockInline]
+    inlines = [StockInline]
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("category", "manufacturer")
-
-
-@admin.register(ProductImage)
-class ProductImageAdmin(admin.ModelAdmin):
-    list_display = [
-        "id",
-        "product",
-        "image_preview",
-        "alt_text",
-        "is_primary",
-        "sort_order",
-    ]
-    list_filter = ["is_primary", "created_at"]
-    search_fields = ["product__name", "alt_text"]
-    list_editable = ["is_primary", "sort_order"]
-    readonly_fields = ["created_at", "updated_at"]
-
-    def image_preview(self, obj):
-        if obj.image:
-            return format_html(
-                '<img src="{}" style="width: 80px; height: auto;" />', obj.image.url
-            )
-        return "-"
-
-    image_preview.short_description = "Preview"
 
 
 @admin.register(ProductReview)
@@ -226,15 +192,3 @@ class StockAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("product", "created_by")
-
-
-@admin.register(ProductTag)
-class ProductTagAdmin(admin.ModelAdmin):
-    list_display = ["name", "product_count"]
-    search_fields = ["name"]
-    prepopulated_fields = {"slug": ("name",)}
-
-    def product_count(self, obj):
-        return obj.products.count()
-
-    product_count.short_description = "Product Count"

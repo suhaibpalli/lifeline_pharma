@@ -113,6 +113,107 @@ class EmailVerificationAdmin(admin.ModelAdmin):
     list_filter = ["is_used", "created_at"]
     search_fields = ["user__email"]
     readonly_fields = ["token", "created_at"]
+    actions = ["resend_verification_email"]
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['show_resend_button'] = True
+        return super().change_view(request, object_id, form_url, extra_context)
+
+    def response_change(self, request, obj):
+        if "_resend_verification" in request.POST:
+            return self.resend_single_verification(request, obj)
+        return super().response_change(request, obj)
+
+    def resend_single_verification(self, request, obj):
+        from django.conf import settings
+        from django.utils import timezone
+        from django.template.loader import render_to_string
+        from django.core.mail import send_mail
+        from datetime import timedelta
+        import uuid
+
+        user = obj.user
+        if user.is_verified:
+            messages.error(request, "User is already verified.")
+            return super().change_view(request, obj.pk)
+
+        token = str(uuid.uuid4())
+        expires_at = timezone.now() + timedelta(days=1)
+        obj.token = token
+        obj.expires_at = expires_at
+        obj.is_used = False
+        obj.save()
+
+        verification_url = f"{settings.SITE_URL}/accounts/verify-email/{token}/?email={user.email}"
+        context = {
+            "user": user,
+            "verification_url": verification_url,
+            "site_name": "Lifeline Healthcare",
+            "preview_text": "Confirm your email address to activate your account.",
+            "expiry_hours": 24,
+            "support_email": settings.DEFAULT_FROM_EMAIL,
+        }
+        text_body = render_to_string("emails/verification_email.txt", context)
+        html_body = render_to_string("emails/verification_email.html", context)
+        
+        send_mail(
+            "Verify your Lifeline Healthcare account",
+            text_body,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
+            html_message=html_body,
+            fail_silently=False,
+        )
+        messages.success(request, f"Verification email sent to {user.email}")
+        return super().change_view(request, obj.pk)
+
+    def resend_verification_email(self, request, queryset):
+        from django.conf import settings
+        from django.utils import timezone
+        from django.template.loader import render_to_string
+        from django.core.mail import send_mail
+        from datetime import timedelta
+        import uuid
+
+        count = 0
+        for verification in queryset.filter(is_used=True):
+            user = verification.user
+            if user.is_verified:
+                continue
+
+            token = str(uuid.uuid4())
+            expires_at = timezone.now() + timedelta(days=1)
+            verification.token = token
+            verification.expires_at = expires_at
+            verification.is_used = False
+            verification.save()
+
+            verification_url = f"{settings.SITE_URL}/accounts/verify-email/{token}/?email={user.email}"
+            context = {
+                "user": user,
+                "verification_url": verification_url,
+                "site_name": "Lifeline Healthcare",
+                "preview_text": "Confirm your email address to activate your account.",
+                "expiry_hours": 24,
+                "support_email": settings.DEFAULT_FROM_EMAIL,
+            }
+            text_body = render_to_string("emails/verification_email.txt", context)
+            html_body = render_to_string("emails/verification_email.html", context)
+            
+            send_mail(
+                "Verify your Lifeline Healthcare account",
+                text_body,
+                settings.DEFAULT_FROM_EMAIL,
+                [user.email],
+                html_message=html_body,
+                fail_silently=False,
+            )
+            count += 1
+
+        self.message_user(request, f"Resent verification email to {count} user(s).")
+    
+    resend_verification_email.short_description = "Resend verification email"
 
 
 admin.site.register(CustomUser, CustomUserAdmin)

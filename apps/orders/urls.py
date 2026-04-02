@@ -8,14 +8,14 @@ urlpatterns = [
     path("", views.OrderListView.as_view(), name="order_list"),
     # Checkout (must be before order_number pattern)
     path("checkout/", views.checkout_view, name="checkout"),
-    # Order detail (must be after checkout)
+    # Coupon management (must be before order_number pattern)
+    path("apply-coupon/", views.apply_coupon, name="apply_coupon"),
+    path("remove-coupon/", views.remove_coupon, name="remove_coupon"),
+    # Order detail (must be after specific paths)
     path("<str:order_number>/", views.OrderDetailView.as_view(), name="order_detail"),
     # Order actions
     path("<str:order_number>/cancel/", views.cancel_order, name="cancel_order"),
     path("<str:order_number>/return/", views.request_return, name="request_return"),
-    # Coupon management
-    path("apply-coupon/", views.apply_coupon, name="apply_coupon"),
-    path("remove-coupon/", views.remove_coupon, name="remove_coupon"),
     # Public tracking
     path("track/<str:order_number>/", views.order_tracking, name="order_tracking"),
     # Razorpay payment routes

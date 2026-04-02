@@ -77,7 +77,10 @@ def checkout_view(request):
 
     addresses = Address.objects.filter(user=request.user)
     subtotal = cart.subtotal
-    delivery_charge = calculate_delivery_charge(subtotal)
+
+    default_address = addresses.filter(is_default=True).first() or addresses.first()
+    pincode = default_address.pincode if default_address else None
+    delivery_charge = calculate_delivery_charge(subtotal, pincode)
 
     coupon_data = get_applied_coupon_data(request, subtotal)
     discount_amount = coupon_data["discount_amount"]
@@ -387,7 +390,10 @@ def verify_razorpay_payment(request):
         order = get_object_or_404(Order, order_number=order_number, user=request.user)
         if order.razorpay_order_id and order.razorpay_order_id != razorpay_order_id:
             return JsonResponse(
-                {"success": False, "message": "Order mismatch during payment verification."},
+                {
+                    "success": False,
+                    "message": "Order mismatch during payment verification.",
+                },
                 status=400,
             )
 
@@ -533,7 +539,9 @@ def razorpay_webhook(request):
 
             order = None
             if razorpay_order_id:
-                order = Order.objects.filter(razorpay_order_id=razorpay_order_id).first()
+                order = Order.objects.filter(
+                    razorpay_order_id=razorpay_order_id
+                ).first()
             if not order and order_number:
                 order = Order.objects.filter(order_number=order_number).first()
 
@@ -551,13 +559,17 @@ def razorpay_webhook(request):
             razorpay_order_id = payment.get("order_id")
             order = None
             if razorpay_order_id:
-                order = Order.objects.filter(razorpay_order_id=razorpay_order_id).first()
+                order = Order.objects.filter(
+                    razorpay_order_id=razorpay_order_id
+                ).first()
             if not order:
                 order_number = payment.get("receipt")
                 if order_number:
                     order = Order.objects.filter(order_number=order_number).first()
             if order and order.payment_status == "PENDING":
-                mark_order_payment_failed(order, notes="Payment failed via Razorpay webhook")
+                mark_order_payment_failed(
+                    order, notes="Payment failed via Razorpay webhook"
+                )
 
         return JsonResponse({"status": "processed"})
 
