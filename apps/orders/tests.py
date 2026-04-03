@@ -10,6 +10,7 @@ from django.utils import timezone
 
 from apps.accounts.models import Address
 from apps.cart.models import Cart, CartItem
+from apps.core.models import DeliveryZone
 from apps.orders.models import Coupon, CouponUsage, Order, OrderItem, RazorpayWebhookEvent
 from apps.products.models import Category, Manufacturer, Product
 
@@ -177,6 +178,43 @@ class RazorpayFlowTestCase(TestCase):
 
         order = Order.objects.get(order_number=data["order_number"])
         self.assertEqual(order.delivery_address["pincode"], self.address.pincode)
+
+    @patch("apps.orders.views.razorpay.Client")
+    def test_initiate_razorpay_order_uses_selected_address_delivery_charge(
+        self, mock_client
+    ):
+        DeliveryZone.objects.create(
+            name="Chennai Free Delivery",
+            pincode_start="600000",
+            pincode_end="600999",
+            delivery_charge=Decimal("0.00"),
+            is_serviceable=True,
+        )
+        self.cart_item.quantity = 1
+        self.cart_item.save(update_fields=["quantity"])
+        self.product.patient_price = Decimal("1.00")
+        self.product.save(update_fields=["patient_price", "updated_at"])
+        self.cart_item.price = Decimal("1.00")
+        self.cart_item.save(update_fields=["price"])
+        mock_client.return_value.order.create.return_value = {"id": "order_test_789"}
+
+        response = self.client.post(
+            reverse("orders:initiate_razorpay_order"),
+            {
+                "address": self.address.id,
+                "payment_method": "ONLINE",
+                "notes": "",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data["success"])
+        self.assertEqual(data["amount"], 100)
+
+        order = Order.objects.get(order_number=data["order_number"])
+        self.assertEqual(order.delivery_charge, Decimal("0.00"))
+        self.assertEqual(order.total_amount, Decimal("1.00"))
 
     def test_failed_payment_restores_stock_once(self):
         order = self.create_pending_online_order()

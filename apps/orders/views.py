@@ -352,7 +352,10 @@ def initiate_razorpay_order(request):
     try:
         with transaction.atomic():
             subtotal = cart.subtotal
-            delivery_charge = calculate_delivery_charge(subtotal)
+            delivery_charge = calculate_delivery_charge(
+                subtotal,
+                form.cleaned_data["address"].pincode,
+            )
             coupon_data = get_applied_coupon_data(request, subtotal)
             coupon_discount = coupon_data["discount_amount"]
             coupon_obj = coupon_data["coupon"]
