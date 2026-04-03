@@ -39,6 +39,16 @@ from .utils import (
 logger = logging.getLogger(__name__)
 
 
+def get_selected_checkout_address(addresses, selected_address_id=None):
+    """Return the selected/default checkout address, falling back to the first one."""
+    if selected_address_id:
+        selected_address = addresses.filter(id=selected_address_id).first()
+        if selected_address:
+            return selected_address
+
+    return addresses.filter(is_default=True).first() or addresses.first()
+
+
 def get_coupon_for_order(order):
     """Return the coupon associated with an order, if any."""
     if not order.applied_coupon_code:
@@ -87,8 +97,11 @@ def checkout_view(request):
     addresses = Address.objects.filter(user=request.user)
     subtotal = cart.subtotal
 
-    default_address = addresses.filter(is_default=True).first() or addresses.first()
-    pincode = default_address.pincode if default_address else None
+    selected_address = get_selected_checkout_address(
+        addresses,
+        request.POST.get("address") if request.method == "POST" else None,
+    )
+    pincode = selected_address.pincode if selected_address else None
     delivery_charge = calculate_delivery_charge(subtotal, pincode)
 
     coupon_data = get_applied_coupon_data(request, subtotal)
@@ -143,15 +156,13 @@ def checkout_view(request):
                     messages.error(request, f"Error placing order: {e}")
         else:
             initial_data = {}
-            if addresses.filter(is_default=True).exists():
-                default_address = addresses.filter(is_default=True).first()
-                initial_data["address"] = default_address.id
+            if selected_address:
+                initial_data["address"] = selected_address.id
             form = CheckoutForm(initial=initial_data, user=request.user)
     else:
         initial_data = {}
-        if addresses.filter(is_default=True).exists():
-            default_address = addresses.filter(is_default=True).first()
-            initial_data["address"] = default_address.id
+        if selected_address:
+            initial_data["address"] = selected_address.id
         form = CheckoutForm(initial=initial_data, user=request.user)
 
     context = {
@@ -166,6 +177,7 @@ def checkout_view(request):
         "discount_amount": discount_amount,
         "total": total,
         "razorpay_key_id": settings.RAZORPAY_KEY_ID,
+        "selected_address_id": selected_address.id if selected_address else None,
     }
 
     return render(request, "orders/checkout.html", context)
@@ -319,7 +331,15 @@ def initiate_razorpay_order(request):
     if not cart.items.exists():
         return JsonResponse({"success": False, "message": "Cart is empty"})
 
-    form = CheckoutForm(request.POST, request.FILES, user=request.user)
+    form_data = request.POST.copy()
+    if not form_data.get("address"):
+        selected_address = get_selected_checkout_address(
+            Address.objects.filter(user=request.user)
+        )
+        if selected_address:
+            form_data["address"] = selected_address.id
+
+    form = CheckoutForm(form_data, request.FILES, user=request.user)
     if not form.is_valid():
         return JsonResponse(
             {

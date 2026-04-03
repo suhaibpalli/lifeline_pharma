@@ -112,6 +112,17 @@ class RazorpayFlowTestCase(TestCase):
         self.assertContains(response, reverse("orders:verify_razorpay_payment"))
         self.assertContains(response, reverse("orders:razorpay_payment_failed"))
 
+    def test_checkout_page_preselects_first_address_when_no_default_exists(self):
+        self.address.is_default = False
+        self.address.save(update_fields=["is_default", "updated_at"])
+
+        response = self.client.get(reverse("orders:checkout"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["selected_address_id"], self.address.id)
+        self.assertContains(response, f'value="{self.address.id}"')
+        self.assertContains(response, "checked")
+
     def test_webhook_url_resolves_to_webhook_view(self):
         match = resolve("/orders/webhook/")
 
@@ -143,6 +154,29 @@ class RazorpayFlowTestCase(TestCase):
         self.assertEqual(order.razorpay_order_id, "order_test_123")
         self.assertEqual(order.applied_coupon_code, "SAVE10")
         self.assertEqual(self.product.stock_quantity, 8)
+
+    @patch("apps.orders.views.razorpay.Client")
+    def test_initiate_razorpay_order_uses_first_address_when_address_missing_and_no_default(
+        self, mock_client
+    ):
+        self.address.is_default = False
+        self.address.save(update_fields=["is_default", "updated_at"])
+        mock_client.return_value.order.create.return_value = {"id": "order_test_456"}
+
+        response = self.client.post(
+            reverse("orders:initiate_razorpay_order"),
+            {
+                "payment_method": "ONLINE",
+                "notes": "",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data["success"])
+
+        order = Order.objects.get(order_number=data["order_number"])
+        self.assertEqual(order.delivery_address["pincode"], self.address.pincode)
 
     def test_failed_payment_restores_stock_once(self):
         order = self.create_pending_online_order()

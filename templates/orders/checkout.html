@@ -44,7 +44,7 @@
                                         <div class="flex items-start">
                                             <input type="radio" name="address" value="{{ address.id }}" 
                                                    class="mt-1 mr-3" 
-                                                   {% if address.is_default %}checked{% endif %}>
+                                                   {% if address.id == selected_address_id %}checked{% endif %}>
                                             <div class="flex-1">
                                                 <div class="flex items-center justify-between">
                                                     <h3 class="font-medium">{{ address.name }}</h3>
