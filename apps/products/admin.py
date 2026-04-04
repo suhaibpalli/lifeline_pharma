@@ -4,8 +4,10 @@ from .models import (
     Category,
     Manufacturer,
     Product,
+    ProductImage,
     ProductReview,
     Stock,
+    ProductTag,
 )
 
 
@@ -76,6 +78,22 @@ class StockInline(admin.TabularInline):
     extra = 0
     fields = ["movement_type", "quantity", "batch_number", "expiry_date", "notes"]
     readonly_fields = ["created_at"]
+
+
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 1
+    fields = ["image", "alt_text", "is_primary", "sort_order", "image_preview"]
+    readonly_fields = ["image_preview"]
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" style="width: 50px; height: auto;" />', obj.image.url
+            )
+        return "-"
+
+    image_preview.short_description = "Preview"
 
 
 @admin.register(Product)
@@ -151,7 +169,7 @@ class ProductAdmin(admin.ModelAdmin):
         ),
     )
 
-    inlines = [StockInline]
+    inlines = [StockInline, ProductImageInline]
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("category", "manufacturer")
@@ -192,3 +210,27 @@ class StockAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("product", "created_by")
+
+
+@admin.register(ProductImage)
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ["product", "is_primary", "sort_order", "image_thumbnail"]
+    list_filter = ["is_primary", "product__category"]
+    search_fields = ["product__name", "alt_text"]
+    list_editable = ["is_primary", "sort_order"]
+
+    def image_thumbnail(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" style="width: 50px; height: auto;" />', obj.image.url
+            )
+        return "-"
+
+    image_thumbnail.short_description = "Image"
+
+
+@admin.register(ProductTag)
+class ProductTagAdmin(admin.ModelAdmin):
+    list_display = ["name", "slug"]
+    search_fields = ["name"]
+    prepopulated_fields = {"slug": ("name",)}
