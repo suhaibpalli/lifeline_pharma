@@ -67,8 +67,9 @@
                     <span class="text-sm text-gray-500 line-through">₹{{ product.mrp_price }}</span>
                 {% endif %}
             </div>
+            <p class="text-[10px] text-gray-500 italic leading-none mt-1">(Incl. of all taxes)</p>
             {% if product.pack_size %}
-                <p class="text-xs text-gray-500">{{ product.pack_size }}</p>
+                <p class="text-xs text-gray-500 mt-1">{{ product.pack_size }}</p>
             {% endif %}
         </div>
         

@@ -117,9 +117,12 @@
                             
                             <hr class="border-border-light">
                             
-                            <div class="flex justify-between text-lg font-bold">
-                                <span class="text-text-primary">Total</span>
-                                <span class="text-primary-600" id="cart-total">₹{{ cart.total_price }}</span>
+                            <div class="flex flex-col items-end">
+                                <div class="flex justify-between w-full text-lg font-bold">
+                                    <span class="text-text-primary">Total</span>
+                                    <span class="text-primary-600" id="cart-total">₹{{ cart.total_price }}</span>
+                                </div>
+                                <p class="text-[10px] text-text-secondary italic">(Inclusive of all taxes)</p>
                             </div>
                         </div>
                         
