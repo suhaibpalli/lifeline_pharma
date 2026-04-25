@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #f8f9fa; padding: 15px; border-bottom: 2px solid #0c7ff2; margin-bottom: 20px; }
+        .section { margin-bottom: 20px; padding: 15px; background-color: #fff; border: 1px solid #e2e8f0; border-radius: 4px; }
+        .footer { font-size: 12px; color: #666; text-align: center; margin-top: 30px; }
+        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; background-color: #e2e8f0; font-weight: bold; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2 style="margin: 0; color: #0c7ff2;">Lifeline Healthcare</h2>
+            <p style="margin: 5px 0 0 0;">Internal Order Notification</p>
+        </div>
+
+        <div class="section">
+            <h3 style="margin-top: 0;">Order Information</h3>
+            <p><strong>Order Number:</strong> #{{ order.order_number }}</p>
+            <p><strong>Order Status:</strong> <span class="status-badge">{{ status }}</span></p>
+            <p><strong>Payment Status:</strong> {{ payment_status }}</p>
+            <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+            <p><strong>Date:</strong> {{ order.created_at|date:"F j, Y, g:i a" }}</p>
+        </div>
+
+        <div class="section">
+            <h3 style="margin-top: 0;">Customer Details</h3>
+            <p><strong>Name:</strong> {{ order.user.get_full_name|default:order.user.email }}</p>
+            <p><strong>Email:</strong> {{ order.user.email }}</p>
+            <p><strong>Phone:</strong> {{ order.delivery_phone }}</p>
+        </div>
+
+        <div class="section">
+            <h3 style="margin-top: 0;">Products Ordered</h3>
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr>
+                        <th style="border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">Product</th>
+                        <th style="border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; text-align: center;">Qty</th>
+                        <th style="border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; text-align: right;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                    <tr>
+                        <td style="border-bottom: 1px solid #f1f5f9; padding: 8px 0;">{{ item.product.name }}</td>
+                        <td style="border-bottom: 1px solid #f1f5f9; padding: 8px 0; text-align: center;">{{ item.quantity }}</td>
+                        <td style="border-bottom: 1px solid #f1f5f9; padding: 8px 0; text-align: right;">₹{{ item.total_price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3 style="margin-top: 0;">Financial Details</h3>
+            <p><strong>Subtotal:</strong> ₹{{ order.subtotal }}</p>
+            <p><strong>Delivery Charge:</strong> ₹{{ order.delivery_charge }}</p>
+            <p><strong>Discount:</strong> ₹{{ order.discount_amount }}</p>
+            <p><strong>Total Amount:</strong> ₹<strong style="font-size: 18px;">{{ order.total_amount }}</strong></p>
+        </div>
+
+        {% if notes %}
+        <div class="section" style="background-color: #fffbeb; border-color: #fef3c7;">
+            <h3 style="margin-top: 0; color: #d97706;">Notes / Updates</h3>
+            <p style="margin-bottom: 0;">{{ notes }}</p>
+        </div>
+        {% endif %}
+
+        <div class="footer">
+            <p>This is an automated notification from the Lifeline Healthcare system.</p>
+        </div>
+    </div>
+</body>
+</html>

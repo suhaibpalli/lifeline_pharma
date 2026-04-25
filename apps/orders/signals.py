@@ -2,6 +2,7 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
 from .models import Order, OrderStatusHistory
+from .emails import send_internal_order_status_email
 
 
 @receiver(post_save, sender=OrderStatusHistory)
@@ -14,6 +15,10 @@ def sync_order_status_from_history(sender, instance, created, **kwargs):
                 status=latest.status,
                 updated_at=timezone.now(),
             )
+        # Send internal notification for the new status
+        # We refresh the order from DB to ensure it has the latest status
+        order = Order.objects.get(pk=instance.order_id)
+        send_internal_order_status_email(order, instance)
 
 
 @receiver(pre_save, sender=Order)

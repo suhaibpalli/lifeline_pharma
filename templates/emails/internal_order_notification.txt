@@ -1,0 +1,29 @@
+Lifeline Healthcare - Internal Order Notification
+
+Order: #{{ order.order_number }}
+Status: {{ status }}
+Payment Status: {{ payment_status }}
+Payment Method: {{ order.get_payment_method_display }}
+
+Customer Details:
+Name: {{ order.user.get_full_name|default:order.user.email }}
+Email: {{ order.user.email }}
+Phone: {{ order.delivery_phone }}
+
+Products Ordered:
+{% for item in order.items.all %}
+- {{ item.product.name }} (Qty: {{ item.quantity }}) - ₹{{ item.total_price }}
+{% endfor %}
+
+Order Details:
+Subtotal: ₹{{ order.subtotal }}
+Delivery Charge: ₹{{ order.delivery_charge }}
+Discount: ₹{{ order.discount_amount }}
+Total Amount: ₹{{ order.total_amount }}
+
+{% if notes %}
+Notes/Updates:
+{{ notes }}
+{% endif %}
+
+Please review this order in the admin panel.
