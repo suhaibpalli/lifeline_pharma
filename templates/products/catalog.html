@@ -18,8 +18,7 @@
         <!-- ════════════════════════════════
              LEFT SIDEBAR — Filters
         ════════════════════════════════ -->
-        <aside class="hidden lg:block w-64 flex-shrink-0 sticky top-4"
-               id="filter-sidebar">
+        <aside class="w-64 flex-shrink-0 sticky top-4" id="filter-sidebar">
             <div class="bg-white rounded-lg shadow-md p-5">
 
                 <div class="flex items-center justify-between mb-4">
@@ -34,24 +33,10 @@
 
                 <form method="get" class="space-y-5">
 
-                    <!-- Search -->
-                    <div>
-                        {{ search_form.query.label_tag }}
-                        {{ search_form.query }}
-                    </div>
-
-                    <hr class="border-gray-100">
-
                     <!-- Category -->
                     <div>
                         {{ search_form.category.label_tag }}
                         {{ search_form.category }}
-                    </div>
-
-                    <!-- Manufacturer -->
-                    <div>
-                        {{ search_form.manufacturer.label_tag }}
-                        {{ search_form.manufacturer }}
                     </div>
 
                     <hr class="border-gray-100">
@@ -105,7 +90,7 @@
         <!-- ════════════════════════════════
              RIGHT COLUMN — Products
         ════════════════════════════════ -->
-        <main class="flex-1 min-w-0">
+        <div class="flex-1 min-w-0">
 
             <!-- Mobile: Filter Toggle Button (shown only on small screens) -->
             <div class="lg:hidden mb-4">
@@ -120,17 +105,8 @@
                      class="hidden mt-3 bg-white rounded-lg shadow-md p-5">
                     <form method="get" class="space-y-5">
                         <div>
-                            {{ search_form.query.label_tag }}
-                            {{ search_form.query }}
-                        </div>
-                        <hr class="border-gray-100">
-                        <div>
                             {{ search_form.category.label_tag }}
                             {{ search_form.category }}
-                        </div>
-                        <div>
-                            {{ search_form.manufacturer.label_tag }}
-                            {{ search_form.manufacturer }}
                         </div>
                         <hr class="border-gray-100">
                         <div>
@@ -277,7 +253,7 @@
                 </div>
             {% endif %}
 
-        </main>
+        </div>
         <!-- END right column -->
 
     </div>
