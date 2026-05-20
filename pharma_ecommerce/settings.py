@@ -269,6 +269,9 @@ if USE_MINIO:
     MINIO_SECURE = config("MINIO_SECURE", default=False, cast=bool)
 
     # AWS S3 Storage Backend for Django
+    AWS_ACCESS_KEY_ID = MINIO_ACCESS_KEY
+    AWS_SECRET_ACCESS_KEY = MINIO_SECRET_KEY
+    AWS_STORAGE_BUCKET_NAME = MINIO_BUCKET_NAME
     AWS_S3_ACCESS_KEY_ID = MINIO_ACCESS_KEY
     AWS_S3_SECRET_ACCESS_KEY = MINIO_SECRET_KEY
     AWS_S3_STORAGE_BUCKET_NAME = MINIO_BUCKET_NAME
@@ -281,6 +284,14 @@ if USE_MINIO:
     # Use S3 storage - explicitly import to ensure it's used
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
     STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        },
+        "staticfiles": {
+            "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+        },
+    }
 
     # Media URL for templates - handle custom domain with or without bucket
     if AWS_S3_CUSTOM_DOMAIN:
@@ -299,6 +310,14 @@ if USE_MINIO:
 else:
     # Local development storage
     DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
 

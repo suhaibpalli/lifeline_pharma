@@ -19,7 +19,7 @@ class Command(BaseCommand):
             },
             {
                 "key": "contact_email",
-                "value": "abijith.apollo@gmail.com",
+                "value": "support@lifelinehealthcare.in",
                 "description": "Primary contact email",
             },
             {

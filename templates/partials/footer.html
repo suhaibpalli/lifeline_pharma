@@ -11,20 +11,6 @@
                         <span class="sr-only">{{ site_name }}</span>
                     </a>
                     <p class="text-white/70 mb-6 leading-relaxed">Your trusted online pharmacy for genuine medicines delivered to your doorstep.</p>
-                    <div class="flex gap-4 mb-4">
-                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-colors duration-250" aria-label="Facebook">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-colors duration-250" aria-label="Twitter">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-colors duration-250" aria-label="Instagram">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-colors duration-250" aria-label="LinkedIn">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                    </div>
                     <div class="mt-4 space-y-1">
                         <p class="text-white/70 text-xs"><span class="font-semibold text-white">GST:</span> 33AABCU9603R1ZM</p>
                         <p class="text-white/70 text-xs"><span class="font-semibold text-white">DL No:</span> TN/ZON/2021/12345</p>
@@ -44,6 +30,9 @@
                         <li><a href="{% url 'core:retailer_enquiry' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
                             <i class="fas fa-chevron-right text-xs text-primary-400"></i>Retailer Enquiry
                         </a></li>
+                        <li><a href="{% url 'core:pharmacies' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs text-primary-400"></i>For Pharmacies
+                        </a></li>
                         <li><a href="{% url 'core:doctor_visit_request' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
                             <i class="fas fa-chevron-right text-xs text-primary-400"></i>For Doctors
                         </a></li>
@@ -53,6 +42,18 @@
                         <li><a href="{% url 'orders:order_list' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
                             <i class="fas fa-chevron-right text-xs text-primary-400"></i>Track Order
                         </a></li>
+                        <li><a href="{% url 'core:return_policy' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs text-primary-400"></i>Returns & Refunds
+                        </a></li>
+                        <li><a href="{% url 'core:delivery_areas' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs text-primary-400"></i>Delivery Areas
+                        </a></li>
+                        <li><a href="{% url 'core:privacy_policy' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs text-primary-400"></i>Privacy Policy
+                        </a></li>
+                        <li><a href="{% url 'core:terms_of_service' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs text-primary-400"></i>Terms of Service
+                        </a></li>
                     </ul>
                 </div>
                 
@@ -60,16 +61,16 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-6">Our Services</h4>
                     <ul class="space-y-3">
-                        <li><a href="#" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
+                        <li><a href="{% url 'core:pharmacies' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
                             <i class="fas fa-chevron-right text-xs text-primary-400"></i>Pharma Marketing
                         </a></li>
-                        <li><a href="#" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
+                        <li><a href="{% url 'core:pharmacies' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
                             <i class="fas fa-chevron-right text-xs text-primary-400"></i>Medicine Distribution
                         </a></li>
-                        <li><a href="#" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
+                        <li><a href="{% url 'core:pharmacies' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
                             <i class="fas fa-chevron-right text-xs text-primary-400"></i>Stockist Network
                         </a></li>
-                        <li><a href="#" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
+                        <li><a href="{% url 'core:pharmacies' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
                             <i class="fas fa-chevron-right text-xs text-primary-400"></i>Institutional Supply
                         </a></li>
                     </ul>
@@ -93,7 +94,7 @@
                             <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
                                 <i class="fas fa-envelope text-sm text-primary-400"></i>
                             </div>
-                            <p class="text-white/70 text-sm">abijith.apollo@gmail.com</p>
+                            <p class="text-white/70 text-sm">support@lifelinehealthcare.in</p>
                         </div>
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -109,8 +110,9 @@
                     <!-- Newsletter -->
                     <div class="mt-6 pt-6 border-t border-white/10">
                         <h5 class="text-sm font-semibold mb-3">Get Updates</h5>
-                        <form class="flex gap-2">
-                            <input type="email" placeholder="Your email" class="flex-1 px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-sm text-white placeholder-white/50 focus:outline-none focus:border-primary-500">
+                        <form method="post" action="{% url 'core:subscribe_newsletter' %}" class="flex gap-2">
+                            {% csrf_token %}
+                            <input type="email" name="email" placeholder="Your email" class="flex-1 px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-sm text-white placeholder-white/50 focus:outline-none focus:border-primary-500" required>
                             <button type="submit" class="px-4 py-2 bg-primary-500 hover:bg-primary-600 rounded-lg transition-colors duration-250">
                                 <i class="fas fa-paper-plane"></i>
                             </button>
@@ -118,6 +120,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <!-- Regulatory Section -->
+        <div class="border-t border-white/10 py-6">
+            <p class="text-white/50 text-xs text-center">
+                Disclaimer: Lifeline Healthcare is a registered pharmacy under the Drugs and Cosmetics Act, 1940. All medicines are dispensed by registered pharmacists.
+            </p>
         </div>
         
         <!-- Bottom Bar -->

@@ -20,4 +20,7 @@ urlpatterns = [
     path('catalogue/', views.CatalogueView.as_view(), name='catalogue'),
     path('careers/', views.CareersView.as_view(), name='careers'),
     path('return-policy/', views.ReturnPolicyView.as_view(), name='return_policy'),
+    path('delivery-areas/', views.DeliveryAreasView.as_view(), name='delivery_areas'),
+    path('pharmacies/', views.PharmaciesView.as_view(), name='pharmacies'),
+    path('subscribe-newsletter/', views.subscribe_newsletter, name='subscribe_newsletter'),
 ]

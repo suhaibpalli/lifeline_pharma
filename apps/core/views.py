@@ -287,3 +287,23 @@ class CareersView(TemplateView):
 
 class ReturnPolicyView(TemplateView):
     template_name = 'pages/return_policy.html'
+
+class DeliveryAreasView(TemplateView):
+    template_name = 'pages/delivery_areas.html'
+
+class PharmaciesView(TemplateView):
+    template_name = 'pages/pharmacies.html'
+
+def subscribe_newsletter(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        if email:
+            ContactInquiry.objects.create(
+                name="Newsletter Subscriber",
+                email=email,
+                subject="Newsletter Subscription",
+                message="Subscribed to newsletter."
+            )
+            messages.success(request, 'Check your email for confirmation')
+    from django.shortcuts import redirect
+    return redirect(request.META.get('HTTP_REFERER', '/'))

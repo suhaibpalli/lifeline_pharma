@@ -14,8 +14,10 @@
                 <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'products:catalog' %}">Products</a>
                 <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'core:catalogue' %}">Catalogue</a>
                 <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'core:about' %}">About Us</a>
-                <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'core:contact' %}">Contact Us</a>
+                <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'core:delivery_areas' %}">Delivery Areas</a>
+                <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'core:pharmacies' %}">For Pharmacies</a>
                 <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'core:doctor_visit_request' %}">For Doctors</a>
+                <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'core:contact' %}">Contact Us</a>
                 {% if user.is_authenticated and user.user_type == 'PHARMACY' %}
                 <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="#">Bulk Orders</a>
                 {% endif %}
@@ -131,8 +133,10 @@
                         <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'products:catalog' %}">Products</a>
                         <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'core:catalogue' %}">Catalogue</a>
                         <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'core:about' %}">About Us</a>
-                        <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'core:contact' %}">Contact Us</a>
+                        <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'core:delivery_areas' %}">Delivery Areas</a>
+                        <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'core:pharmacies' %}">For Pharmacies</a>
                         <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'core:doctor_visit_request' %}">For Doctors</a>
+                        <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'core:contact' %}">Contact Us</a>
                         {% if user.is_authenticated and user.user_type == 'PHARMACY' %}
                         <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="#">Bulk Orders</a>
                         {% endif %}
