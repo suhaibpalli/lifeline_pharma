@@ -270,7 +270,7 @@ class RazorpayFlowTestCase(TestCase):
             CouponUsage.objects.filter(order=order, coupon=self.coupon).exists()
         )
 
-    @override_settings(DEBUG=True)
+    @override_settings(DEBUG=True, RAZORPAY_WEBHOOK_SECRET="")
     def test_payment_captured_webhook_finalizes_late_payment(self):
         order = self.create_pending_online_order(coupon_code=self.coupon.code)
 
@@ -350,7 +350,7 @@ class RazorpayFlowTestCase(TestCase):
             ).exists()
         )
 
-    @override_settings(DEBUG=True)
+    @override_settings(DEBUG=True, RAZORPAY_WEBHOOK_SECRET="")
     def test_webhook_requires_event_id_header(self):
         response = self.client.post(
             reverse("orders:razorpay_webhook"),
@@ -361,7 +361,7 @@ class RazorpayFlowTestCase(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["status"], "missing event id")
 
-    @override_settings(DEBUG=True)
+    @override_settings(DEBUG=True, RAZORPAY_WEBHOOK_SECRET="")
     def test_duplicate_webhook_event_is_ignored_idempotently(self):
         order = self.create_pending_online_order(coupon_code=self.coupon.code)
         body = json.dumps(
@@ -401,7 +401,7 @@ class RazorpayFlowTestCase(TestCase):
             CouponUsage.objects.filter(order=order, coupon=self.coupon).count(), 1
         )
 
-    @override_settings(DEBUG=False)
+    @override_settings(DEBUG=False, RAZORPAY_WEBHOOK_SECRET="")
     def test_webhook_requires_secret_outside_debug(self):
         response = self.client.post(
             reverse("orders:razorpay_webhook"),

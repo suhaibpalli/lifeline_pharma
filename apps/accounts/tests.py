@@ -18,7 +18,7 @@ class EmailVerificationFlowTestCase(TestCase):
             is_verified=False,
         )
 
-    @patch("apps.accounts.views.send_mail")
+    @patch("apps.accounts.views.EmailMultiAlternatives.send")
     def test_resend_verification_creates_new_token_and_marks_old_unused_tokens_used(
         self, mock_send_mail
     ):
@@ -51,7 +51,7 @@ class EmailVerificationFlowTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn(reverse("accounts:resend_verification"), response.url)
 
-    @patch("apps.accounts.views.send_mail")
+    @patch("apps.accounts.views.EmailMultiAlternatives.send")
     def test_already_verified_user_is_redirected_to_login_on_resend(self, mock_send_mail):
         self.user.is_verified = True
         self.user.save(update_fields=["is_verified"])
@@ -65,7 +65,7 @@ class EmailVerificationFlowTestCase(TestCase):
         self.assertEqual(response.url, reverse("accounts:login"))
         mock_send_mail.assert_not_called()
 
-    @patch("apps.accounts.views.send_mail", side_effect=Exception("smtp failure"))
+    @patch("apps.accounts.views.EmailMultiAlternatives.send", side_effect=Exception("smtp failure"))
     def test_resend_verification_shows_error_when_email_send_fails(self, mock_send_mail):
         response = self.client.post(
             reverse("accounts:resend_verification"),

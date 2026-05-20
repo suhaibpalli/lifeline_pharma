@@ -570,11 +570,12 @@ def razorpay_webhook(request):
             return JsonResponse({"status": "missing event type"}, status=400)
 
         try:
-            webhook_event = RazorpayWebhookEvent.objects.create(
-                event_id=event_id,
-                event_type=event_type,
-                payload=event,
-            )
+            with transaction.atomic():
+                webhook_event = RazorpayWebhookEvent.objects.create(
+                    event_id=event_id,
+                    event_type=event_type,
+                    payload=event,
+                )
         except IntegrityError:
             return JsonResponse({"status": "duplicate ignored"})
 
