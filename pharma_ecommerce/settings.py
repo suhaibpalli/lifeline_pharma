@@ -283,15 +283,29 @@ if USE_MINIO:
 
     # Use S3 storage - explicitly import to ensure it's used
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-    STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
-    STORAGES = {
-        "default": {
-            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-        },
-        "staticfiles": {
-            "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
-        },
-    }
+    
+    # In local development (DEBUG=True), serve static files locally.
+    # In production (DEBUG=False), serve static files from S3/MinIO.
+    if DEBUG:
+        STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+        STORAGES = {
+            "default": {
+                "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            },
+            "staticfiles": {
+                "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+            },
+        }
+    else:
+        STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
+        STORAGES = {
+            "default": {
+                "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            },
+            "staticfiles": {
+                "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+            },
+        }
 
     # Media URL for templates - handle custom domain with or without bucket
     if AWS_S3_CUSTOM_DOMAIN:
