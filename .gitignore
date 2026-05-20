@@ -82,7 +82,6 @@ Thumbs.db
 code_copy.py
 code_dump.txt
 
-
 collect_codes.py
 tree.py
 all_files_combined.txt
@@ -90,3 +89,5 @@ tree_output.txt
 node_modules/
 package-lock.json
 static/css/tailwind.min.css
+skills-lock.json
+.agents/

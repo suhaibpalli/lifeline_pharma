@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Request Submitted - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-16 flex justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-md border border-border-light max-w-md w-full text-center">
+        <div class="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-6">
+            <i class="fas fa-check text-4xl text-green-600"></i>
+        </div>
+        
+        <h2 class="text-3xl font-bold text-text-primary mb-4">Request Submitted!</h2>
+        
+        <p class="text-text-secondary mb-8 leading-relaxed">
+            Thank you for your request. Our medical representative will review the details and contact you to confirm the visit schedule.
+        </p>
+        
+        <div class="flex flex-col space-y-4">
+            <a href="{% url 'core:home' %}" class="bg-primary-600 text-white py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors font-semibold shadow-md block w-full">
+                Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

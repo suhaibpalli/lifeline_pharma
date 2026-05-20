@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Retailer Enquiry - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12 max-w-3xl">
+    <div class="bg-white rounded-lg shadow-md border border-border-light overflow-hidden">
+        <div class="bg-primary-600 px-6 py-8 text-center text-white">
+            <h1 class="text-3xl font-bold mb-2">Retailer Enquiry</h1>
+            <p class="text-primary-100">Partner with us to reach more customers and grow your business.</p>
+        </div>
+        
+        <div class="p-8">
+            {% if messages %}
+                <div class="mb-6">
+                    {% for message in messages %}
+                        <div class="p-4 rounded-lg {% if message.tags == 'success' %}bg-green-50 text-green-800 border border-green-200{% else %}bg-red-50 text-red-800 border border-red-200{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">Business Name <span class="text-red-500">*</span></label>
+                        {% render_field form.business_name class="w-full px-4 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" %}
+                        {% if form.business_name.errors %}
+                            <p class="mt-1 text-xs text-red-500">{{ form.business_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">Contact Person Name <span class="text-red-500">*</span></label>
+                        {% render_field form.contact_person class="w-full px-4 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" %}
+                        {% if form.contact_person.errors %}
+                            <p class="mt-1 text-xs text-red-500">{{ form.contact_person.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">Email Address <span class="text-red-500">*</span></label>
+                        {% render_field form.email class="w-full px-4 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" %}
+                        {% if form.email.errors %}
+                            <p class="mt-1 text-xs text-red-500">{{ form.email.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">Phone Number <span class="text-red-500">*</span></label>
+                        {% render_field form.phone class="w-full px-4 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" %}
+                        {% if form.phone.errors %}
+                            <p class="mt-1 text-xs text-red-500">{{ form.phone.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-text-primary mb-2">Business Address <span class="text-red-500">*</span></label>
+                    {% render_field form.address class="w-full px-4 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" %}
+                    {% if form.address.errors %}
+                        <p class="mt-1 text-xs text-red-500">{{ form.address.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">City <span class="text-red-500">*</span></label>
+                        {% render_field form.city class="w-full px-4 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" %}
+                        {% if form.city.errors %}
+                            <p class="mt-1 text-xs text-red-500">{{ form.city.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">State <span class="text-red-500">*</span></label>
+                        {% render_field form.state class="w-full px-4 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" %}
+                        {% if form.state.errors %}
+                            <p class="mt-1 text-xs text-red-500">{{ form.state.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">Pincode <span class="text-red-500">*</span></label>
+                        {% render_field form.pincode class="w-full px-4 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" %}
+                        {% if form.pincode.errors %}
+                            <p class="mt-1 text-xs text-red-500">{{ form.pincode.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">GST Number (Optional)</label>
+                        {% render_field form.gst_number class="w-full px-4 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" %}
+                        {% if form.gst_number.errors %}
+                            <p class="mt-1 text-xs text-red-500">{{ form.gst_number.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">Estimated Monthly Order Value <span class="text-red-500">*</span></label>
+                        {% render_field form.estimated_order_value class="w-full px-4 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" %}
+                        {% if form.estimated_order_value.errors %}
+                            <p class="mt-1 text-xs text-red-500">{{ form.estimated_order_value.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-text-primary mb-2">Message/Requirements (Optional)</label>
+                    {% render_field form.message class="w-full px-4 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm" %}
+                    {% if form.message.errors %}
+                        <p class="mt-1 text-xs text-red-500">{{ form.message.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <button type="submit" class="w-full bg-primary-600 text-white py-3 px-4 rounded-lg hover:bg-primary-700 transition-colors font-semibold shadow-md">
+                        Submit Enquiry
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

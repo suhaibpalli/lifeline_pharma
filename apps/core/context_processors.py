@@ -22,8 +22,8 @@ def site_settings(request):
         "site_tagline": settings_dict.get(
             "site_tagline", "Your trusted online pharmacy for genuine medicines"
         ),
-        "contact_email": settings_dict.get("contact_email", ""),
-        "contact_phone": settings_dict.get("contact_phone", ""),
+        "contact_email": settings_dict.get("contact_email", "abijith.apollo@gmail.com"),
+        "contact_phone": settings_dict.get("contact_phone", "044 - 48633074"),
     }
 
 

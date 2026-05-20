@@ -4,8 +4,10 @@ from django.contrib import messages
 from django.conf import settings
 from django.urls import reverse_lazy
 from django.http import HttpResponse, JsonResponse
-from .models import CarouselImage, ContactInquiry, Page, DeliveryZone
-from .forms import ContactForm
+from .models import CarouselImage, ContactInquiry, Page, DeliveryZone, RetailerEnquiry, ProductCatalogue, DoctorVisitRequest
+from .forms import ContactForm, RetailerEnquiryForm, DoctorVisitRequestForm
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 class StaticPageMixin:
@@ -190,3 +192,98 @@ def custom_404(request, exception):
 def custom_500(request):
     """Custom 500 error page"""
     return render(request, "errors/500.html", status=500)
+
+class RetailerEnquiryView(CreateView):
+    model = RetailerEnquiry
+    form_class = RetailerEnquiryForm
+    template_name = 'pages/retailer_enquiry.html'
+    success_url = reverse_lazy('core:retailer_enquiry_success')
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        subject = f"[Pharma Store] New Retailer Enquiry Submission"
+        message = f"New Retailer Enquiry from {form.cleaned_data['business_name']}:\n\n"
+        for field, value in form.cleaned_data.items():
+            message += f"{field.replace('_', ' ').title()}: {value}\n"
+        
+        from .models import SiteConfiguration
+        admin_email = settings.DEFAULT_FROM_EMAIL
+        try:
+            admin_email = SiteConfiguration.objects.get(key='contact_email').value
+        except SiteConfiguration.DoesNotExist:
+            pass
+            
+        try:
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [admin_email], fail_silently=True)
+        except Exception:
+            pass
+            
+        messages.success(self.request, 'Your enquiry has been submitted successfully!')
+        return response
+
+class RetailerEnquirySuccessView(TemplateView):
+    template_name = 'pages/retailer_enquiry_success.html'
+
+class DoctorVisitRequestView(CreateView):
+    model = DoctorVisitRequest
+    form_class = DoctorVisitRequestForm
+    template_name = 'pages/doctor_visit_request.html'
+    success_url = reverse_lazy('core:doctor_visit_success')
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        subject = f"[Pharma Store] New Doctor Visit Request Submission"
+        message = f"New Visit Request from Dr. {form.cleaned_data['doctor_name']}:\n\n"
+        for field, value in form.cleaned_data.items():
+            message += f"{field.replace('_', ' ').title()}: {value}\n"
+            
+        from .models import SiteConfiguration
+        admin_email = settings.DEFAULT_FROM_EMAIL
+        try:
+            admin_email = SiteConfiguration.objects.get(key='contact_email').value
+        except SiteConfiguration.DoesNotExist:
+            pass
+            
+        try:
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [admin_email], fail_silently=True)
+        except Exception:
+            pass
+            
+        messages.success(self.request, 'Your visit request has been submitted successfully!')
+        return response
+
+class DoctorVisitSuccessView(TemplateView):
+    template_name = 'pages/doctor_visit_success.html'
+
+class CatalogueView(TemplateView):
+    template_name = 'pages/catalogue.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['catalogue'] = ProductCatalogue.objects.filter(is_active=True).first()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        if name and phone:
+            # Save as ContactInquiry for lead capture
+            ContactInquiry.objects.create(
+                name=name,
+                phone=phone,
+                email='lead@catalogue.com',
+                subject='Catalogue Download Lead',
+                message=f'Lead captured from catalogue download. Phone: {phone}'
+            )
+            # Store flag in session to allow download
+            request.session['catalogue_unlocked'] = True
+            messages.success(request, 'Thank you! You can now download the catalogue.')
+            
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
+class CareersView(TemplateView):
+    template_name = 'pages/careers.html'
+
+class ReturnPolicyView(TemplateView):
+    template_name = 'pages/return_policy.html'

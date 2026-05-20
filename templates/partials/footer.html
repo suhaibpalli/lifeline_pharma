@@ -11,7 +11,7 @@
                         <span class="sr-only">{{ site_name }}</span>
                     </a>
                     <p class="text-white/70 mb-6 leading-relaxed">Your trusted online pharmacy for genuine medicines delivered to your doorstep.</p>
-                    <div class="flex gap-4">
+                    <div class="flex gap-4 mb-4">
                         <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-colors duration-250" aria-label="Facebook">
                             <i class="fab fa-facebook-f"></i>
                         </a>
@@ -25,6 +25,10 @@
                             <i class="fab fa-linkedin-in"></i>
                         </a>
                     </div>
+                    <div class="mt-4 space-y-1">
+                        <p class="text-white/70 text-xs"><span class="font-semibold text-white">GST:</span> 33AABCU9603R1ZM</p>
+                        <p class="text-white/70 text-xs"><span class="font-semibold text-white">DL No:</span> TN/ZON/2021/12345</p>
+                    </div>
                 </div>
                 
                 <!-- Quick Links -->
@@ -37,6 +41,12 @@
                         <li><a href="{% url 'core:contact' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
                             <i class="fas fa-chevron-right text-xs text-primary-400"></i>Contact Us
                         </a></li>
+                        <li><a href="{% url 'core:retailer_enquiry' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs text-primary-400"></i>Retailer Enquiry
+                        </a></li>
+                        <li><a href="{% url 'core:doctor_visit_request' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs text-primary-400"></i>For Doctors
+                        </a></li>
                         <li><a href="{% url 'core:faq' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
                             <i class="fas fa-chevron-right text-xs text-primary-400"></i>FAQs
                         </a></li>
@@ -46,26 +56,26 @@
                     </ul>
                 </div>
                 
-                <!-- Legal -->
+                <!-- Our Services -->
                 <div>
-                    <h4 class="text-lg font-semibold mb-6">Legal</h4>
+                    <h4 class="text-lg font-semibold mb-6">Our Services</h4>
                     <ul class="space-y-3">
-                        <li><a href="{% url 'core:privacy_policy' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
-                            <i class="fas fa-chevron-right text-xs text-primary-400"></i>Privacy Policy
-                        </a></li>
-                        <li><a href="{% url 'core:terms_of_service' %}" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
-                            <i class="fas fa-chevron-right text-xs text-primary-400"></i>Terms of Service
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs text-primary-400"></i>Pharma Marketing
                         </a></li>
                         <li><a href="#" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
-                            <i class="fas fa-chevron-right text-xs text-primary-400"></i>Return Policy
+                            <i class="fas fa-chevron-right text-xs text-primary-400"></i>Medicine Distribution
                         </a></li>
                         <li><a href="#" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
-                            <i class="fas fa-chevron-right text-xs text-primary-400"></i>Refund Policy
+                            <i class="fas fa-chevron-right text-xs text-primary-400"></i>Stockist Network
+                        </a></li>
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors duration-250 inline-flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs text-primary-400"></i>Institutional Supply
                         </a></li>
                     </ul>
                 </div>
                 
-                <!-- Contact Info -->
+                <!-- Contact Info & Newsletter -->
                 <div>
                     <h4 class="text-lg font-semibold mb-6">Contact Info</h4>
                     <div class="space-y-4">

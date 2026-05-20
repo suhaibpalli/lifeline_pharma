@@ -39,9 +39,8 @@
                                             </a>
                                         {% else %}
                                             <a href="{% url 'products:catalog' %}" 
-                                               class="group bg-white text-primary-600 px-8 py-4 rounded-xl hover:bg-gray-50 transition-all duration-300 text-base font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                                                Order Medicines
-                                                <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                                               class="bg-white text-primary-600 px-8 py-3 md:py-4 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base font-bold shadow-lg">
+                                                Shop Now
                                             </a>
                                         {% endif %}
                                         <a href="{% url 'core:about' %}" 
@@ -71,9 +70,8 @@
                                 </p>
                                 <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up" style="animation-delay: 0.2s">
                                     <a href="{% url 'products:catalog' %}" 
-                                       class="group bg-white text-primary-600 px-8 py-4 rounded-xl hover:bg-gray-50 transition-all duration-300 text-base font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                                        Order Medicines
-                                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                                       class="bg-white text-primary-600 px-8 py-3 md:py-4 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base font-bold shadow-lg">
+                                        Shop Now
                                     </a>
                                     <a href="{% url 'core:about' %}" 
                                        class="group border-2 border-white text-white px-8 py-4 rounded-xl hover:bg-white hover:text-primary-600 transition-all duration-300 text-base font-bold">
@@ -155,83 +153,126 @@
     <!-- Stats Section -->
     <section class="py-16 bg-surface-muted">
         <div class="mx-auto px-6 lg:px-10">
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-                <div class="bg-white rounded-2xl p-6 text-center shadow-card hover:shadow-hover transition-shadow duration-300">
-                    <div class="text-4xl md:text-5xl font-bold text-primary-600 mb-2">1,500+</div>
-                    <p class="text-sm text-content-secondary">Certified Pharmacies</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <div class="bg-background-subtle rounded-lg p-6 text-center">
+                    <p class="text-text-primary text-base font-medium mb-2">Certified Pharmacies</p>
+                    <p class="text-text-primary text-3xl font-bold">500+</p>
                 </div>
-                <div class="bg-white rounded-2xl p-6 text-center shadow-card hover:shadow-hover transition-shadow duration-300">
-                    <div class="text-4xl md:text-5xl font-bold text-primary-600 mb-2">500K+</div>
-                    <p class="text-sm text-content-secondary">Happy Customers</p>
+                <div class="bg-background-subtle rounded-lg p-6 text-center">
+                    <p class="text-text-primary text-base font-medium mb-2">Happy Customers</p>
+                    <p class="text-text-primary text-3xl font-bold">10,000+</p>
                 </div>
-                <div class="bg-white rounded-2xl p-6 text-center shadow-card hover:shadow-hover transition-shadow duration-300">
-                    <div class="text-4xl md:text-5xl font-bold text-primary-600 mb-2">10,000+</div>
-                    <p class="text-sm text-content-secondary">Medicines Available</p>
-                </div>
-                <div class="bg-white rounded-2xl p-6 text-center shadow-card hover:shadow-hover transition-shadow duration-300">
-                    <div class="text-4xl md:text-5xl font-bold text-primary-600 mb-2">100+</div>
-                    <p class="text-sm text-content-secondary">Cities Served</p>
+                <div class="bg-background-subtle rounded-lg p-6 text-center">
+                    <p class="text-text-primary text-base font-medium mb-2">Cities Served</p>
+                    <p class="text-text-primary text-3xl font-bold">50+</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Categories Section -->
-    <section class="py-20 bg-white">
+    <!-- Services Section -->
+    <section class="py-16 bg-white">
+        <div class="mx-auto px-6 lg:px-10">
+            <h2 class="text-text-primary text-2xl md:text-3xl font-bold leading-tight tracking-tight text-center mb-12">
+                Our Pharma Services
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                <div class="group cursor-pointer">
+                    <div class="bg-blue-100 rounded-lg aspect-square mb-4 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                        <i class="fas fa-bullhorn text-4xl text-blue-600"></i>
+                    </div>
+                    <p class="text-text-primary text-base font-medium text-center">Pharma Marketing</p>
+                </div>
+                <div class="group cursor-pointer">
+                    <div class="bg-green-100 rounded-lg aspect-square mb-4 flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                        <i class="fas fa-truck-loading text-4xl text-green-600"></i>
+                    </div>
+                    <p class="text-text-primary text-base font-medium text-center">Medicine Distribution</p>
+                </div>
+                <div class="group cursor-pointer">
+                    <div class="bg-purple-100 rounded-lg aspect-square mb-4 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                        <i class="fas fa-network-wired text-4xl text-purple-600"></i>
+                    </div>
+                    <p class="text-text-primary text-base font-medium text-center">Stockist Network</p>
+                </div>
+                <div class="group cursor-pointer">
+                    <div class="bg-orange-100 rounded-lg aspect-square mb-4 flex items-center justify-center group-hover:bg-orange-200 transition-colors">
+                        <i class="fas fa-hospital text-4xl text-orange-600"></i>
+                    </div>
+                    <p class="text-text-primary text-base font-medium text-center">Institutional Supply</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Portfolio & Brands Section -->
+    <section class="py-16 bg-background-subtle">
         <div class="mx-auto px-6 lg:px-10">
             <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-content-primary mb-4">Shop by Category</h2>
-                <p class="text-content-secondary max-w-2xl mx-auto">Browse our extensive range of healthcare products organized into easy-to-find categories</p>
+                <h2 class="text-text-primary text-2xl md:text-3xl font-bold leading-tight tracking-tight mb-4">
+                    Our Product Portfolio & Brands
+                </h2>
+                <p class="text-text-secondary max-w-2xl mx-auto">
+                    We offer a comprehensive range of high-quality pharmaceutical products across multiple therapeutic segments.
+                </p>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
-                <a href="{% url 'products:catalog' %}?category=medicines" class="group">
-                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 text-center transition-all duration-300 group-hover:shadow-card group-hover:-translate-y-1">
-                        <div class="w-16 h-16 bg-blue-500/10 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                            <i class="fas fa-capsules text-2xl"></i>
-                        </div>
-                        <p class="text-sm font-semibold text-content-primary">Medicines</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-border-light text-center">
+                    <div class="w-16 h-16 mx-auto bg-primary-50 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-heartbeat text-2xl text-primary-600"></i>
                     </div>
-                </a>
-                <a href="{% url 'products:catalog' %}?category=wellness" class="group">
-                    <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 text-center transition-all duration-300 group-hover:shadow-card group-hover:-translate-y-1">
-                        <div class="w-16 h-16 bg-green-500/10 text-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                            <i class="fas fa-leaf text-2xl"></i>
-                        </div>
-                        <p class="text-sm font-semibold text-content-primary">Wellness</p>
+                    <h3 class="font-bold text-text-primary mb-2">Cardiology</h3>
+                    <p class="text-sm text-text-secondary">Premium cardiac care products</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-border-light text-center">
+                    <div class="w-16 h-16 mx-auto bg-primary-50 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-brain text-2xl text-primary-600"></i>
                     </div>
-                </a>
-                <a href="{% url 'products:catalog' %}?category=equipment" class="group">
-                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 text-center transition-all duration-300 group-hover:shadow-card group-hover:-translate-y-1">
-                        <div class="w-16 h-16 bg-purple-500/10 text-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                            <i class="fas fa-heartbeat text-2xl"></i>
-                        </div>
-                        <p class="text-sm font-semibold text-content-primary">Equipment</p>
+                    <h3 class="font-bold text-text-primary mb-2">Neurology</h3>
+                    <p class="text-sm text-text-secondary">Advanced neurological medicines</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-border-light text-center">
+                    <div class="w-16 h-16 mx-auto bg-primary-50 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-bone text-2xl text-primary-600"></i>
                     </div>
-                </a>
-                <a href="{% url 'products:catalog' %}?category=personal-care" class="group">
-                    <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-6 text-center transition-all duration-300 group-hover:shadow-card group-hover:-translate-y-1">
-                        <div class="w-16 h-16 bg-orange-500/10 text-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                            <i class="fas fa-spa text-2xl"></i>
-                        </div>
-                        <p class="text-sm font-semibold text-content-primary">Personal Care</p>
+                    <h3 class="font-bold text-text-primary mb-2">Orthopedics</h3>
+                    <p class="text-sm text-text-secondary">Bone & joint health solutions</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-border-light text-center">
+                    <div class="w-16 h-16 mx-auto bg-primary-50 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-child text-2xl text-primary-600"></i>
                     </div>
+                    <h3 class="font-bold text-text-primary mb-2">Pediatrics</h3>
+                    <p class="text-sm text-text-secondary">Safe pediatric formulations</p>
+                </div>
+            </div>
+            <div class="text-center mt-10">
+                <a href="{% url 'core:catalogue' %}" class="inline-block bg-white text-primary-600 border-2 border-primary-600 px-8 py-3 rounded-lg hover:bg-primary-50 transition-colors font-bold shadow-sm">
+                    Download Full Catalogue
                 </a>
-                <a href="{% url 'products:catalog' %}?category=supplements" class="group">
-                    <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-2xl p-6 text-center transition-all duration-300 group-hover:shadow-card group-hover:-translate-y-1">
-                        <div class="w-16 h-16 bg-yellow-500/10 text-yellow-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                            <i class="fas fa-vial text-2xl"></i>
-                        </div>
-                        <p class="text-sm font-semibold text-content-primary">Supplements</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prescription Upload Section -->
+    <section class="py-12 bg-primary-50">
+        <div class="mx-auto px-6 lg:px-10 max-w-6xl">
+            <div class="bg-white rounded-xl shadow-md border border-primary-100 p-8 flex flex-col md:flex-row items-center justify-between">
+                <div class="flex items-center mb-6 md:mb-0">
+                    <div class="w-16 h-16 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-2xl mr-6">
+                        <i class="fas fa-file-medical"></i>
                     </div>
-                </a>
-                <a href="{% url 'products:catalog' %}?category=baby-care" class="group">
-                    <div class="bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl p-6 text-center transition-all duration-300 group-hover:shadow-card group-hover:-translate-y-1">
-                        <div class="w-16 h-16 bg-pink-500/10 text-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                            <i class="fas fa-baby text-2xl"></i>
-                        </div>
-                        <p class="text-sm font-semibold text-content-primary">Baby Care</p>
+                    <div>
+                        <h3 class="text-xl font-bold text-text-primary mb-2">Have a Prescription?</h3>
+                        <p class="text-text-secondary text-sm max-w-md">Upload your prescription and our pharmacists will handle the rest. Get your medicines delivered quickly.</p>
                     </div>
-                </a>
+                </div>
+                <div class="flex-shrink-0 w-full md:w-auto">
+                    <button type="button" class="w-full md:w-auto bg-primary-600 text-white px-8 py-4 rounded-lg hover:bg-primary-700 transition-colors font-bold shadow flex items-center justify-center">
+                        <i class="fas fa-upload mr-2"></i> Upload Prescription
+                    </button>
+                    <p class="text-xs text-center text-text-secondary mt-2">Valid prescription required</p>
+                </div>
             </div>
         </div>
     </section>
@@ -257,14 +298,16 @@
                     <p class="text-content-secondary text-sm leading-relaxed max-w-xs mx-auto">Find your medicines by searching or browsing through our categories</p>
                 </div>
                 
-                <!-- Step 2 -->
-                <div class="text-center relative">
-                    <div class="w-16 h-16 bg-primary-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 relative z-10 shadow-lg shadow-primary-500/30">
-                        <i class="fas fa-upload text-2xl"></i>
+                <!-- For Pharmacies & Retailers -->
+                <div class="bg-white rounded-lg border border-border-light p-6">
+                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-store text-xl"></i>
                     </div>
-                    <span class="inline-block bg-primary-100 text-primary-600 text-sm font-bold px-3 py-1 rounded-full mb-4">Step 2</span>
-                    <h3 class="text-xl font-bold text-content-primary mb-3">Upload Prescription</h3>
-                    <p class="text-content-secondary text-sm leading-relaxed max-w-xs mx-auto">For prescription medicines, upload a valid prescription from your doctor</p>
+                    <h3 class="text-text-primary text-lg font-bold mb-2">For Pharmacies</h3>
+                    <p class="text-text-secondary text-sm leading-relaxed mb-4">
+                        Extensive territory coverage and seamless stockist onboarding. Access bulk ordering and special retailer margins.
+                    </p>
+                    <a href="{% url 'core:retailer_enquiry' %}" class="text-primary-600 text-sm font-semibold hover:underline">Partner With Us &rarr;</a>
                 </div>
                 
                 <!-- Step 3 -->
@@ -389,9 +432,99 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="py-20 bg-gradient-to-br from-primary-600 to-primary-700">
-        <div class="mx-auto px-6 lg:px-10 text-center text-white max-w-4xl">
+    <!-- Delivery Areas & Maps Section -->
+    <section class="py-16 bg-white border-b border-border-light">
+        <div class="mx-auto px-6 lg:px-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+                <div>
+                    <h2 class="text-text-primary text-2xl md:text-3xl font-bold leading-tight tracking-tight mb-6">
+                        Wide Territory Coverage
+                    </h2>
+                    <p class="text-text-secondary leading-relaxed mb-6">
+                        We have established a robust distribution network ensuring timely availability of our pharma products across all major regions. 
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center text-text-secondary">
+                            <i class="fas fa-check-circle text-green-500 mr-3 text-lg"></i>
+                            <strong>Same Day Dispatch</strong> for orders placed before 2 PM.
+                        </li>
+                        <li class="flex items-center text-text-secondary">
+                            <i class="fas fa-check-circle text-green-500 mr-3 text-lg"></i>
+                            Dedicated supply chain for temperature-sensitive items.
+                        </li>
+                        <li class="flex items-center text-text-secondary">
+                            <i class="fas fa-check-circle text-green-500 mr-3 text-lg"></i>
+                            Serving over 50+ locations with real-time tracking.
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-background-subtle rounded-xl p-8 relative overflow-hidden">
+                    <i class="fas fa-map-marked-alt text-9xl text-primary-100 absolute -right-6 -bottom-6 opacity-50"></i>
+                    <h3 class="font-bold text-text-primary text-xl mb-4 relative z-10">Key Delivery Areas</h3>
+                    <div class="grid grid-cols-2 gap-4 relative z-10">
+                        <div class="bg-white p-3 rounded shadow-sm text-sm font-medium text-text-secondary flex items-center">
+                            <i class="fas fa-map-marker-alt text-primary-500 mr-2"></i> Chennai
+                        </div>
+                        <div class="bg-white p-3 rounded shadow-sm text-sm font-medium text-text-secondary flex items-center">
+                            <i class="fas fa-map-marker-alt text-primary-500 mr-2"></i> Coimbatore
+                        </div>
+                        <div class="bg-white p-3 rounded shadow-sm text-sm font-medium text-text-secondary flex items-center">
+                            <i class="fas fa-map-marker-alt text-primary-500 mr-2"></i> Madurai
+                        </div>
+                        <div class="bg-white p-3 rounded shadow-sm text-sm font-medium text-text-secondary flex items-center">
+                            <i class="fas fa-map-marker-alt text-primary-500 mr-2"></i> Trichy
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 bg-background-subtle">
+        <div class="mx-auto px-6 lg:px-10">
+            <h2 class="text-text-primary text-2xl md:text-3xl font-bold leading-tight tracking-tight text-center mb-12">
+                What Our Partners Say
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="bg-white p-8 rounded-lg shadow-sm border border-border-light relative">
+                    <i class="fas fa-quote-left text-4xl text-primary-100 absolute top-4 right-4"></i>
+                    <p class="text-text-secondary italic mb-6 relative z-10">"Lifeline Healthcare has been a reliable distribution partner for over two years. Their stock availability and timely deliveries are unmatched in the region."</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center font-bold text-xl mr-4">R</div>
+                        <div>
+                            <h4 class="font-bold text-text-primary text-sm">Rajesh Kumar</h4>
+                            <p class="text-text-secondary text-xs">Apollo Pharmacy, Chennai</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-sm border border-border-light relative">
+                    <i class="fas fa-quote-left text-4xl text-primary-100 absolute top-4 right-4"></i>
+                    <p class="text-text-secondary italic mb-6 relative z-10">"The best marketing company we have worked with. Their product quality and doctor coverage network have significantly boosted our sales."</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center font-bold text-xl mr-4">D</div>
+                        <div>
+                            <h4 class="font-bold text-text-primary text-sm">Dr. Ramesh</h4>
+                            <p class="text-text-secondary text-xs">Care Hospital, Coimbatore</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-sm border border-border-light relative">
+                    <i class="fas fa-quote-left text-4xl text-primary-100 absolute top-4 right-4"></i>
+                    <p class="text-text-secondary italic mb-6 relative z-10">"Excellent B2B support and very transparent margins. Their institutional supply chain handles large volumes flawlessly."</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center font-bold text-xl mr-4">S</div>
+                        <div>
+                            <h4 class="font-bold text-text-primary text-sm">Suresh Medicals</h4>
+                            <p class="text-text-secondary text-xs">Main Branch, Madurai</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-16 bg-primary-600 text-white">
+        <div class="mx-auto px-6 lg:px-10 text-center">
             <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Get Started?</h2>
             <p class="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
                 Join thousands of satisfied customers who trust us with their healthcare needs.

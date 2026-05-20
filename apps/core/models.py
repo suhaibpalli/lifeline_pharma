@@ -141,3 +141,88 @@ class CarouselImage(TimeStampedModel):
 
     def __str__(self):
         return self.title
+class RetailerEnquiry(TimeStampedModel):
+    ORDER_VALUE_CHOICES = [
+        ('<50k', 'Less than 50,000'),
+        ('50k-1L', '50,000 - 1 Lakh'),
+        ('1L-5L', '1 Lakh - 5 Lakhs'),
+        ('5L+', 'More than 5 Lakhs'),
+    ]
+    
+    business_name = models.CharField(max_length=200)
+    contact_person = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    address = models.TextField()
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    pincode = models.CharField(max_length=10)
+    gst_number = models.CharField(max_length=20, blank=True)
+    estimated_order_value = models.CharField(max_length=20, choices=ORDER_VALUE_CHOICES)
+    message = models.TextField(blank=True)
+    
+    class Meta:
+        verbose_name = "Retailer Enquiry"
+        verbose_name_plural = "Retailer Enquiries"
+        ordering = ['-created_at']
+        
+    def __str__(self):
+        return f"{self.business_name} - {self.contact_person}"
+
+
+class ProductCatalogue(TimeStampedModel):
+    title = models.CharField(max_length=200, default="Product Catalogue")
+    description = models.TextField(blank=True)
+    pdf_file = models.FileField(upload_to='catalogues/')
+    is_active = models.BooleanField(default=True)
+    
+    class Meta:
+        verbose_name = "Product Catalogue"
+        verbose_name_plural = "Product Catalogues"
+        ordering = ['-created_at']
+        
+    def __str__(self):
+        return self.title
+
+
+class DoctorVisitRequest(TimeStampedModel):
+    SPECIALIZATION_CHOICES = [
+        ('General Physician', 'General Physician'),
+        ('Cardiologist', 'Cardiologist'),
+        ('Dermatologist', 'Dermatologist'),
+        ('Pediatrician', 'Pediatrician'),
+        ('Orthopedic', 'Orthopedic'),
+        ('Gynecologist', 'Gynecologist'),
+        ('ENT Specialist', 'ENT Specialist'),
+        ('Neurologist', 'Neurologist'),
+        ('Psychiatrist', 'Psychiatrist'),
+        ('Ophthalmologist', 'Ophthalmologist'),
+        ('Other', 'Other'),
+    ]
+    
+    TIME_SLOT_CHOICES = [
+        ('Morning', 'Morning (9:00 AM - 12:00 PM)'),
+        ('Afternoon', 'Afternoon (12:00 PM - 3:00 PM)'),
+        ('Evening', 'Evening (3:00 PM - 6:00 PM)'),
+    ]
+    
+    doctor_name = models.CharField(max_length=100)
+    specialization = models.CharField(max_length=50, choices=SPECIALIZATION_CHOICES)
+    hospital_name = models.CharField(max_length=200)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    address = models.TextField()
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    preferred_date = models.DateField()
+    preferred_time = models.CharField(max_length=20, choices=TIME_SLOT_CHOICES)
+    purpose = models.TextField(blank=True)
+    notes = models.TextField(blank=True)
+    
+    class Meta:
+        verbose_name = "Doctor Visit Request"
+        verbose_name_plural = "Doctor Visit Requests"
+        ordering = ['-created_at']
+        
+    def __str__(self):
+        return f"Dr. {self.doctor_name} - {self.preferred_date}"

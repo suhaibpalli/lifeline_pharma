@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.core.cache import cache
-from .models import SiteConfiguration, ContactInquiry, DeliveryZone, Page, CarouselImage
+from .models import SiteConfiguration, ContactInquiry, DeliveryZone, Page, CarouselImage, RetailerEnquiry, ProductCatalogue, DoctorVisitRequest
 
 SITE_CONFIG_KEYS = [
     ("site_name", "Site Name", "text"),
@@ -112,3 +112,21 @@ class CarouselImageAdmin(admin.ModelAdmin):
         ),
         ("Display Settings", {"fields": ("is_active", "order")}),
     )
+
+@admin.register(RetailerEnquiry)
+class RetailerEnquiryAdmin(admin.ModelAdmin):
+    list_display = ['business_name', 'contact_person', 'email', 'phone', 'created_at']
+    list_filter = ['estimated_order_value', 'created_at']
+    search_fields = ['business_name', 'contact_person', 'email']
+
+@admin.register(ProductCatalogue)
+class ProductCatalogueAdmin(admin.ModelAdmin):
+    list_display = ['title', 'is_active', 'created_at']
+    list_filter = ['is_active', 'created_at']
+    search_fields = ['title', 'description']
+
+@admin.register(DoctorVisitRequest)
+class DoctorVisitRequestAdmin(admin.ModelAdmin):
+    list_display = ['doctor_name', 'specialization', 'hospital_name', 'preferred_date', 'preferred_time', 'created_at']
+    list_filter = ['specialization', 'preferred_time', 'created_at']
+    search_fields = ['doctor_name', 'hospital_name', 'email']

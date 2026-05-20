@@ -139,12 +139,17 @@
                         </div>
                     </div>
                     
-                    <div class="flex space-x-4">
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                         <button class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 font-semibold"
                                 onclick="addToCartWithQuantity()">
                             <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
                         </button>
-                        <button class="p-3 text-gray-600 hover:text-red-600 border border-gray-300 rounded-lg hover:border-red-300"
+                        <a href="https://wa.me/{{ site_settings.whatsapp_number|default:''|urlencode }}?text=Hi, I'm interested in ordering {{ product.name|urlencode }} - {{ request.build_absolute_uri|urlencode }}" 
+                           target="_blank"
+                           class="flex-1 bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-600 font-semibold flex items-center justify-center">
+                            <i class="fab fa-whatsapp text-xl mr-2"></i>Order on WhatsApp
+                        </a>
+                        <button class="p-3 text-gray-600 hover:text-red-600 border border-gray-300 rounded-lg hover:border-red-300 flex items-center justify-center"
                                 onclick="{% if user.is_authenticated %}addToWishlist({{ product.id }}){% else %}window.location.href='{% url 'accounts:login' %}'{% endif %}">
                             <i class="fas fa-heart"></i>
                         </button>
