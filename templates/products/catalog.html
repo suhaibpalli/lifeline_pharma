@@ -4,32 +4,49 @@
 {% block title %}Products - {{ site_name }}{% endblock %}
 
 {% block content %}
-<div class="catalog-page bg-slate-50 min-h-screen">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+<div class="catalog-page bg-slate-50/50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
+        <!-- Breadcrumbs -->
+        <nav class="flex mb-4 text-[10px] font-bold tracking-widest uppercase text-slate-400 gap-2 items-center" aria-label="Breadcrumb">
+            <a href="{% url 'core:home' %}" class="breadcrumb-link transition-colors">Home</a>
+            <i class="fas fa-chevron-right text-[8px] text-slate-300"></i>
+            <span class="text-slate-500">Products</span>
+        </nav>
+
         <!-- Page header -->
-        <div class="mb-6">
-            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Products</h1>
-            <p class="text-sm text-slate-500 mt-1">Discover medicines and health products</p>
+        <div class="mb-8 pb-6 border-b border-slate-200/60 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-none font-headings">Products Catalog</h1>
+                <p class="text-sm sm:text-base text-slate-500 mt-2.5 max-w-2xl leading-relaxed">Browse genuine prescription (Rx) and OTC medicines verified by licensed pharmacists and delivered right to your doorstep.</p>
+            </div>
+            <div class="hidden md:flex flex-shrink-0">
+                <span class="inline-flex items-center gap-2 bg-white text-slate-600 px-4 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 shadow-sm select-none">
+                    <i class="fas fa-boxes text-primary-500 text-xs"></i>
+                    Total Items: <strong class="text-slate-900">{{ total_products }}</strong>
+                </span>
+            </div>
         </div>
 
         <!-- Mobile filter toggle + toolbar -->
         <div class="flex flex-wrap items-center justify-between gap-3 mb-5 lg:hidden">
             <button type="button" id="mobile-filter-btn"
-                    class="inline-flex items-center gap-2 bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium shadow-sm hover:border-primary-300">
+                    class="inline-flex items-center gap-2 bg-white border border-slate-200 text-slate-700 px-4 py-2.5 rounded-xl text-sm font-semibold shadow-sm hover:border-primary-300 transition-all">
                 <i class="fas fa-sliders-h text-primary-600"></i> Filters
             </button>
-            <p class="text-xs text-slate-500">
-                <span class="font-semibold text-slate-800">{{ products|length }}</span> of {{ total_products }} products
+            <p class="text-xs font-semibold text-slate-500">
+                <span class="text-slate-800">{{ products|length }}</span> of {{ total_products }} products
             </p>
         </div>
 
         <div class="flex gap-6 lg:gap-8 items-start">
             <!-- Sidebar filters (desktop) -->
-            <aside class="hidden lg:block w-full max-w-[250px] flex-shrink-0" id="filter-sidebar">
-                <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-sm">
-                    <div class="flex items-center justify-between mb-5">
-                        <h2 class="text-base font-bold text-slate-900">Filters</h2>
-                        <a href="{% url 'products:catalog' %}" class="text-xs font-medium text-slate-500 hover:text-red-600">Clear all</a>
+            <aside class="hidden lg:block w-full max-w-[260px] flex-shrink-0" id="filter-sidebar">
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-5 pb-3 border-b border-slate-100">
+                        <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fas fa-sliders-h text-primary-600 text-sm"></i> Filters
+                        </h2>
+                        <a href="{% url 'products:catalog' %}" class="text-xs font-semibold text-slate-400 hover:text-red-600 transition-colors">Clear all</a>
                     </div>
                     {% include 'products/partials/catalog_filters.html' %}
                 </div>
@@ -37,11 +54,13 @@
 
             <!-- Mobile filter modal overlay -->
             <div id="mobile-filter-overlay" class="fixed inset-0 z-50 hidden lg:hidden" aria-hidden="true">
-                <div class="absolute inset-0 bg-slate-900/50" id="mobile-filter-backdrop"></div>
-                <div class="absolute left-0 top-0 bottom-0 w-full max-w-sm bg-white shadow-xl overflow-y-auto">
-                    <div class="flex items-center justify-between p-4 border-b border-slate-200">
-                        <h2 class="font-bold text-slate-900">Filters</h2>
-                        <button type="button" id="mobile-filter-close" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-100 rounded-lg">
+                <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-xs" id="mobile-filter-backdrop"></div>
+                <div class="absolute left-0 top-0 bottom-0 w-full max-w-xs bg-white shadow-2xl overflow-y-auto">
+                    <div class="flex items-center justify-between p-4 border-b border-slate-100">
+                        <h2 class="font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fas fa-sliders-h text-primary-600 text-sm"></i> Filters
+                        </h2>
+                        <button type="button" id="mobile-filter-close" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-100 rounded-xl transition-colors">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
@@ -54,35 +73,37 @@
             <!-- Product grid column -->
             <div class="flex-1 min-w-0">
                 <!-- Toolbar -->
-                <div class="hidden lg:flex items-center justify-between mb-5 bg-white rounded-lg border border-slate-200 px-4 py-3 shadow-sm">
-                    <p class="text-sm text-slate-600">
+                <div class="hidden lg:flex items-center justify-between mb-6 bg-white rounded-2xl border border-slate-200 px-5 py-3.5 shadow-sm">
+                    <p class="text-sm font-medium text-slate-600">
                         Showing <span class="font-semibold text-slate-900">{{ products|length }}</span>
                         of <span class="font-semibold text-slate-900">{{ total_products }}</span> products
                     </p>
                     <div class="flex items-center gap-3">
-                        <label class="text-sm text-slate-600">Sort:</label>
+                        <label class="text-sm font-semibold text-slate-600">Sort By:</label>
                         <form method="get" class="inline" id="sort-form-desktop">
                             {% for key, value in request.GET.items %}
                                 {% if key != 'sort' and key != 'page' %}
                                 <input type="hidden" name="{{ key }}" value="{{ value }}">
                                 {% endif %}
                             {% endfor %}
-                            {{ filter_form.sort|add_class:"text-sm border-slate-200 rounded-lg py-1.5 pl-3 pr-8 focus:ring-primary-500 focus:border-primary-500" }}
+                            {{ filter_form.sort|add_class:"text-sm border-slate-200 rounded-lg py-1.5 pl-3 pr-8 focus:ring-primary-500 focus:border-primary-500 bg-slate-50/50 hover:bg-slate-50 transition-colors" }}
                         </form>
                     </div>
                 </div>
 
                 <!-- Product grid -->
-                <div class="product-card-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 items-stretch" id="product-grid">
+                <div class="product-card-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 items-stretch" id="product-grid">
                     {% for product in products %}
                         {% include 'products/partials/product_card.html' with product=product %}
                     {% empty %}
-                        <div class="col-span-full text-center py-16 bg-white rounded-xl border border-slate-200">
-                            <i class="fas fa-search text-5xl text-slate-300 mb-4"></i>
-                            <h3 class="text-lg font-semibold text-slate-800 mb-2">No products found</h3>
-                            <p class="text-sm text-slate-500 mb-6">Try adjusting your filters or search terms</p>
-                            <a href="{% url 'products:catalog' %}" class="inline-flex items-center gap-2 text-sm font-semibold text-primary-600 hover:text-primary-700">
-                                Clear filters <i class="fas fa-arrow-right text-xs"></i>
+                        <div class="col-span-full text-center py-20 bg-white rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
+                                <i class="fas fa-search text-2xl text-slate-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-1">No products found</h3>
+                            <p class="text-sm text-slate-500 mb-6 max-w-sm mx-auto">We couldn't find any products matching your selection. Try adjusting your filters or search terms.</p>
+                            <a href="{% url 'products:catalog' %}" class="inline-flex items-center gap-2 bg-primary-50 text-primary-600 hover:bg-primary-100 border border-primary-200 px-4 py-2 rounded-xl text-sm font-semibold transition-all">
+                                Clear all filters <i class="fas fa-arrow-right text-xs"></i>
                             </a>
                         </div>
                     {% endfor %}
@@ -90,25 +111,25 @@
 
                 <!-- Pagination -->
                 {% if is_paginated %}
-                <nav class="mt-10 flex justify-center" aria-label="Pagination">
-                    <div class="inline-flex items-center gap-1 bg-white border border-slate-200 rounded-lg p-1 shadow-sm">
+                <nav class="mt-12 flex justify-center" aria-label="Pagination">
+                    <div class="inline-flex items-center gap-1 bg-white border border-slate-200 rounded-xl p-1 shadow-sm">
                         {% if page_obj.has_previous %}
                         <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
-                           class="px-3 py-2 text-sm text-slate-600 hover:text-primary-600 rounded-md hover:bg-slate-50">
+                           class="px-3 py-2 text-sm font-semibold text-slate-600 hover:text-primary-600 rounded-lg hover:bg-slate-50 transition-colors">
                             <i class="fas fa-chevron-left mr-1"></i>Prev
                         </a>
                         {% endif %}
                         {% for num in page_obj.paginator.page_range %}
                             {% if page_obj.number == num %}
-                            <span class="px-3 py-2 text-sm bg-primary-600 text-white rounded-md font-medium">{{ num }}</span>
+                            <span class="px-3.5 py-2 text-sm bg-primary-600 text-white rounded-lg font-bold shadow-sm">{{ num }}</span>
                             {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
                             <a href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
-                               class="px-3 py-2 text-sm text-slate-600 hover:text-primary-600 rounded-md hover:bg-slate-50">{{ num }}</a>
+                               class="px-3.5 py-2 text-sm font-semibold text-slate-600 hover:text-primary-600 rounded-lg hover:bg-slate-50 transition-colors">{{ num }}</a>
                             {% endif %}
                         {% endfor %}
                         {% if page_obj.has_next %}
                         <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
-                           class="px-3 py-2 text-sm text-slate-600 hover:text-primary-600 rounded-md hover:bg-slate-50">
+                           class="px-3 py-2 text-sm font-semibold text-slate-600 hover:text-primary-600 rounded-lg hover:bg-slate-50 transition-colors">
                             Next<i class="fas fa-chevron-right ml-1"></i>
                         </a>
                         {% endif %}

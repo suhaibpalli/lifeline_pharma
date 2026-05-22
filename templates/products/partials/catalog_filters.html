@@ -1,44 +1,40 @@
 {% load widget_tweaks %}
-<form method="get" class="space-y-5 catalog-filters-form">
+<form method="get" class="space-y-6 catalog-filters-form">
     <div>
-        <label class="block text-sm font-medium text-slate-700 mb-2">{{ search_form.category.label }}</label>
-        {{ search_form.category|add_class:"w-full text-sm border-slate-200 rounded-lg focus:ring-primary-500
-        focus:border-primary-500" }}
+        <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-2.5">{{ search_form.category.label }}</label>
+        {{ search_form.category|add_class:"w-full text-sm border-slate-200 rounded-xl focus:ring-primary-500 focus:border-primary-500 bg-slate-50/50 hover:bg-slate-50 transition-colors font-medium text-slate-700" }}
     </div>
 
     <hr class="border-slate-100">
 
-    <div>ś
-        <label class="block text-sm font-medium text-slate-700 mb-2">Price Range (₹)</label>
-        <div class="flex gap-2">
-            {{ search_form.min_price|add_class:"w-full text-sm border-slate-200 rounded-lg focus:ring-primary-500
-            focus:border-primary-500" }}
-            {{ search_form.max_price|add_class:"w-full text-sm border-slate-200 rounded-lg focus:ring-primary-500
-            focus:border-primary-500" }}
+    <div>
+        <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-2.5">Price Range (₹)</label>
+        <div class="flex items-center gap-2">
+            {{ search_form.min_price|add_class:"w-full text-sm border-slate-200 rounded-xl focus:ring-primary-500 focus:border-primary-500 bg-slate-50/50 hover:bg-slate-50 placeholder:text-slate-400 font-medium text-slate-700 transition-colors" }}
+            <span class="text-slate-300 font-bold text-xs">-</span>
+            {{ search_form.max_price|add_class:"w-full text-sm border-slate-200 rounded-xl focus:ring-primary-500 focus:border-primary-500 bg-slate-50/50 hover:bg-slate-50 placeholder:text-slate-400 font-medium text-slate-700 transition-colors" }}
         </div>
     </div>
 
     <hr class="border-slate-100">
 
     <div class="lg:hidden">
-        <label class="block text-sm font-medium text-slate-700 mb-2">{{ filter_form.sort.label }}</label>
-        {{ filter_form.sort|add_class:"w-full text-sm border-slate-200 rounded-lg focus:ring-primary-500
-        focus:border-primary-500" }}
+        <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-2.5">{{ filter_form.sort.label }}</label>
+        {{ filter_form.sort|add_class:"w-full text-sm border-slate-200 rounded-xl focus:ring-primary-500 focus:border-primary-500 bg-slate-50/50 hover:bg-slate-50 transition-colors font-medium text-slate-700" }}
     </div>
 
-    <div class="flex items-center gap-2">
-        {{ search_form.in_stock|add_class:"rounded border-slate-300 text-primary-600 focus:ring-primary-500" }}
-        <label for="{{ search_form.in_stock.id_for_label }}" class="text-sm text-slate-700 cursor-pointer">In Stock
-            Only</label>
+    <div class="flex items-center gap-2.5 py-1">
+        {{ search_form.in_stock|add_class:"rounded-md border-slate-300 text-primary-600 focus:ring-primary-500 w-4 h-4 cursor-pointer" }}
+        <label for="{{ search_form.in_stock.id_for_label }}" class="text-xs font-bold uppercase tracking-wider text-slate-600 cursor-pointer select-none">In Stock Only</label>
     </div>
 
-    <div class="space-y-2 pt-2">
+    <div class="space-y-2 pt-4 border-t border-slate-100">
         <button type="submit"
-            class="w-full bg-primary-600 hover:bg-primary-700 text-white py-2.5 rounded-lg text-sm font-semibold transition-colors">
-            Apply Filters
+            class="w-full bg-primary-600 hover:bg-primary-700 text-white py-2.5 rounded-xl text-sm font-bold shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+            <i class="fas fa-check text-xs"></i> Apply Filters
         </button>
         <a href="{% url 'products:catalog' %}"
-            class="w-full block text-center bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 rounded-lg text-sm font-medium transition-colors">
+            class="w-full block text-center bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 rounded-xl text-sm font-semibold transition-colors">
             Clear All
         </a>
     </div>
