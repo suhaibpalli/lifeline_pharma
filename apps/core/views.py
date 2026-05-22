@@ -35,7 +35,28 @@ class HomeView(TemplateView):
         carousel_images = CarouselImage.objects.filter(is_active=True)
         context["carousel_images"] = carousel_images
 
-        # We'll add featured products later
+        try:
+            from apps.products.models import Product
+
+            featured = list(
+                Product.objects.filter(is_active=True, is_featured=True)
+                .select_related("manufacturer", "category")
+                .prefetch_related("images")[:12]
+            )
+            if not featured:
+                featured = list(
+                    Product.objects.filter(is_active=True)
+                    .select_related("manufacturer", "category")
+                    .prefetch_related("images")
+                    .order_by("-created_at")[:12]
+                )
+            for product in featured:
+                product.user_price = product.get_price_for_user(self.request.user)
+                product.discount_percentage = product.get_discount_percentage(self.request.user)
+            context["featured_products"] = featured
+        except Exception:
+            context["featured_products"] = []
+
         return context
 
 

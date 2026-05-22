@@ -1,148 +1,172 @@
 {% load static %}
-<header class="bg-white border-b border-border-light sticky top-0 z-50">
-    <div class="mx-auto px-6 lg:px-10">
-        <!-- Main header -->
-        <div class="flex items-center justify-between h-16">
-            <a href="{% url 'core:home' %}" class="flex items-center gap-3">
-                <img src="{% static 'images/logo.png' %}" alt="{{ site_name }}" class="h-12 w-auto object-contain">
-                <span class="sr-only">{{ site_name }}</span>
+<header class="site-header bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center gap-3 sm:gap-4 py-3">
+            <!-- Logo -->
+            <a href="{% url 'core:home' %}" class="flex-shrink-0 flex items-center" aria-label="{{ site_name }} home">
+                <img src="{% static 'images/logo.png' %}" alt="{{ site_name }}" class="h-10 sm:h-11 w-auto object-contain">
             </a>
-            
-            <!-- Desktop Navigation -->
-            <div class="hidden lg:flex items-center gap-8">
-                <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'core:home' %}">Home</a>
-                <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'products:catalog' %}">Products</a>
-                <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'core:catalogue' %}">Catalogue</a>
-                <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'core:about' %}">About Us</a>
-                <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'core:delivery_areas' %}">Delivery Areas</a>
-                <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'core:pharmacies' %}">For Pharmacies</a>
-                <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'core:doctor_visit_request' %}">For Doctors</a>
-                <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="{% url 'core:contact' %}">Contact Us</a>
-                {% if user.is_authenticated and user.user_type == 'PHARMACY' %}
-                <a class="text-text-primary text-sm font-medium hover:text-primary-500 transition-colors" href="#">Bulk Orders</a>
-                {% endif %}
-            </div>
-            
-            <!-- Search bar (hidden on mobile) -->
-            <div class="hidden md:flex flex-1 max-w-md mx-8">
-                <div class="relative w-full">
-                    <form method="get" action="{% url 'products:search' %}">
-                        <input type="text" 
-                               name="q"
-                               placeholder="Search medicines, health products..." 
-                               class="w-full px-4 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm">
-                        <button type="submit" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-secondary hover:text-primary-500 transition-colors">
-                            <i class="fas fa-search text-sm"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-            
-            <!-- User actions -->
-            <div class="flex items-center gap-3">
-                {% if user.is_authenticated %}
-                    <!-- User menu -->
-                    <div class="relative group">
-                        <button class="flex items-center text-text-primary hover:text-primary-500 focus:outline-none text-sm font-medium cursor-pointer">
-                            <i class="fas fa-user mr-2"></i>
-                            <span class="hidden sm:inline">{{ user.get_full_name|default:user.email|truncatechars:15 }}</span>
-                            <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                        </button>
 
-                        <div class="absolute right-0 top-full h-3 w-48"></div>
-                        
-                        <!-- Dropdown menu -->
-                        <div class="dropdown-menu invisible absolute right-0 top-full mt-2 w-48 rounded-lg border border-border-light bg-white py-1 opacity-0 shadow-lg transition duration-150 group-hover:visible group-hover:opacity-100 z-50">
-                            <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-sm text-text-primary hover:bg-background-subtle">
-                                <i class="fas fa-user mr-2"></i>My Profile
+            <!-- Search (desktop) -->
+            <div class="hidden md:flex flex-1 max-w-2xl mx-4 lg:mx-8">
+                <form method="get" action="{% url 'products:search' %}" class="header-search-form w-full" role="search">
+                    <i class="fas fa-search header-search-icon" aria-hidden="true"></i>
+                    <input type="search"
+                           name="q"
+                           placeholder="Search medicines, brands..."
+                           class="header-search-input"
+                           autocomplete="off">
+                    <button type="submit" class="header-search-submit" aria-label="Search">
+                        <span class="hidden lg:inline">Search</span>
+                        <i class="fas fa-search lg:hidden"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-2.5 sm:gap-3.5 ml-auto flex-shrink-0">
+                <a href="{% url 'core:delivery_areas' %}" class="hidden lg:flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-primary-600 px-3 py-2 rounded-lg border border-slate-200 bg-slate-50/50 hover:bg-slate-50 hover:border-primary-200 transition-all duration-200 whitespace-nowrap shadow-sm">
+                    <i class="fas fa-map-marker-alt" style="color: #0c7ff2;"></i>
+                    <span>Deliver to: <strong class="text-slate-800">Chennai</strong></span>
+                </a>
+
+                {% if user.is_authenticated %}
+                    <a href="{% url 'cart:wishlist' %}" class="hidden sm:flex w-10 h-10 items-center justify-center text-slate-600 hover:text-primary-600 hover:bg-slate-100 rounded-lg transition-colors" title="Wishlist">
+                        <i class="fas fa-heart"></i>
+                    </a>
+                {% endif %}
+
+                <a href="{% url 'cart:cart' %}" class="header-cart-link" title="Cart" aria-label="Cart ({{ cart_items_count }} items)">
+                    <span class="header-cart-icon" aria-hidden="true">
+                        <i class="fas fa-shopping-cart"></i>
+                    </span>
+                    <span id="header-cart-count" class="cart-count-badge{% if cart_items_count == 0 %} cart-count-badge--empty{% endif %}">{{ cart_items_count|default:0 }}</span>
+                </a>
+
+                {% if user.is_authenticated %}
+                    <div class="relative group hidden sm:block">
+                        <button type="button" class="flex items-center gap-2 pl-2 pr-3 py-1.5 text-sm font-medium text-slate-700 hover:text-primary-600 border border-slate-200 rounded-lg hover:border-primary-200 transition-colors bg-white shadow-sm">
+                            <span class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm" style="background-color: #0c7ff2;">
+                                {{ user.get_full_name|default:user.email|slice:":1"|upper }}
+                            </span>
+                            <span class="max-w-[100px] truncate hidden lg:inline">{{ user.get_full_name|default:user.email|truncatechars:12 }}</span>
+                            <i class="fas fa-chevron-down text-[10px] text-slate-400 transition-transform duration-200 group-hover:rotate-180"></i>
+                        </button>
+                        <div class="absolute right-0 top-full h-2 w-48"></div>
+                        <div class="absolute right-0 top-full mt-1.5 w-52 rounded-xl border border-slate-100 bg-white py-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.08)] opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 ease-out z-50">
+                            <a href="{% url 'accounts:profile' %}" class="flex items-center gap-2.5 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-primary-600 rounded-lg mx-1.5 transition-colors">
+                                <i class="fas fa-user w-4 text-slate-400"></i>My Profile
                             </a>
-                            <a href="{% url 'orders:order_list' %}" class="block px-4 py-2 text-sm text-text-primary hover:bg-background-subtle">
-                                <i class="fas fa-shopping-bag mr-2"></i>My Orders
+                            <a href="{% url 'orders:order_list' %}" class="flex items-center gap-2.5 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-primary-600 rounded-lg mx-1.5 transition-colors">
+                                <i class="fas fa-box w-4 text-slate-400"></i>My Orders
                             </a>
-                            <a href="{% url 'accounts:address_list' %}" class="block px-4 py-2 text-sm text-text-primary hover:bg-background-subtle">
-                                <i class="fas fa-map-marker-alt mr-2"></i>My Addresses
+                            <a href="{% url 'accounts:address_list' %}" class="flex items-center gap-2.5 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-primary-600 rounded-lg mx-1.5 transition-colors">
+                                <i class="fas fa-map-marker-alt w-4 text-slate-400"></i>My Addresses
                             </a>
-                            <div class="border-t border-border-light my-1"></div>
-                            <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-sm text-text-primary hover:bg-background-subtle">
-                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            <div class="border-t border-slate-100 my-1.5 mx-1.5"></div>
+                            <a href="{% url 'accounts:logout' %}" class="flex items-center gap-2.5 px-3 py-2 text-sm text-slate-600 hover:bg-red-50 hover:text-red-600 rounded-lg mx-1.5 transition-colors">
+                                <i class="fas fa-sign-out-alt w-4 text-slate-400"></i>Logout
                             </a>
                         </div>
                     </div>
-                    
-                    <!-- Wishlist -->
-                    <a href="{% url 'cart:wishlist' %}" class="text-text-primary hover:text-primary-500 transition-colors">
-                        <i class="fas fa-heart text-lg"></i>
-                    </a>
-                    
-                    <!-- Cart -->
-                    <a href="{% url 'cart:cart' %}" class="relative text-text-primary hover:text-primary-500 transition-colors">
-                        <i class="fas fa-shopping-cart text-lg"></i>
-                        <span class="absolute -top-2 -right-2 bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                            {{ user.cart.total_items|default:0 }}
-                        </span>
-                    </a>
                 {% else %}
-                    <!-- Cart -->
-                    <a href="{% url 'cart:cart' %}" class="relative text-text-primary hover:text-primary-500 transition-colors mr-2">
-                        <i class="fas fa-shopping-cart text-lg"></i>
-                        <span class="absolute -top-2 -right-2 bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                            0
-                        </span>
-                    </a>
-                    
-                    <!-- Login/Register -->
-                    <a href="{% url 'accounts:login' %}" 
-                       class="text-text-primary hover:text-primary-500 transition-colors text-sm font-medium hidden md:inline-block">
-                        Stockist / Retailer Login
-                    </a>
-                    <span class="text-border-light hidden md:inline-block">|</span>
-                    <a href="{% url 'accounts:login' %}" 
-                       class="text-text-primary hover:text-primary-500 transition-colors text-sm font-medium">
+                    <a href="{% url 'accounts:login' %}" class="header-btn-login">
                         Login
                     </a>
-                    <a href="{% url 'accounts:register_choice' %}" 
-                       class="bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors text-sm font-bold">
+                    <a href="{% url 'accounts:register_choice' %}" class="header-btn-register">
                         Register
                     </a>
                 {% endif %}
-                
-                <!-- Mobile menu button -->
-                <button class="lg:hidden text-text-primary hover:text-primary-500 transition-colors" id="mobile-menu-btn">
+
+                <button type="button" class="lg:hidden w-10 h-10 flex items-center justify-center text-slate-700 hover:bg-slate-100 rounded-lg transition-colors" id="mobile-menu-btn" aria-label="Open menu">
                     <i class="fas fa-bars text-lg"></i>
                 </button>
             </div>
         </div>
-        
-        <!-- Mobile menu -->
-        <div class="lg:hidden hidden" id="mobile-menu">
-            <div class="py-4 border-t border-border-light">
-                <div class="flex flex-col gap-4">
-                    <!-- Mobile search -->
-                    <div class="px-2">
-                        <form method="get" action="{% url 'products:search' %}">
-                            <input type="text" 
-                                   name="q"
-                                   placeholder="Search medicines..." 
-                                   class="w-full px-4 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm">
-                        </form>
-                    </div>
-                    
-                    <!-- Mobile navigation -->
-                    <div class="flex flex-col gap-2">
-                        <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'core:home' %}">Home</a>
-                        <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'products:catalog' %}">Products</a>
-                        <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'core:catalogue' %}">Catalogue</a>
-                        <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'core:about' %}">About Us</a>
-                        <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'core:delivery_areas' %}">Delivery Areas</a>
-                        <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'core:pharmacies' %}">For Pharmacies</a>
-                        <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'core:doctor_visit_request' %}">For Doctors</a>
-                        <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="{% url 'core:contact' %}">Contact Us</a>
-                        {% if user.is_authenticated and user.user_type == 'PHARMACY' %}
-                        <a class="text-text-primary hover:text-primary-500 transition-colors px-2 py-2 text-sm font-medium" href="#">Bulk Orders</a>
-                        {% endif %}
+
+        <!-- Mobile search -->
+        <div class="md:hidden pb-3">
+            <form method="get" action="{% url 'products:search' %}" class="header-search-form w-full" role="search">
+                <i class="fas fa-search header-search-icon" aria-hidden="true"></i>
+                <input type="search"
+                       name="q"
+                       placeholder="Search medicines, brands..."
+                       class="header-search-input"
+                       autocomplete="off">
+                <button type="submit" class="header-search-submit" aria-label="Search">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Secondary navigation -->
+    <nav class="border-t border-slate-100 bg-white hidden lg:block" aria-label="Main navigation">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between gap-4">
+            {% url 'core:home' as home_url %}
+            {% url 'products:catalog' as catalog_url %}
+            {% url 'core:delivery_areas' as delivery_areas_url %}
+            {% url 'core:pharmacies' as pharmacies_url %}
+            {% url 'core:doctor_visit_request' as doctor_visit_url %}
+            {% url 'core:contact' as contact_url %}
+            
+            <div class="flex items-center gap-1 flex-wrap">
+                <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400 bg-slate-100 px-2 py-0.5 rounded mr-2.5">For Patients</span>
+                <a href="{% url 'core:home' %}" class="nav-link px-3.5 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 {% if request.path == home_url %}text-primary-600 bg-primary-50/50 font-semibold{% else %}text-slate-600 hover:text-primary-600 hover:bg-slate-50{% endif %}">Home</a>
+                <a href="{% url 'products:catalog' %}" class="nav-link px-3.5 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 {% if request.path == catalog_url or 'products' in request.path %}text-primary-600 bg-primary-50/50 font-semibold{% else %}text-slate-600 hover:text-primary-600 hover:bg-slate-50{% endif %}">Products</a>
+                {% if navigation.categories %}
+                <div class="relative group">
+                    <button type="button" class="nav-link px-3.5 py-1.5 text-sm font-medium text-slate-600 hover:text-primary-600 hover:bg-slate-50 rounded-lg transition-all duration-200 inline-flex items-center gap-1.5">
+                        Categories <i class="fas fa-chevron-down text-[10px] text-slate-400 transition-transform duration-200 group-hover:rotate-180"></i>
+                    </button>
+                    <div class="absolute left-0 top-full h-2 w-56"></div>
+                    <div class="absolute left-0 top-full mt-1.5 w-56 bg-white border border-slate-100 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] py-1.5 z-50 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 ease-out">
+                        {% for category in navigation.categories %}
+                        <a href="{% url 'products:category_products' category.slug %}" class="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-primary-600 rounded-lg mx-1.5 transition-colors">{{ category.name }}</a>
+                        {% endfor %}
                     </div>
                 </div>
+                {% endif %}
+                <a href="{% url 'core:delivery_areas' %}" class="nav-link px-3.5 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 {% if request.path == delivery_areas_url %}text-primary-600 bg-primary-50/50 font-semibold{% else %}text-slate-600 hover:text-primary-600 hover:bg-slate-50{% endif %}">Delivery Areas</a>
             </div>
+            
+            <div class="flex items-center gap-1">
+                <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400 bg-slate-100 px-2 py-0.5 rounded mr-2.5">For Partners</span>
+                <a href="{% url 'core:pharmacies' %}" class="nav-link px-3.5 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 {% if request.path == pharmacies_url %}text-primary-600 bg-primary-50/50 font-semibold{% else %}text-slate-600 hover:text-primary-600 hover:bg-slate-50{% endif %}">For Pharmacies</a>
+                <a href="{% url 'core:doctor_visit_request' %}" class="nav-link px-3.5 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 {% if request.path == doctor_visit_url %}text-primary-600 bg-primary-50/50 font-semibold{% else %}text-slate-600 hover:text-primary-600 hover:bg-slate-50{% endif %}">For Doctors</a>
+                <a href="{% url 'core:contact' %}" class="nav-link px-3.5 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 {% if request.path == contact_url %}text-primary-600 bg-primary-50/50 font-semibold{% else %}text-slate-600 hover:text-primary-600 hover:bg-slate-50{% endif %}">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div class="lg:hidden hidden border-t border-slate-100 bg-white" id="mobile-menu">
+        <div class="max-w-7xl mx-auto px-4 py-4 space-y-4">
+            <div>
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-2">For Patients</p>
+                <div class="flex flex-col gap-0.5">
+                    <a href="{% url 'core:home' %}" class="px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-md">Home</a>
+                    <a href="{% url 'products:catalog' %}" class="px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-md">Products</a>
+                    {% for category in navigation.categories %}
+                    <a href="{% url 'products:category_products' category.slug %}" class="px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-md pl-6">{{ category.name }}</a>
+                    {% endfor %}
+                    <a href="{% url 'core:delivery_areas' %}" class="px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-md">Delivery Areas</a>
+                </div>
+            </div>
+            <div>
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-2">For Professionals</p>
+                <div class="flex flex-col gap-0.5">
+                    <a href="{% url 'core:pharmacies' %}" class="px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-md">For Pharmacies</a>
+                    <a href="{% url 'core:doctor_visit_request' %}" class="px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-md">For Doctors</a>
+                    <a href="{% url 'core:contact' %}" class="px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-md">Contact</a>
+                </div>
+            </div>
+            {% if not user.is_authenticated %}
+            <div class="pt-2 border-t border-slate-100 flex gap-2">
+                <a href="{% url 'accounts:login' %}" class="header-btn-login flex-1 justify-center">Login</a>
+                <a href="{% url 'accounts:register_choice' %}" class="header-btn-register flex-1 justify-center">Register</a>
+            </div>
+            {% endif %}
         </div>
     </div>
 </header>
