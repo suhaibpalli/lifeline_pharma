@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "razorpay": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://mcp.razorpay.com/mcp",
+        "--header",
+        "Authorization: Basic ${AUTH_TOKEN}"
+      ],
+      "env": {
+        "AUTH_TOKEN": "cnpwX3Rlc3RfU1hrdlFQb3ZCVlFQUXI6dGdvOUxFNUJVNVAyN1dodk1DMjdmSzZQ"
+      }
+    }
+  }
+}

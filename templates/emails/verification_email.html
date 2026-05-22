@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify your {{ site_name }} account</title>
+</head>
+<body style="margin:0; padding:0; background-color:#eef4fb; font-family:Inter, Arial, sans-serif; color:#0f172a;">
+    <div style="display:none; max-height:0; overflow:hidden; opacity:0;">
+        {{ preview_text }}
+    </div>
+
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:linear-gradient(180deg, #eef6ff 0%, #eef4fb 100%);">
+        <tr>
+            <td align="center" style="padding:40px 16px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:620px;">
+                    <tr>
+                        <td style="padding-bottom:18px;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                                <tr>
+                                    <td align="left" style="font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:#2563eb; font-weight:700;">
+                                        Lifeline Healthcare
+                                    </td>
+                                    <td align="right" style="font-size:12px; color:#64748b;">
+                                        Secure account verification
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="background-color:#ffffff; border:1px solid #dbe7f5; border-radius:28px; box-shadow:0 24px 60px rgba(15, 23, 42, 0.08); overflow:hidden;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                                <tr>
+                                    <td style="padding:0; background:radial-gradient(circle at top left, #60a5fa 0%, #2563eb 45%, #0f172a 100%);">
+                                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                                            <tr>
+                                                <td style="padding:40px 40px 32px 40px;">
+                                                    <div style="display:inline-block; padding:8px 14px; border:1px solid rgba(255,255,255,0.2); border-radius:999px; color:#dbeafe; font-size:12px; letter-spacing:0.08em; text-transform:uppercase;">
+                                                        Account activation
+                                                    </div>
+                                                    <h1 style="margin:20px 0 12px; font-size:34px; line-height:1.15; color:#ffffff; font-weight:800;">
+                                                        Confirm your email and unlock your account
+                                                    </h1>
+                                                    <p style="margin:0; font-size:16px; line-height:1.7; color:#dbeafe;">
+                                                        Hi {% if user.first_name %}{{ user.first_name }}{% else %}there{% endif %}, verify your email address to activate your {{ site_name }} account and continue securely.
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="padding:36px 40px 16px 40px;">
+                                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                                            <tr>
+                                                <td style="padding:0 0 20px 0;">
+                                                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                        <tr>
+                                                            <td valign="top" style="width:44px;">
+                                                                <div style="width:36px; height:36px; border-radius:10px; background:#eff6ff; text-align:center; line-height:36px; font-size:18px;">1</div>
+                                                            </td>
+                                                            <td style="font-size:15px; line-height:1.7; color:#334155;">
+                                                                Click the secure button below to verify your email.
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td valign="top" style="width:44px; padding-top:16px;">
+                                                                <div style="width:36px; height:36px; border-radius:10px; background:#eff6ff; text-align:center; line-height:36px; font-size:18px;">2</div>
+                                                            </td>
+                                                            <td style="padding-top:16px; font-size:15px; line-height:1.7; color:#334155;">
+                                                                This link is valid for {{ expiry_hours }} hours. If it expires, you can request a fresh one from the login screen.
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td valign="top" style="width:44px; padding-top:16px;">
+                                                                <div style="width:36px; height:36px; border-radius:10px; background:#eff6ff; text-align:center; line-height:36px; font-size:18px;">3</div>
+                                                            </td>
+                                                            <td style="padding-top:16px; font-size:15px; line-height:1.7; color:#334155;">
+                                                                After verification, sign in and start using your account normally.
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td align="center" style="padding:8px 40px 8px 40px;">
+                                        <a href="{{ verification_url }}" style="display:inline-block; background:linear-gradient(135deg, #0c7ff2 0%, #2563eb 100%); color:#ffffff; text-decoration:none; font-size:16px; font-weight:700; padding:16px 28px; border-radius:16px; box-shadow:0 14px 28px rgba(37, 99, 235, 0.28);">
+                                            Verify My Email
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="padding:24px 40px 12px 40px;">
+                                        <div style="background:#f8fbff; border:1px solid #dbeafe; border-radius:18px; padding:18px 20px;">
+                                            <p style="margin:0 0 10px 0; font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#2563eb;">
+                                                Manual link
+                                            </p>
+                                            <p style="margin:0; font-size:13px; line-height:1.7; color:#475569; word-break:break-all;">
+                                                If the button does not work, copy and paste this URL into your browser:<br>
+                                                <a href="{{ verification_url }}" style="color:#0c7ff2; text-decoration:none;">{{ verification_url }}</a>
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="padding:12px 40px 36px 40px;">
+                                        <p style="margin:0; font-size:13px; line-height:1.7; color:#64748b;">
+                                            If you did not create this account, you can ignore this email. Need help? Contact us at
+                                            <a href="mailto:{{ support_email }}" style="color:#0c7ff2; text-decoration:none;">{{ support_email }}</a>.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="center" style="padding-top:18px; font-size:12px; line-height:1.7; color:#64748b;">
+                            {{ site_name }}<br>
+                            Trusted online pharmacy and healthcare platform
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

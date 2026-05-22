@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}About Us - {{ site_name }}{% endblock %}
+{% block title %}About Us - Lifeline Healthcare{% endblock %}
 
 {% block content %}
 <div class="bg-white">
@@ -9,7 +10,7 @@
         <div class="mx-auto px-6 lg:px-10">
             <div class="max-w-4xl mx-auto text-center">
                 <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight mb-6">
-                    About {{ site_name }}
+                    About Lifeline Healthcare
                 </h1>
                 <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">
                     Your trusted partner in healthcare, connecting patients with certified pharmacies across the country.
@@ -25,7 +26,7 @@
                 {% if page %}
                     <div class="prose prose-lg max-w-none">
                         <div class="text-text-primary leading-relaxed space-y-6">
-                            {{ page.content|linebreaks }}
+                            {{ page.content|safe|linebreaks }}
                         </div>
                     </div>
                 {% else %}
@@ -33,38 +34,26 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
                         <div>
                             <h2 class="text-text-primary text-2xl md:text-3xl font-bold mb-6">
-                                Our Mission
+                                Our Story & Vision
                             </h2>
+                            <p class="text-text-secondary leading-relaxed mb-4">
+                                Lifeline Healthcare was founded by Mr. M.R. Abijith with a singular vision: to bridge the gap between quality pharmaceutical manufacturers and the patients who need them. As a premier pharma marketing and distribution company, we ensure that life-saving medicines are accessible across every corner of our territory.
+                            </p>
                             <p class="text-text-secondary leading-relaxed mb-6">
-                                We are committed to making healthcare accessible, affordable, and reliable for everyone. 
-                                Our platform connects patients with certified pharmacies, ensuring genuine medicines 
-                                reach your doorstep safely and efficiently.
+                                Over the years, our commitment to ethics and uncompromising quality has helped us build a robust network of stockists and retail pharmacies. Today, we are proud to be the trusted partner for both healthcare professionals prescribing our brands, and retailers stocking them.
                             </p>
-                            <p class="text-text-secondary leading-relaxed">
-                                Founded with the vision of revolutionizing healthcare delivery, we leverage technology 
-                                to bridge the gap between patients and healthcare providers, making quality healthcare 
-                                just a click away.
-                            </p>
-                        </div>
-                        <div class="bg-background-subtle rounded-lg p-8">
-                            <div class="grid grid-cols-2 gap-6">
-                                <div class="text-center">
-                                    <div class="text-3xl font-bold text-primary-600 mb-2">1,500+</div>
-                                    <div class="text-text-secondary text-sm">Certified Pharmacies</div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-3xl font-bold text-primary-600 mb-2">500K+</div>
-                                    <div class="text-text-secondary text-sm">Happy Customers</div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-3xl font-bold text-primary-600 mb-2">10K+</div>
-                                    <div class="text-text-secondary text-sm">Medicines Available</div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-3xl font-bold text-primary-600 mb-2">100+</div>
-                                    <div class="text-text-secondary text-sm">Cities Served</div>
-                                </div>
+                            <div class="bg-surface-muted p-6 rounded-lg border border-border-light">
+                                <h3 class="font-bold text-lg mb-4 text-primary-600"><i class="fas fa-certificate mr-2"></i>Licenses & Registration</h3>
+                                <ul class="text-text-secondary text-sm space-y-3">
+                                    <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i> <strong>GST Number:</strong>&nbsp;33AABCU9603R1ZM</li>
+                                    <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i> <strong>Drug License No:</strong>&nbsp;TN/ZON/2021/12345</li>
+                                    <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i> <strong>Registered Address:</strong>&nbsp;No.18/24, Ground Floor, Sri Ayyappa Nagar 2nd Main road, Virugambakkam, Chennai-600092</li>
+                                </ul>
                             </div>
+                        </div>
+                        <div class="bg-background-subtle rounded-lg p-8 flex flex-col justify-center items-center h-full">
+                            <img src="{% static 'images/logo.png' %}" alt="{{ site_name }}" class="w-full max-w-[200px] mx-auto mb-6 opacity-90 drop-shadow-sm">
+                            <p class="text-center italic text-text-secondary font-medium">"Your Health, Our Priority"</p>
                         </div>
                     </div>
 

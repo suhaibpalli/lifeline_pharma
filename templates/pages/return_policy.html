@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Return & Refund Policy - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-16">
+    <div class="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-lg shadow border border-border-light prose prose-blue max-w-none">
+        <h1 class="text-3xl font-bold text-text-primary mb-8 border-b pb-4">Return & Refund Policy</h1>
+        
+        <p class="text-text-secondary leading-relaxed mb-6">
+            At Lifeline Healthcare, we strive to ensure that all our pharmaceutical products reach you in the best condition. However, we understand that situations may arise where a return or refund is necessary. Please read our policy carefully.
+        </p>
+
+        <h2 class="text-xl font-bold text-text-primary mt-8 mb-4">1. Return Eligibility</h2>
+        <p class="text-text-secondary leading-relaxed mb-4">Returns are generally accepted under the following conditions:</p>
+        <ul class="list-disc pl-6 text-text-secondary mb-6 space-y-2">
+            <li>The product received is damaged, defective, or tampered with at the time of delivery.</li>
+            <li>The product delivered does not match your order (wrong item).</li>
+            <li>The product has passed its expiration date before delivery.</li>
+            <li>For retail/B2B stockists, specific near-expiry return arrangements are handled as per individual distribution agreements.</li>
+        </ul>
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+            <p class="text-sm text-yellow-700 m-0"><strong>Note:</strong> Due to regulatory and safety reasons, we cannot accept returns for temperature-sensitive items, opened medicines, or products whose original packaging/seals have been broken.</p>
+        </div>
+
+        <h2 class="text-xl font-bold text-text-primary mt-8 mb-4">2. Timeframe for Returns</h2>
+        <p class="text-text-secondary leading-relaxed mb-6">
+            Any discrepancies, damages, or requests for returns must be reported to our customer support within <strong>48 hours</strong> of delivery. Late requests will not be entertained for safety and compliance reasons.
+        </p>
+
+        <h2 class="text-xl font-bold text-text-primary mt-8 mb-4">3. Refund Process</h2>
+        <p class="text-text-secondary leading-relaxed mb-4">Once your return request is approved and the returned item is received at our facility:</p>
+        <ol class="list-decimal pl-6 text-text-secondary mb-6 space-y-2">
+            <li>Our quality assurance team will inspect the product.</li>
+            <li>If the claim is found to be valid, a replacement will be dispatched, or a full refund will be initiated.</li>
+            <li>Refunds will be processed to the original method of payment within 5-7 business days.</li>
+        </ol>
+
+        <h2 class="text-xl font-bold text-text-primary mt-8 mb-4">4. Order Cancellations</h2>
+        <p class="text-text-secondary leading-relaxed mb-6">
+            Orders can be cancelled before they are dispatched from our warehouse. Once dispatched, cancellations are not permitted. If you need to cancel an order, please contact our support team immediately.
+        </p>
+
+        <h2 class="text-xl font-bold text-text-primary mt-8 mb-4">5. Contact Us</h2>
+        <p class="text-text-secondary leading-relaxed">
+            If you have any questions or wish to initiate a return, please reach out to our support team:
+        </p>
+        <ul class="list-none text-text-secondary mt-2">
+            <li><strong>Email:</strong> {{ site_settings.contact_email|default:'support@lifelinehealthcare.in' }}</li>
+            <li><strong>Phone:</strong> {{ site_settings.contact_phone|default:'+91 9876543210' }}</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

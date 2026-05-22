@@ -14,7 +14,24 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Delivery zone checker
     initializeDeliveryChecker();
+
+    // Reveal lazy-loaded images (paired with custom.css opacity fade-in)
+    initializeLazyImages();
 });
+
+function initializeLazyImages() {
+    document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+        function reveal() {
+            img.classList.add('loaded');
+        }
+        if (img.complete) {
+            reveal();
+        } else {
+            img.addEventListener('load', reveal, { once: true });
+            img.addEventListener('error', reveal, { once: true });
+        }
+    });
+}
 
 function initializeComponents() {
     // Add any component initialization here

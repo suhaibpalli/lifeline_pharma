@@ -1,172 +1,120 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Shopping Cart - {{ site_name }}{% endblock %}
+{% block title %}Your Cart - {{ site_name }}{% endblock %}
 
 {% block content %}
-<div class="bg-white min-h-screen">
-    <div class="mx-auto px-6 lg:px-10 py-8">
-        <h1 class="text-text-primary text-3xl font-bold mb-8">Shopping Cart</h1>
-        
-        {% if cart_items %}
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Cart Items -->
-                <div class="lg:col-span-2">
-                    <div class="bg-white border border-border-light rounded-lg overflow-hidden">
-                        {% for item in cart_items %}
-                            <div class="cart-item border-b border-border-light last:border-b-0 p-6" data-item-id="{{ item.id }}">
-                                <div class="flex items-center gap-4">
-                                    <!-- Product Image -->
-                                    <div class="flex-shrink-0">
-                                        {% if item.product.primary_image %}
-                                            <img src="data:image/jpeg;base64,{{ item.product.primary_image.image_data }}" 
-                                                 alt="{{ item.product.name }}" 
-                                                 class="w-20 h-20 object-cover rounded-lg">
-                                        {% else %}
-                                            <div class="w-20 h-20 bg-background-subtle rounded-lg flex items-center justify-center">
-                                                <i class="fas fa-pills text-text-secondary text-xl"></i>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                    
-                                    <!-- Product Details -->
-                                    <div class="flex-1">
-                                        <h3 class="text-text-primary font-semibold text-lg mb-1">
-                                            <a href="{{ item.product.get_absolute_url }}" class="hover:text-primary-500 transition-colors">
-                                                {{ item.product.name }}
-                                            </a>
-                                        </h3>
-                                        <p class="text-text-secondary text-sm mb-1">{{ item.product.manufacturer.name }}</p>
-                                        {% if item.product.pack_size %}
-                                            <p class="text-text-secondary text-xs">{{ item.product.pack_size }}</p>
-                                        {% endif %}
-                                        
-                                        <!-- Stock Status -->
-                                        {% if not item.product.is_in_stock %}
-                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 mt-2">
-                                                Out of Stock
-                                            </span>
-                                        {% elif item.product.is_low_stock %}
-                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mt-2">
-                                                Low Stock
-                                            </span>
-                                        {% endif %}
-                                    </div>
-                                    
-                                    <!-- Quantity Controls -->
-                                    <div class="flex items-center gap-2">
-                                        <button class="quantity-btn w-8 h-8 bg-background-subtle text-text-secondary rounded-lg hover:bg-border-light transition-colors flex items-center justify-center"
-                                                data-action="decrease" data-item-id="{{ item.id }}">
-                                            <i class="fas fa-minus text-xs"></i>
-                                        </button>
-                                        <input type="number" 
-                                               class="quantity-input w-16 text-center border border-border-light rounded-lg py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                                               value="{{ item.quantity }}" 
-                                               min="1" 
-                                               max="{{ item.product.stock_quantity|default:99 }}"
-                                               data-item-id="{{ item.id }}">
-                                        <button class="quantity-btn w-8 h-8 bg-background-subtle text-text-secondary rounded-lg hover:bg-border-light transition-colors flex items-center justify-center"
-                                                data-action="increase" data-item-id="{{ item.id }}">
-                                            <i class="fas fa-plus text-xs"></i>
-                                        </button>
-                                    </div>
-                                    
-                                    <!-- Price -->
-                                    <div class="text-right">
-                                        <p class="text-lg font-bold text-primary-600 item-total">₹{{ item.total_price }}</p>
-                                        <p class="text-sm text-text-secondary">₹{{ item.price }} each</p>
-                                    </div>
-                                    
-                                    <!-- Remove Button -->
-                                    <button class="remove-item text-text-secondary hover:text-red-600 p-2 transition-colors"
-                                            data-item-id="{{ item.id }}"
-                                            title="Remove item">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    
-                    <!-- Cart Actions -->
-                    <div class="mt-6 flex justify-between items-center">
-                        <a href="{% url 'products:catalog' %}" class="text-primary-600 hover:text-primary-700 font-medium flex items-center transition-colors">
-                            <i class="fas fa-arrow-left mr-2"></i>Continue Shopping
-                        </a>
-                        <a href="{% url 'cart:clear_cart' %}" class="text-red-600 hover:text-red-700 font-medium flex items-center transition-colors">
-                            <i class="fas fa-trash mr-2"></i>Clear Cart
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Cart Summary -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white border border-border-light rounded-lg p-6 sticky top-8">
-                        <h2 class="text-text-primary text-xl font-semibold mb-4">Order Summary</h2>
-                        
-                        <div class="space-y-3">
-                            <div class="flex justify-between">
-                                <span class="text-text-secondary">Subtotal (<span id="cart-count">{{ cart.total_items }}</span> items)</span>
-                                <span class="font-semibold text-text-primary" id="cart-subtotal">₹{{ cart.subtotal }}</span>
-                            </div>
-                            
-                            <div class="flex justify-between text-sm">
-                                <span class="text-text-secondary">Delivery Charges</span>
-                                <span class="text-text-secondary">Calculated at checkout</span>
-                            </div>
-                            
-                            <hr class="border-border-light">
-                            
-                            <div class="flex justify-between text-lg font-bold">
-                                <span class="text-text-primary">Total</span>
-                                <span class="text-primary-600" id="cart-total">₹{{ cart.total_price }}</span>
-                            </div>
-                        </div>
-                        
-                        <a href="{% url 'orders:checkout' %}" 
-                           class="w-full bg-primary-600 text-white py-3 rounded-lg hover:bg-primary-700 mt-6 font-semibold text-center block transition-colors">
-                            <i class="fas fa-credit-card mr-2"></i>Proceed to Checkout
-                        </a>
-                        
-                        <div class="mt-4 text-center">
-                            <p class="text-sm text-text-secondary flex items-center justify-center">
-                                <i class="fas fa-shield-alt mr-2 text-green-600"></i>
-                                Secure and encrypted checkout
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% else %}
-            <!-- Empty Cart -->
-            <div class="text-center py-16">
-                <div class="w-24 h-24 bg-background-subtle rounded-full flex items-center justify-center mx-auto mb-6">
-                    <i class="fas fa-shopping-cart text-4xl text-text-secondary"></i>
-                </div>
-                <h2 class="text-text-primary text-2xl font-semibold mb-4">Your cart is empty</h2>
-                <p class="text-text-secondary mb-8 max-w-md mx-auto">
-                    Looks like you haven't added anything to your cart yet. Start shopping to find great deals!
-                </p>
-                <a href="{% url 'products:catalog' %}" 
-                   class="bg-primary-600 text-white px-8 py-3 rounded-lg hover:bg-primary-700 inline-flex items-center transition-colors font-medium">
-                    <i class="fas fa-pills mr-2"></i>Start Shopping
-                </a>
-            </div>
-        {% endif %}
-    </div>
+<div class="cart-page bg-slate-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-8">
+            Your Cart {% if cart_items %}<span class="text-slate-500 font-normal text-lg">({{ cart.total_items }} item{{ cart.total_items|pluralize }})</span>{% endif %}
+        </h1>
 
-    <!-- Loading Overlay -->
-    <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
-        <div class="bg-white rounded-lg p-6">
-            <div class="flex items-center gap-3">
-                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
-                <span class="text-text-primary">Updating cart...</span>
+        {% if cart_items %}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Cart items -->
+            <div class="lg:col-span-2 space-y-4">
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm divide-y divide-slate-100">
+                    {% for item in cart_items %}
+                    <div class="cart-item p-4 sm:p-5" data-item-id="{{ item.id }}">
+                        <div class="flex gap-4">
+                            <a href="{{ item.product.get_absolute_url }}" class="flex-shrink-0">
+                                {% if item.product.primary_image %}
+                                <img src="{{ item.product.primary_image.image.url }}" alt="{{ item.product.name }}"
+                                     class="w-20 h-20 sm:w-24 sm:h-24 object-contain bg-slate-50 rounded-lg border border-slate-100 p-1">
+                                {% else %}
+                                <div class="w-20 h-20 sm:w-24 sm:h-24 bg-slate-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-pills text-slate-400"></i>
+                                </div>
+                                {% endif %}
+                            </a>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="font-semibold text-slate-900 text-sm sm:text-base leading-snug">
+                                    <a href="{{ item.product.get_absolute_url }}" class="hover:text-primary-600">{{ item.product.name }}</a>
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-0.5">{{ item.product.manufacturer.name }}</p>
+                                {% if item.product.pack_size %}
+                                <p class="text-xs text-slate-400">{{ item.product.pack_size }}</p>
+                                {% endif %}
+                                {% if not item.product.is_in_stock %}
+                                <span class="inline-block mt-2 text-[11px] font-medium text-red-600">Out of Stock</span>
+                                {% endif %}
+                            </div>
+                            <div class="flex flex-col items-end justify-between gap-2">
+                                <button type="button" class="remove-item text-slate-400 hover:text-red-600 p-1 transition-colors" data-item-id="{{ item.id }}" title="Remove">
+                                    <i class="fas fa-trash text-sm"></i>
+                                </button>
+                                <p class="text-base font-bold text-primary-600 item-total">₹{{ item.total_price }}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mt-4 pl-24 sm:pl-28">
+                            <div class="inline-flex items-center border border-slate-200 rounded-lg overflow-hidden">
+                                <button type="button" class="quantity-btn px-2.5 py-1.5 hover:bg-slate-50 text-slate-600" data-action="decrease" data-item-id="{{ item.id }}">
+                                    <i class="fas fa-minus text-xs"></i>
+                                </button>
+                                <input type="number" class="quantity-input w-12 text-center border-x border-slate-200 py-1.5 text-sm focus:outline-none"
+                                       value="{{ item.quantity }}" min="1" max="{{ item.product.stock_quantity|default:99 }}" data-item-id="{{ item.id }}">
+                                <button type="button" class="quantity-btn px-2.5 py-1.5 hover:bg-slate-50 text-slate-600" data-action="increase" data-item-id="{{ item.id }}">
+                                    <i class="fas fa-plus text-xs"></i>
+                                </button>
+                            </div>
+                            <p class="text-xs text-slate-500">₹{{ item.price }} each</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="flex flex-wrap justify-between gap-3 text-sm">
+                    <a href="{% url 'products:catalog' %}" class="inline-flex items-center gap-2 font-medium text-primary-600 hover:text-primary-700">
+                        <i class="fas fa-arrow-left"></i> Continue Shopping
+                    </a>
+                    <a href="{% url 'cart:clear_cart' %}" class="inline-flex items-center gap-2 font-medium text-red-600 hover:text-red-700">
+                        <i class="fas fa-trash"></i> Clear Cart
+                    </a>
+                </div>
+            </div>
+
+            <!-- Order summary -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm lg:sticky lg:top-24">
+                    <h2 class="text-lg font-bold text-slate-900 mb-5">Order Summary</h2>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-slate-600">Subtotal (<span id="cart-count">{{ cart.total_items }}</span> items)</span>
+                            <span class="font-semibold text-slate-900" id="cart-subtotal">₹{{ cart.subtotal }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-600">Delivery</span>
+                            <span class="text-slate-500 text-xs">At checkout</span>
+                        </div>
+                        <hr class="border-slate-100">
+                        <div class="flex justify-between text-base font-bold pt-1">
+                            <span class="text-slate-900">Total</span>
+                            <span class="text-primary-600" id="cart-total">₹{{ cart.total_price }}</span>
+                        </div>
+                        <p class="text-[10px] text-slate-400 text-right">Inclusive of all taxes</p>
+                    </div>
+                    <a href="{% url 'orders:checkout' %}"
+                       class="mt-6 w-full flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3.5 rounded-lg transition-colors">
+                        Proceed to Checkout <i class="fas fa-arrow-right text-sm"></i>
+                    </a>
+                    <p class="mt-4 text-xs text-slate-500 text-center flex items-center justify-center gap-1.5">
+                        <i class="fas fa-shield-alt text-emerald-600"></i> Secure checkout
+                    </p>
+                </div>
             </div>
         </div>
+        {% else %}
+        <div class="text-center py-20 bg-white rounded-xl border border-slate-200 max-w-lg mx-auto">
+            <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-shopping-cart text-3xl text-slate-400"></i>
+            </div>
+            <h2 class="text-xl font-bold text-slate-900 mb-2">Your cart is empty</h2>
+            <p class="text-sm text-slate-500 mb-8 px-6">Add medicines and health products to get started.</p>
+            <a href="{% url 'products:catalog' %}" class="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+                Browse Products
+            </a>
+        </div>
+        {% endif %}
     </div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'js/cart.js' %}"></script>
 {% endblock %}

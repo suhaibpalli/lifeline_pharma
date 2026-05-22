@@ -18,6 +18,7 @@ class ProductSearchForm(forms.Form):
     )
     category = forms.ModelChoiceField(
         queryset=Category.objects.filter(is_active=True, parent=None),
+        to_field_name="slug",
         required=False,
         empty_label="All Categories",
         widget=forms.Select(attrs={
@@ -26,6 +27,7 @@ class ProductSearchForm(forms.Form):
     )
     manufacturer = forms.ModelChoiceField(
         queryset=Manufacturer.objects.filter(is_active=True),
+        to_field_name="slug",
         required=False,
         empty_label="All Manufacturers",
         widget=forms.Select(attrs={

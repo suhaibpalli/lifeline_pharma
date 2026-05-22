@@ -1,0 +1,16 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block object-tools-items %}
+{% if show_resend_button and original and not original.user.is_verified %}
+<li>
+    <form method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" name="_resend_verification" class="historylink" style="background:none;border:none;padding:0;color:#417690;cursor:pointer;">
+            <i class="fas fa-envelope"></i> Resend Verification Email
+        </button>
+    </form>
+</li>
+{% endif %}
+{{ block.super }}
+{% endblock %}

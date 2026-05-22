@@ -22,80 +22,206 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-s#98eej-m150l=6^b(3riwhk#l#s8uevf=__n&wbex8yda_%*c'
+SECRET_KEY = config("SECRET_KEY")
+
+# Razorpay
+RAZORPAY_KEY_ID = config("RAZORPAY_KEY_ID", default="")
+RAZORPAY_KEY_SECRET = config("RAZORPAY_KEY_SECRET", default="")
+RAZORPAY_WEBHOOK_SECRET = config("RAZORPAY_WEBHOOK_SECRET", default="")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = config(
+    "ALLOWED_HOSTS", default="", cast=lambda v: [s.strip() for s in v.split(",")]
+)
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
+    "jazzmin",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.sitemaps",
+    "django.contrib.staticfiles",
     # Third Party Apps
-    'widget_tweaks',
-
+    "widget_tweaks",
+    "storages",
     # My Apps
-    'apps.core',
-    'apps.accounts',
-    'apps.products',
-    'apps.cart',
-    'apps.orders',
+    "apps.core",
+    "apps.accounts",
+    "apps.products",
+    "apps.cart",
+    "apps.orders",
     # 'apps.payments',
     # 'apps.dashboard',
     # 'apps.admin_panel',
 ]
 
+JAZZMIN_SETTINGS = {
+    "site_title": "Lifeline Admin",
+    "site_header": "Lifeline Healthcare",
+    "site_brand": "Lifeline Admin",
+    "site_logo": "images/logo.png",
+    # "login_logo": "images/logo.png",
+    "site_logo_classes": "img-circle elevation-2",
+    "welcome_sign": "Welcome to Lifeline Healthcare Admin",
+    "copyright": "Lifeline Healthcare",
+    "search_model": [
+        "accounts.CustomUser",
+        "products.Product",
+        "orders.Order",
+        "orders.Coupon",
+        "orders.RazorpayWebhookEvent",
+    ],
+    "topmenu_links": [
+        {"name": "Dashboard", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Storefront", "url": "/", "new_window": True},
+        {"model": "orders.Order"},
+        {"model": "products.Product"},
+        {"app": "orders"},
+    ],
+    "usermenu_links": [
+        {"name": "View Site", "url": "/", "new_window": True},
+    ],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+    "order_with_respect_to": [
+        "orders",
+        "products",
+        "accounts",
+        "core",
+        "cart",
+    ],
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "accounts.CustomUser": "fas fa-user",
+        "accounts.Address": "fas fa-map-marker-alt",
+        "products.Category": "fas fa-layer-group",
+        "products.Manufacturer": "fas fa-industry",
+        "products.Product": "fas fa-capsules",
+        "products.ProductImage": "fas fa-image",
+        "orders.Order": "fas fa-shopping-bag",
+        "orders.OrderItem": "fas fa-box-open",
+        "orders.OrderRefund": "fas fa-undo-alt",
+        "orders.Coupon": "fas fa-tags",
+        "orders.CouponUsage": "fas fa-ticket-alt",
+        "orders.RazorpayWebhookEvent": "fas fa-plug",
+        "core.SiteConfiguration": "fas fa-cog",
+        "core.CarouselImage": "fas fa-images",
+        "core.ContactInquiry": "fas fa-envelope",
+        "cart.Cart": "fas fa-shopping-cart",
+        "cart.Wishlist": "fas fa-heart",
+    },
+    "custom_links": {
+        "orders": [
+            {
+                "name": "Open Storefront",
+                "url": "/",
+                "icon": "fas fa-external-link-alt",
+                "permissions": ["orders.view_order"],
+            }
+        ]
+    },
+    # "show_ui_builder": True,
+    "changeform_format": "horizontal_tabs",
+    "related_modal_active": True,
+    "custom_css": "css/custom.css",
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+    "dark_mode_theme": None,
+    "navbar": "navbar-white navbar-light",
+    "no_navbar_border": False,
+    "accent": "accent-info",
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-info",
+    "brand_text_colour": "navbar-white",
+    "sidebar": "sidebar-dark-info",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme_colour": "navbar-info",
+    "button_classes": {
+        "primary": "btn-info",
+        "secondary": "btn-outline-secondary",
+        "info": "btn-outline-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success",
+    },
+}
+
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'pharma_ecommerce.urls'
+ROOT_URLCONF = "pharma_ecommerce.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'apps.core.context_processors.site_settings',
-                'apps.core.context_processors.navigation_context',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "apps.core.context_processors.site_settings",
+                "apps.core.context_processors.navigation_context",
+                "apps.cart.context_processors.cart_counts",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'pharma_ecommerce.wsgi.application'
+WSGI_APPLICATION = "pharma_ecommerce.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+_db_engine = config("DB_ENGINE", default="django.db.backends.sqlite3")
+
+if _db_engine == "django.db.backends.sqlite3":
+    DATABASES = {
+        "default": {
+            "ENGINE": _db_engine,
+            "NAME": BASE_DIR / config("DB_NAME", default="db.sqlite3"),
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": _db_engine,
+            "NAME": config("DB_NAME"),
+            "USER": config("DB_USER"),
+            "PASSWORD": config("DB_PASSWORD"),
+            "HOST": config("DB_HOST", default="localhost"),
+            "PORT": config("DB_PORT", default="5432"),
+        }
+    }
 
 
 # Password validation
@@ -103,50 +229,128 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
 
 # Internationalization
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Asia/Kolkata'
+LANGUAGE_CODE = "en-us"
+TIME_ZONE = "Asia/Kolkata"
 USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# Media files - MinIO/S3 Storage
+USE_MINIO = config("USE_MINIO", default=str(not DEBUG).lower(), cast=bool)
+
+if USE_MINIO:
+    # MinIO/S3 Storage Configuration
+    MINIO_BUCKET_NAME = config("MINIO_BUCKET_NAME", default="lifeline-media")
+    # Backend URL (for Django to connect to MinIO)
+    MINIO_ENDPOINT_URL = config("MINIO_ENDPOINT_URL", default="http://localhost:9000")
+    # Public URL (for browser to access media files)
+    MINIO_PUBLIC_URL = config("MINIO_PUBLIC_URL", default="http://localhost:9000")
+    MINIO_ACCESS_KEY = config("MINIO_ACCESS_KEY")
+    MINIO_SECRET_KEY = config("MINIO_SECRET_KEY")
+    MINIO_REGION_NAME = config("MINIO_REGION_NAME", default="us-east-1")
+    MINIO_SECURE = config("MINIO_SECURE", default=False, cast=bool)
+
+    # AWS S3 Storage Backend for Django
+    AWS_ACCESS_KEY_ID = MINIO_ACCESS_KEY
+    AWS_SECRET_ACCESS_KEY = MINIO_SECRET_KEY
+    AWS_STORAGE_BUCKET_NAME = MINIO_BUCKET_NAME
+    AWS_S3_ACCESS_KEY_ID = MINIO_ACCESS_KEY
+    AWS_S3_SECRET_ACCESS_KEY = MINIO_SECRET_KEY
+    AWS_S3_STORAGE_BUCKET_NAME = MINIO_BUCKET_NAME
+    AWS_S3_ENDPOINT_URL = MINIO_ENDPOINT_URL
+    AWS_S3_REGION_NAME = MINIO_REGION_NAME
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = None
+    AWS_S3_CUSTOM_DOMAIN = config("AWS_S3_CUSTOM_DOMAIN", default=None)
+
+    # Use S3 storage - explicitly import to ensure it's used
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    
+    # In local development (DEBUG=True), serve static files locally.
+    # In production (DEBUG=False), serve static files from S3/MinIO.
+    if DEBUG:
+        STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+        STORAGES = {
+            "default": {
+                "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            },
+            "staticfiles": {
+                "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+            },
+        }
+    else:
+        STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
+        STORAGES = {
+            "default": {
+                "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            },
+            "staticfiles": {
+                "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+            },
+        }
+
+    # Media URL for templates - handle custom domain with or without bucket
+    if AWS_S3_CUSTOM_DOMAIN:
+        # Check if domain already includes bucket path
+        if "/" in AWS_S3_CUSTOM_DOMAIN:
+            MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+        else:
+            MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{MINIO_BUCKET_NAME}/"
+    else:
+        protocol = "https" if MINIO_SECURE else "http"
+        MEDIA_URL = (
+            f"{protocol}://{MINIO_PUBLIC_URL.split('://')[-1]}/{MINIO_BUCKET_NAME}/"
+        )
+
+    MEDIA_ROOT = None  # Disable local storage
+else:
+    # Local development storage
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Custom User Model (we'll create this later)
-AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = "accounts.CustomUser"
 
 # Login/Logout URLs
-LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/dashboard/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/dashboard/"
+LOGOUT_REDIRECT_URL = "/"
 
 # Site URL (for email verification links)
-SITE_URL = 'http://127.0.0.1:8000'
+SITE_URL = config("SITE_URL", default="http://127.0.0.1:8000")
 
 # Session Configuration
 SESSION_COOKIE_AGE = 86400  # 24 hours
@@ -154,45 +358,81 @@ SESSION_SAVE_EVERY_REQUEST = True
 
 # Message Framework
 from django.contrib.messages import constants as messages
+
 MESSAGE_TAGS = {
-    messages.DEBUG: 'debug',
-    messages.INFO: 'info',
-    messages.SUCCESS: 'success',
-    messages.WARNING: 'warning',
-    messages.ERROR: 'error',
+    messages.DEBUG: "debug",
+    messages.INFO: "info",
+    messages.SUCCESS: "success",
+    messages.WARNING: "warning",
+    messages.ERROR: "error",
 }
 
-# Email Configuration (for development)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Email Configuration
+EMAIL_BACKEND = config(
+    "EMAIL_BACKEND", default="apps.core.email_backend.ConfigurableSMTPEmailBackend"
+)
+EMAIL_HOST = config("EMAIL_HOST", default="")
+EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
+EMAIL_USE_SSL = config("EMAIL_USE_SSL", default=False, cast=bool)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER)
+EMAIL_VALIDATE_CERTS = config("EMAIL_VALIDATE_CERTS", default=True, cast=bool)
 
 # Logging Configuration
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
         },
     },
-    'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs' / 'django.log',
-            'formatter': 'verbose',
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "logs" / "django.log",
+            "formatter": "verbose",
         },
-        'console': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
         },
     },
-    'root': {
-        'handlers': ['console', 'file'],
-        'level': 'INFO',
+    "root": {
+        "handlers": ["console", "file"],
+        "level": "INFO",
     },
 }
 
 # Create logs directory
-os.makedirs(BASE_DIR / 'logs', exist_ok=True)
+os.makedirs(BASE_DIR / "logs", exist_ok=True)
+
+# Security Settings for Production
+if not DEBUG:
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT", default=True, cast=bool)
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    X_FRAME_OPTIONS = "DENY"
+    # Set this to your production domain(s)
+    CSRF_TRUSTED_ORIGINS = config(
+        "CSRF_TRUSTED_ORIGINS",
+        default="",
+        cast=lambda v: [s.strip() for s in v.split(",") if s],
+    )
+else:
+    # Development security settings
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

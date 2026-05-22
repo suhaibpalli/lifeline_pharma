@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block title %}Delivery Areas - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-16">
+    <div class="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-lg shadow border border-border-light prose prose-blue max-w-none">
+        <h1 class="text-3xl font-bold text-text-primary mb-8 border-b pb-4">Our Serviceable Delivery Areas</h1>
+        
+        <p class="text-text-secondary leading-relaxed mb-8">
+            At Lifeline Healthcare, we offer reliable doorstep delivery of genuine medicines, healthcare supplements, and personal care products across a wide network. Below you can check if delivery is available for your pincode and find details about our distribution regions.
+        </p>
+
+        <!-- Pincode Checker Card -->
+        <div class="bg-primary-50 rounded-xl p-6 md:p-8 border border-primary-200 mb-10">
+            <h2 class="text-xl font-bold text-primary-800 mt-0 mb-3"><i class="fas fa-shipping-fast mr-2"></i>Check Delivery Availability</h2>
+            <p class="text-primary-700 text-sm mb-6">Enter your 6-digit postal pincode below to check if we deliver to your area and see estimated delivery times.</p>
+            
+            <div class="flex flex-col sm:flex-row gap-3 max-w-md">
+                <input type="text" id="pincode-checker-input" placeholder="Enter 6-digit Pincode (e.g. 600092)" maxlength="6" class="flex-1 px-4 py-3 border border-primary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm">
+                <button id="pincode-checker-btn" class="bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-sm flex items-center justify-center gap-2">
+                    Check Now <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            
+            <div id="pincode-checker-result" class="mt-6 hidden">
+                <!-- Result will be dynamically injected here by JS -->
+            </div>
+        </div>
+
+        <h2 class="text-xl font-bold text-text-primary mt-8 mb-4">1. Primary Distribution Areas (Chennai Region)</h2>
+        <p class="text-text-secondary leading-relaxed mb-4">
+            We offer express delivery and comprehensive coverage across major residential and commercial hubs in Chennai, including:
+        </p>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-text-secondary mb-8">
+            <div class="bg-background-subtle p-3 rounded-lg flex items-center gap-2"><i class="fas fa-map-marker-alt text-primary-600"></i> Virugambakkam (600092)</div>
+            <div class="bg-background-subtle p-3 rounded-lg flex items-center gap-2"><i class="fas fa-map-marker-alt text-primary-600"></i> Chinmaya Nagar (600092)</div>
+            <div class="bg-background-subtle p-3 rounded-lg flex items-center gap-2"><i class="fas fa-map-marker-alt text-primary-600"></i> Anna Nagar (600040)</div>
+            <div class="bg-background-subtle p-3 rounded-lg flex items-center gap-2"><i class="fas fa-map-marker-alt text-primary-600"></i> T. Nagar (600017)</div>
+            <div class="bg-background-subtle p-3 rounded-lg flex items-center gap-2"><i class="fas fa-map-marker-alt text-primary-600"></i> Vadapalani (600026)</div>
+            <div class="bg-background-subtle p-3 rounded-lg flex items-center gap-2"><i class="fas fa-map-marker-alt text-primary-600"></i> Kodambakkam (600024)</div>
+            <div class="bg-background-subtle p-3 rounded-lg flex items-center gap-2"><i class="fas fa-map-marker-alt text-primary-600"></i> KK Nagar (600078)</div>
+            <div class="bg-background-subtle p-3 rounded-lg flex items-center gap-2"><i class="fas fa-map-marker-alt text-primary-600"></i> Koyambedu (600107)</div>
+            <div class="bg-background-subtle p-3 rounded-lg flex items-center gap-2"><i class="fas fa-map-marker-alt text-primary-600"></i> And more...</div>
+        </div>
+
+        <h2 class="text-xl font-bold text-text-primary mt-8 mb-4">2. B2B & Wholesale Stockist Network</h2>
+        <p class="text-text-secondary leading-relaxed mb-6">
+            For pharmacies, clinics, and retail partners, our distribution network spans all major states and cities. Wholesale delivery is optimized via designated supply lanes to guarantee cold chain integrity and timely restocks. Please submit a <a href="{% url 'core:retailer_enquiry' %}" class="text-primary-600 hover:underline">Retailer Enquiry</a> for specific territory onboarding.
+        </p>
+
+        <h2 class="text-xl font-bold text-text-primary mt-8 mb-4">3. Delivery Timelines & Charges</h2>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full divide-y divide-border border rounded-lg text-sm text-text-secondary">
+                <thead class="bg-background-subtle">
+                    <tr>
+                        <th class="px-6 py-3 text-left font-semibold text-text-primary">Order Destination</th>
+                        <th class="px-6 py-3 text-left font-semibold text-text-primary">Est. Timeframe</th>
+                        <th class="px-6 py-3 text-left font-semibold text-text-primary">Standard Shipping Fee</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-border">
+                    <tr>
+                        <td class="px-6 py-4 font-medium text-text-primary">Local Chennai (Serviceable Pincodes)</td>
+                        <td class="px-6 py-4">Same Day / 24 Hours</td>
+                        <td class="px-6 py-4">Free (above ₹499) / ₹40 otherwise</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 font-medium text-text-primary">Rest of Tamil Nadu</td>
+                        <td class="px-6 py-4">2 - 3 Business Days</td>
+                        <td class="px-6 py-4">₹60</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 font-medium text-text-primary">Other Major Cities (India)</td>
+                        <td class="px-6 py-4">3 - 5 Business Days</td>
+                        <td class="px-6 py-4">₹99</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2 class="text-xl font-bold text-text-primary mt-8 mb-4">4. Cold Chain & Special Handling</h2>
+        <p class="text-text-secondary leading-relaxed mb-6">
+            Medicines requiring strict temperature control (like insulin, vaccines, or specific injections) are packed using validated insulated shippers with gel ice packs. These are currently limited to local Chennai deliveries to ensure absolute product efficacy and patient safety.
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('pincode-checker-input');
+    const btn = document.getElementById('pincode-checker-btn');
+    const resultDiv = document.getElementById('pincode-checker-result');
+    
+    if (btn && input && resultDiv) {
+        btn.addEventListener('click', function() {
+            const pincode = input.value.trim();
+            if (!/^\d{6}$/.test(pincode)) {
+                resultDiv.innerHTML = `
+                    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
+                        <i class="fas fa-exclamation-circle text-lg"></i>
+                        <span>Please enter a valid 6-digit numeric pincode.</span>
+                    </div>
+                `;
+                resultDiv.classList.remove('hidden');
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-circle-notch animate-spin"></i> Checking...`;
+            
+            fetch(`/check-delivery/?pincode=${pincode}`)
+                .then(response => response.json())
+                .then(data => {
+                    btn.disabled = false;
+                    btn.innerHTML = `Check Now <i class="fas fa-arrow-right"></i>`;
+                    
+                    if (data.serviceable) {
+                        resultDiv.innerHTML = `
+                            <div class="bg-green-50 border border-green-200 text-green-800 p-5 rounded-lg text-sm">
+                                <div class="flex items-center gap-3 font-semibold mb-2 text-green-900">
+                                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                                    <span>Great News! We deliver to your area (${pincode}).</span>
+                                </div>
+                                <ul class="list-disc pl-5 mt-2 space-y-1 text-green-700">
+                                    <li><strong>Estimated Delivery:</strong> Within ${data.estimated_days} days.</li>
+                                    <li><strong>Delivery Charge:</strong> ₹${data.delivery_charge} (Free on orders above ₹499).</li>
+                                    <li><strong>Zone:</strong> ${data.zone_name}.</li>
+                                </ul>
+                            </div>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `
+                            <div class="bg-orange-50 border border-orange-200 text-orange-800 p-5 rounded-lg text-sm">
+                                <div class="flex items-center gap-3 font-semibold mb-2 text-orange-900">
+                                    <i class="fas fa-exclamation-triangle text-orange-600 text-xl"></i>
+                                    <span>Service Unavailable.</span>
+                                </div>
+                                <p class="m-0 text-orange-700">${data.message || 'Sorry, we do not deliver to this pincode yet.'}</p>
+                                <p class="mt-2 text-xs text-orange-600 m-0">Need wholesale distribution in your region? Feel free to contact our support or drop a retailer enquiry.</p>
+                            </div>
+                        `;
+                    }
+                    resultDiv.classList.remove('hidden');
+                })
+                .catch(error => {
+                    btn.disabled = false;
+                    btn.innerHTML = `Check Now <i class="fas fa-arrow-right"></i>`;
+                    resultDiv.innerHTML = `
+                        <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
+                            <i class="fas fa-exclamation-circle text-lg"></i>
+                            <span>Unable to check delivery availability at this moment. Please try again later.</span>
+                        </div>
+                    `;
+                    resultDiv.classList.remove('hidden');
+                });
+        });
+        
+        // Allow enter key press
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                btn.click();
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

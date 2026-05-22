@@ -1,83 +1,89 @@
-<footer class="bg-white border-t border-border-light">
-    <div class="mx-auto px-6 lg:px-10">
-        <div class="py-12">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-                <!-- Company Info -->
-                <div class="md:col-span-1">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-8 h-8 text-primary-500">
-                            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z"
-                                    fill="currentColor"
-                                ></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-text-primary text-lg font-bold">{{ site_name }}</h3>
-                    </div>
-                    <p class="text-text-secondary text-sm mb-4">{{ site_tagline }}</p>
-                    <div class="flex gap-4">
-                        <a href="#" class="text-text-secondary hover:text-primary-500 transition-colors">
-                            <i class="fab fa-facebook-f text-lg"></i>
-                        </a>
-                        <a href="#" class="text-text-secondary hover:text-primary-500 transition-colors">
-                            <i class="fab fa-twitter text-lg"></i>
-                        </a>
-                        <a href="#" class="text-text-secondary hover:text-primary-500 transition-colors">
-                            <i class="fab fa-instagram text-lg"></i>
-                        </a>
-                        <a href="#" class="text-text-secondary hover:text-primary-500 transition-colors">
-                            <i class="fab fa-linkedin-in text-lg"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Quick Links -->
-                <div>
-                    <h4 class="text-text-primary font-semibold mb-4">Quick Links</h4>
-                    <ul class="space-y-2">
-                        <li><a href="{% url 'core:about' %}" class="text-text-secondary hover:text-primary-500 transition-colors text-sm">About Us</a></li>
-                        <li><a href="{% url 'core:contact' %}" class="text-text-secondary hover:text-primary-500 transition-colors text-sm">Contact</a></li>
-                        <li><a href="#" class="text-text-secondary hover:text-primary-500 transition-colors text-sm">Track Order</a></li>
-                        <li><a href="#" class="text-text-secondary hover:text-primary-500 transition-colors text-sm">Return Policy</a></li>
-                    </ul>
-                </div>
-                
-                <!-- Categories -->
-                <div>
-                    <h4 class="text-text-primary font-semibold mb-4">Categories</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-text-secondary hover:text-primary-500 transition-colors text-sm">Medicines</a></li>
-                        <li><a href="#" class="text-text-secondary hover:text-primary-500 transition-colors text-sm">Health Care</a></li>
-                        <li><a href="#" class="text-text-secondary hover:text-primary-500 transition-colors text-sm">Personal Care</a></li>
-                        <li><a href="#" class="text-text-secondary hover:text-primary-500 transition-colors text-sm">Wellness</a></li>
-                    </ul>
-                </div>
-                
-                <!-- Contact Info -->
-                <div>
-                    <h4 class="text-text-primary font-semibold mb-4">Contact Info</h4>
-                    <div class="space-y-2">
-                        <p class="text-text-secondary text-sm flex items-start">
-                            <i class="fas fa-map-marker-alt mr-2 mt-1 text-xs"></i>
-                            123 Pharmacy Street, City, State 123456
-                        </p>
-                        <p class="text-text-secondary text-sm flex items-center">
-                            <i class="fas fa-phone mr-2 text-xs"></i>
-                            {{ contact_phone }}
-                        </p>
-                        <p class="text-text-secondary text-sm flex items-center">
-                            <i class="fas fa-envelope mr-2 text-xs"></i>
-                            {{ contact_email }}
-                        </p>
-                    </div>
-                </div>
+{% load static %}
+<footer class="site-footer text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-14">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12">
+            <!-- Quick Links -->
+            <div>
+                <h4 class="text-sm font-semibold uppercase tracking-wider text-white mb-5">Quick Links</h4>
+                <ul class="space-y-2.5">
+                    <li><a href="{% url 'core:home' %}" class="text-sm text-slate-400 hover:text-white transition-colors">Home</a></li>
+                    <li><a href="{% url 'products:catalog' %}" class="text-sm text-slate-400 hover:text-white transition-colors">Products</a></li>
+                    <li><a href="{% url 'core:about' %}" class="text-sm text-slate-400 hover:text-white transition-colors">About Us</a></li>
+                    <li><a href="{% url 'core:contact' %}" class="text-sm text-slate-400 hover:text-white transition-colors">Contact</a></li>
+                    <li><a href="{% url 'core:faq' %}" class="text-sm text-slate-400 hover:text-white transition-colors">FAQ</a></li>
+                    <li><a href="{% url 'core:delivery_areas' %}" class="text-sm text-slate-400 hover:text-white transition-colors">Delivery Areas</a></li>
+                    <li><a href="{% url 'core:privacy_policy' %}" class="text-sm text-slate-400 hover:text-white transition-colors">Privacy Policy</a></li>
+                    <li><a href="{% url 'core:terms_of_service' %}" class="text-sm text-slate-400 hover:text-white transition-colors">Terms of Service</a></li>
+                </ul>
+            </div>
+
+            <!-- Services -->
+            <div>
+                <h4 class="text-sm font-semibold uppercase tracking-wider text-white mb-5">Our Services</h4>
+                <ul class="space-y-2.5">
+                    <li><a href="{% url 'core:pharmacies' %}" class="text-sm text-slate-400 hover:text-white transition-colors">Pharma Marketing</a></li>
+                    <li><a href="{% url 'core:pharmacies' %}" class="text-sm text-slate-400 hover:text-white transition-colors">Medicine Distribution</a></li>
+                    <li><a href="{% url 'core:retailer_enquiry' %}" class="text-sm text-slate-400 hover:text-white transition-colors">Stockist Network</a></li>
+                    <li><a href="{% url 'core:pharmacies' %}" class="text-sm text-slate-400 hover:text-white transition-colors">Institutional Supply</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div>
+                <h4 class="text-sm font-semibold uppercase tracking-wider text-white mb-5">Contact</h4>
+                <ul class="space-y-4 text-sm text-slate-400">
+                    <li class="flex gap-3">
+                        <i class="fas fa-map-marker-alt text-primary-400 mt-0.5 flex-shrink-0"></i>
+                        <span>No.18/24, Ground Floor, Sri Ayyappa Nagar 2nd Main road, Virugambakkam, Chennai-600092</span>
+                    </li>
+                    <li class="flex gap-3">
+                        <i class="fas fa-envelope text-primary-400 flex-shrink-0"></i>
+                        <a href="mailto:{{ contact_email }}" class="hover:text-white transition-colors">{{ contact_email }}</a>
+                    </li>
+                    <li class="flex gap-3">
+                        <i class="fas fa-phone text-primary-400 flex-shrink-0"></i>
+                        <span>044 - 48633074 · 6381411751 · 9884433074</span>
+                    </li>
+                </ul>
             </div>
         </div>
-        
-        <div class="border-t border-border-light py-6 text-center">
-            <p class="text-text-secondary text-sm">
-                © {% now "Y" %} {{ site_name }}. All rights reserved.
+
+        <!-- Newsletter -->
+        <div class="mt-10 pt-8 border-t border-slate-800">
+            <div class="max-w-xl mx-auto text-center md:text-left md:max-w-none md:flex md:items-center md:justify-between md:gap-8">
+                <div class="mb-4 md:mb-0">
+                    <h5 class="text-base font-semibold text-white">Get Health Tips & Updates</h5>
+                    <p class="text-sm text-slate-400 mt-1">Subscribe for offers and wellness updates.</p>
+                </div>
+                <form method="post" action="{% url 'core:subscribe_newsletter' %}" class="flex flex-col sm:flex-row gap-2 flex-1 max-w-md md:max-w-lg">
+                    {% csrf_token %}
+                    <input type="email" name="email" placeholder="Your email address" required
+                           class="flex-1 px-4 py-2.5 text-sm bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500">
+                    <button type="submit" class="px-6 py-2.5 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-lg transition-colors whitespace-nowrap">
+                        Subscribe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-center md:text-left">
+                <p class="text-xs text-slate-500">
+                    © {% now "Y" %} {{ site_name }}. All rights reserved.
+                </p>
+                <p class="text-xs text-slate-500">
+                    GST: 33AABCU9603R1ZM · DL No: TN/ZON/2021/12345
+                </p>
+                <div class="flex items-center justify-center md:justify-end gap-5 text-xs text-slate-400">
+                    <span class="inline-flex items-center gap-1.5"><i class="fas fa-lock text-primary-400"></i> Secure Payments</span>
+                    <span class="inline-flex items-center gap-1.5"><i class="fas fa-certificate text-primary-400"></i> Verified Pharmacy</span>
+                </div>
+            </div>
+            <p class="text-[11px] text-slate-600 text-center mt-4 max-w-3xl mx-auto leading-relaxed">
+                Disclaimer: Lifeline Healthcare is a registered pharmacy. All medicines are dispensed by registered pharmacists.
             </p>
         </div>
     </div>

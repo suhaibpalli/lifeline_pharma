@@ -1,72 +1,100 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{% block meta_description %}{{ site_settings.meta_description|default:'Trusted online pharmacy for all your healthcare needs' }}{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}pharmacy, medicines, healthcare, online pharmacy{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{{ site_settings.meta_description|default:'Lifeline Healthcare is a trusted pharma marketing and distribution network in Chennai. Buy Rx and OTC medicines online, partner as a retailer or doctor.' }}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}pharma marketing company Chennai, online pharmacy, buy medicines online, stockist network, Rx medicines, OTC healthcare, pharmacy distribution, Lifeline Healthcare{% endblock %}">
     
     <title>{% block title %}{{ site_name }}{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
     
     <!-- Modern Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS CDN with plugins -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    
+    <!-- Tailwind CSS (Production Build) -->
+    <link rel="stylesheet" href="{% static 'css/tailwind.min.css' %}">
+
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Custom CSS -->
-    {% load static %}
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     
     {% block extra_css %}{% endblock %}
-    
-    <!-- Tailwind Config -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'lexend': ['Lexend', 'Inter', 'sans-serif'],
-                        'inter': ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            500: '#0c7ff2',
-                            600: '#0968da',
-                            700: '#0858c2',
-                        },
-                        text: {
-                            primary: '#111418',
-                            secondary: '#60758a',
-                        },
-                        background: {
-                            subtle: '#f0f2f5',
-                            card: '#ffffff',
-                        },
-                        border: {
-                            light: '#dbe0e6',
-                        }
-                    },
-                    borderRadius: {
-                        'lg': '0.75rem',
-                    },
-                    spacing: {
-                        '18': '4.5rem',
-                        '88': '22rem',
-                    }
-                }
+    <style>
+        :root {
+            --color-primary: #0c7ff2;
+            --color-primary-hover: #0968da;
+            --color-surface: #ffffff;
+            --color-surface-muted: #f8fafc;
+            --color-content-primary: #0f172a;
+            --color-content-secondary: #64748b;
+            --color-border: #e2e8f0;
+            --color-success: #059669;
+            --color-warning: #d97706;
+            --color-error: #dc2626;
+            --color-info: #0284c7;
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --shadow-soft: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+            --shadow-card: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 10px 40px -10px rgba(0, 0, 0, 0.12);
+            --transition-fast: 150ms ease;
+            --transition-base: 250ms ease;
+            --transition-slow: 400ms ease;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
         }
-    </script>
+        
+        *:focus-visible {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        ::selection {
+            background-color: rgba(12, 127, 242, 0.2);
+            color: #0f172a;
+        }
+        
+        /* Skip to main content link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--color-primary);
+            color: white;
+            padding: 8px 16px;
+            z-index: 100;
+            transition: top 0.3s;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+    </style>
 </head>
-<body class="bg-white font-lexend">
+<body class="bg-surface-muted font-lexend text-content-primary antialiased">
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
     <div class="relative flex min-h-screen flex-col">
         <!-- Header -->
         {% include 'partials/header.html' %}
@@ -77,7 +105,7 @@
         {% endif %}
         
         <!-- Main Content -->
-        <main class="flex-1">
+        <main id="main-content" class="flex-1">
             {% block content %}{% endblock %}
         </main>
         
@@ -87,6 +115,15 @@
 
     <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/{{ site_settings.whatsapp_number|default:'916381411751' }}?text=Hi%20Lifeline%20Healthcare%2C%20I%27d%20like%20to%20place%20an%20order%20for%20medicines" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       class="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg transition transform hover:scale-110"
+       title="Order via WhatsApp">
+        <i class="fab fa-whatsapp text-3xl"></i>
+    </a>
 
     <!-- JavaScript -->
     <script src="{% static 'js/main.js' %}"></script>
@@ -101,19 +138,27 @@
         const container = document.getElementById('toast-container');
         
         const toast = document.createElement('div');
-        toast.className = `toast-notification transform transition-transform duration-300 ease-in-out translate-x-full`;
+        toast.className = `toast-notification transform transition-all duration-300 ease-out translate-x-full opacity-0`;
         
-        const bgColor = type === 'success' ? 'bg-green-500' : 
-                       type === 'error' ? 'bg-red-500' : 
-                       type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500';
+        const colors = {
+            success: 'bg-success',
+            error: 'bg-error',
+            warning: 'bg-warning',
+            info: 'bg-info'
+        };
+        
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-times-circle',
+            warning: 'fa-exclamation-triangle',
+            info: 'fa-info-circle'
+        };
         
         toast.innerHTML = `
-            <div class="${bgColor} text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-3 min-w-80">
-                <i class="fas ${type === 'success' ? 'fa-check-circle' : 
-                              type === 'error' ? 'fa-times-circle' : 
-                              type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'}"></i>
-                <span class="flex-1">${message}</span>
-                <button onclick="this.closest('.toast-notification').remove()" class="text-white hover:text-gray-200">
+            <div class="${colors[type] || colors.info} text-white px-6 py-4 rounded-xl shadow-hover flex items-center gap-3 min-w-80 backdrop-blur-sm">
+                <i class="fas ${icons[type] || icons.info} text-lg"></i>
+                <span class="flex-1 font-medium">${message}</span>
+                <button onclick="this.closest('.toast-notification').remove()" class="text-white/80 hover:text-white transition-colors">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -122,13 +167,13 @@
         container.appendChild(toast);
         
         // Animate in
-        setTimeout(() => {
-            toast.classList.remove('translate-x-full');
-        }, 100);
+        requestAnimationFrame(() => {
+            toast.classList.remove('translate-x-full', 'opacity-0');
+        });
         
         // Auto remove
         setTimeout(() => {
-            toast.classList.add('translate-x-full');
+            toast.classList.add('translate-x-full', 'opacity-0');
             setTimeout(() => {
                 if (toast.parentNode) {
                     toast.parentNode.removeChild(toast);
@@ -145,6 +190,25 @@
             {% endfor %}
         });
     {% endif %}
+    
+    // Intersection Observer for scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const animateOnScroll = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-fade-up');
+                animateOnScroll.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    document.querySelectorAll('.scroll-animate').forEach(el => {
+        animateOnScroll.observe(el);
+    });
     </script>
 </body>
 </html>

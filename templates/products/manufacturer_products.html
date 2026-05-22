@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ manufacturer.name }} Products - Lifeline Healthcare{% endblock %}
+
+{% block content %}
+<div class="bg-surface">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-primary-600 to-primary-700 text-white py-12">
+        <div class="mx-auto px-6 lg:px-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <nav class="text-sm text-white/70 mb-4">
+                    <a href="{% url 'core:home' %}" class="hover:text-white">Home</a>
+                    <span class="mx-2">/</span>
+                    <a href="{% url 'products:catalog' %}" class="hover:text-white">Products</a>
+                    <span class="mx-2">/</span>
+                    <span class="text-white">{{ manufacturer.name }}</span>
+                </nav>
+                <h1 class="text-3xl md:text-4xl font-bold mb-4">{{ manufacturer.name }}</h1>
+                {% if manufacturer.description %}
+                    <p class="text-lg text-white/90">{{ manufacturer.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Manufacturer Products -->
+    <section class="py-12">
+        <div class="mx-auto px-6 lg:px-10">
+            <div class="max-w-7xl mx-auto">
+                <!-- Products Grid -->
+                {% if products %}
+                    <p class="text-content-secondary mb-6">
+                        Showing <span class="font-semibold text-content-primary">{{ products|length }}</span> product{{ products|pluralize }} from {{ manufacturer.name }}
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {% for product in products %}
+                            {% include 'products/partials/product_card.html' with product=product %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if is_paginated %}
+                        <div class="mt-12 flex justify-center">
+                            <nav class="flex items-center gap-2">
+                                {% if page_obj.has_previous %}
+                                    <a href="?page={{ page_obj.previous_page_number }}" 
+                                       class="px-4 py-2 border border-border rounded-lg hover:bg-surface-muted transition-colors">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% for num in paginator.page_range %}
+                                    {% if page_obj.number == num %}
+                                        <span class="px-4 py-2 bg-primary-500 text-white rounded-lg">{{ num }}</span>
+                                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                        <a href="?page={{ num }}" 
+                                           class="px-4 py-2 border border-border rounded-lg hover:bg-surface-muted transition-colors">
+                                            {{ num }}
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if page_obj.has_next %}
+                                    <a href="?page={{ page_obj.next_page_number }}" 
+                                       class="px-4 py-2 border border-border rounded-lg hover:bg-surface-muted transition-colors">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                {% endif %}
+                            </nav>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="text-center py-16">
+                        <div class="w-24 h-24 bg-surface-muted rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-industry text-4xl text-content-tertiary"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-content-primary mb-4">No products from this manufacturer</h2>
+                        <p class="text-content-secondary mb-8">Check back later or explore other manufacturers.</p>
+                        <a href="{% url 'products:catalog' %}" 
+                           class="inline-flex items-center gap-2 bg-primary-500 text-white px-6 py-3 rounded-xl hover:bg-primary-600 transition-colors font-medium">
+                            <i class="fas fa-th-large"></i>
+                            Browse All Products
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
