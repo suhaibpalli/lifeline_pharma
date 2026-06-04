@@ -25,6 +25,8 @@
                     {% if product.primary_image %}
                         <img src="{{ product.primary_image.image.url }}"
                              alt="{{ product.name }}"
+                             loading="eager"
+                             width="800" height="800"
                              class="w-full h-full object-contain p-4 lg:p-6"
                              id="main-image">
                     {% else %}
@@ -39,7 +41,7 @@
                     <button type="button"
                             class="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg border-2 border-transparent hover:border-primary-500 overflow-hidden bg-white focus:border-primary-500 transition-colors"
                             onclick="changeMainImage('{{ image.image.url }}')">
-                        <img src="{{ image.image.url }}" alt="" class="w-full h-full object-cover">
+                        <img src="{{ image.image.url }}" alt="" loading="lazy" width="80" height="80" class="w-full h-full object-cover">
                     </button>
                     {% endfor %}
                 </div>

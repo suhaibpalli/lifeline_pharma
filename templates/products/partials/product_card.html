@@ -5,10 +5,14 @@
         {% if product.primary_image and product.primary_image.image %}
             <img src="{{ product.primary_image.image.url }}"
                  alt="{{ product.name }}"
+                 loading="lazy"
+                 width="400" height="400"
                  class="product-card-image transition-transform duration-500 group-hover:scale-105">
         {% elif product.images.all.0 and product.images.all.0.image %}
             <img src="{{ product.images.all.0.image.url }}"
                  alt="{{ product.name }}"
+                 loading="lazy"
+                 width="400" height="400"
                  class="product-card-image transition-transform duration-500 group-hover:scale-105">
         {% else %}
             <span class="product-card__placeholder">

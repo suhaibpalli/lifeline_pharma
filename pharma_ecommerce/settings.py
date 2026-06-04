@@ -220,6 +220,8 @@ else:
             "PASSWORD": config("DB_PASSWORD"),
             "HOST": config("DB_HOST", default="localhost"),
             "PORT": config("DB_PORT", default="5432"),
+            "CONN_MAX_AGE": 60,
+            "OPTIONS": {"connect_timeout": 5},
         }
     }
 
@@ -281,6 +283,9 @@ if USE_MINIO:
     AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL = None
     AWS_S3_CUSTOM_DOMAIN = config("AWS_S3_CUSTOM_DOMAIN", default=None)
+    AWS_S3_OBJECT_PARAMETERS = {
+        "CacheControl": "public, max-age=31536000, immutable",
+    }
 
     # Use S3 storage - explicitly import to ensure it's used
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
@@ -352,9 +357,30 @@ LOGOUT_REDIRECT_URL = "/"
 # Site URL (for email verification links)
 SITE_URL = config("SITE_URL", default="http://127.0.0.1:8000")
 
+# Redis cache — django-redis wires to the running pharma_redis container
+# In prod: REDIS_URL=redis://redis:6379/1 (docker service name)
+# In dev:  REDIS_URL=redis://127.0.0.1:6379/1 (default)
+REDIS_URL = config("REDIS_URL", default="redis://127.0.0.1:6379/1")
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "SOCKET_CONNECT_TIMEOUT": 5,
+            "SOCKET_TIMEOUT": 5,
+            "IGNORE_EXCEPTIONS": True,  # fall back to None on Redis down, don't 500
+        },
+        "KEY_PREFIX": "lifeline",
+        "TIMEOUT": 300,  # 5 min default TTL — complies with data/redis-always-ttl rule
+    }
+}
+
 # Session Configuration
 SESSION_COOKIE_AGE = 86400  # 24 hours
-SESSION_SAVE_EVERY_REQUEST = True
+SESSION_SAVE_EVERY_REQUEST = False  # was True — eliminated per-request DB write
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"  # Redis-first, DB fallback
 
 # Message Framework
 from django.contrib.messages import constants as messages

@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
 from django.urls import reverse
+from apps.core.images import convert_to_webp
 from apps.core.models import TimeStampedModel, get_default_storage
 
 User = get_user_model()
@@ -58,6 +59,10 @@ class Category(TimeStampedModel):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
+        result = convert_to_webp(self.image)
+        if result:
+            new_name, content = result
+            self.image.save(new_name, content, save=False)
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -108,6 +113,10 @@ class Manufacturer(TimeStampedModel):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
+        result = convert_to_webp(self.logo)
+        if result:
+            new_name, content = result
+            self.logo.save(new_name, content, save=False)
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -263,6 +272,11 @@ class ProductImage(TimeStampedModel):
 
         if not self.product.images.exists():
             self.is_primary = True
+
+        result = convert_to_webp(self.image)
+        if result:
+            new_name, content = result
+            self.image.save(new_name, content, save=False)
 
         super().save(*args, **kwargs)
 

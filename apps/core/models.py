@@ -141,6 +141,16 @@ class CarouselImage(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        from apps.core.images import convert_to_webp
+        result = convert_to_webp(self.image)
+        if result:
+            new_name, content = result
+            self.image.save(new_name, content, save=False)
+        super().save(*args, **kwargs)
+
+
 class RetailerEnquiry(TimeStampedModel):
     ORDER_VALUE_CHOICES = [
         ('<50k', 'Less than 50,000'),
