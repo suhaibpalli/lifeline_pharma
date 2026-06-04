@@ -82,18 +82,18 @@ class Command(BaseCommand):
                     new_name, content = result
                     new_size = len(content)
 
-                    # Delete old object from storage before saving new key
+                    # Save directly via storage to bypass upload_to (which would
+                    # double-prefix the path if called through field.save()).
+                    old_name = field.name
+                    storage = field.storage
+                    saved_name = storage.save(new_name, content)
+                    # Update DB and in-memory field to the saved path
+                    type(obj).objects.filter(pk=obj.pk).update(**{field_name: saved_name})
+                    field.name = saved_name
+                    # Delete old object; failure is non-fatal (orphan is harmless)
                     try:
-                        old_storage = field.storage
-                        old_name = field.name
-                        field.save(new_name, content, save=False)
-                        setattr(obj, field_name, field)
-                        type(obj).objects.filter(pk=obj.pk).update(
-                            **{field_name: field.name}
-                        )
-                        old_storage.delete(old_name)
+                        storage.delete(old_name)
                     except Exception:
-                        # If old-key delete fails, ignore — orphan is harmless
                         pass
 
                     reduction = ""
