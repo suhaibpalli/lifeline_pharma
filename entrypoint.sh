@@ -23,7 +23,7 @@ python manage.py collectstatic --noinput --clear
 echo ">>> Starting Gunicorn..."
 exec gunicorn pharma_ecommerce.wsgi:application \
     --bind 0.0.0.0:8000 \
-    --workers "${GUNICORN_WORKERS:-3}" \
+    --workers "${GUNICORN_WORKERS:-2}" \
     --worker-class sync \
     --worker-connections 1000 \
     --timeout "${GUNICORN_TIMEOUT:-120}" \
