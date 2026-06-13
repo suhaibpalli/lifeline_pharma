@@ -34,7 +34,7 @@
                 <ul class="space-y-4 text-sm text-slate-400">
                     <li class="flex gap-3">
                         <i class="fas fa-map-marker-alt text-primary-400 mt-0.5 flex-shrink-0"></i>
-                        <span>No.18/24, Ground Floor, Sri Ayyappa Nagar 2nd Main road, Virugambakkam, Chennai-600092</span>
+                        <span>{{ contact_address }}</span>
                     </li>
                     <li class="flex gap-3">
                         <i class="fas fa-envelope text-primary-400 flex-shrink-0"></i>
@@ -42,7 +42,7 @@
                     </li>
                     <li class="flex gap-3">
                         <i class="fas fa-phone text-primary-400 flex-shrink-0"></i>
-                        <span>044 - 48633074 · 6381411751 · 9884433074</span>
+                        <a href="tel:{{ contact_phone_tel }}" class="hover:text-white transition-colors">{{ contact_phone }}</a>
                     </li>
                 </ul>
             </div>

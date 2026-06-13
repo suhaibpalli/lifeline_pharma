@@ -100,11 +100,7 @@
                                     </div>
                                     <div>
                                         <h3 class="text-text-primary font-semibold mb-1">Address</h3>
-                                        <p class="text-text-secondary text-sm leading-relaxed">
-                                            No.18/24, Ground Floor,<br>
-                                            Sri Ayyappa Nagar 2nd Main road,<br>
-                                            Virugambakkam, Chennai-600092
-                                        </p>
+                                        <p class="text-text-secondary text-sm leading-relaxed">{{ contact_address }}</p>
                                     </div>
                                 </div>
                                 
@@ -115,8 +111,7 @@
                                     <div>
                                         <h3 class="text-text-primary font-semibold mb-1">Phone</h3>
                                         <p class="text-text-secondary text-sm leading-relaxed">
-                                            044 - 48633074<br>
-                                            6381411751 / 9884433074
+                                            <a href="tel:{{ contact_phone_tel }}" class="hover:text-primary-600">{{ contact_phone }}</a>
                                         </p>
                                         <p class="text-text-secondary text-xs mt-1">Mon-Sat: 9AM-8PM</p>
                                     </div>
@@ -128,7 +123,9 @@
                                     </div>
                                     <div>
                                         <h3 class="text-text-primary font-semibold mb-1">Email</h3>
-                                        <p class="text-text-secondary text-sm">support@lifelinehealthcare.in</p>
+                                        <p class="text-text-secondary text-sm">
+                                            <a href="mailto:{{ contact_email }}" class="hover:text-primary-600">{{ contact_email }}</a>
+                                        </p>
                                         <p class="text-text-secondary text-xs mt-1">We'll respond within 24 hours</p>
                                     </div>
                                 </div>
@@ -144,7 +141,7 @@
                             <p class="text-red-700 text-sm mb-3">
                                 For urgent medical assistance, please contact:
                             </p>
-                            <p class="text-red-800 font-semibold mb-2">Customer Care: 044 - 48633074 / 6381411751 / 9884433074</p>
+                            <p class="text-red-800 font-semibold mb-2">Customer Care: {{ contact_phone }}</p>
                             <p class="text-red-600 text-xs">Available during business hours</p>
                         </div>
 
@@ -159,7 +156,7 @@
                                     View FAQ
                                 </a>
                                 <span class="text-border-light">|</span>
-                                <a href="tel:04448633074" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                                <a href="tel:{{ contact_phone_tel }}" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
                                     Call Support
                                 </a>
                             </div>
