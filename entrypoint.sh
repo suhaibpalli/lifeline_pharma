@@ -30,6 +30,7 @@ exec gunicorn pharma_ecommerce.wsgi:application \
     --keep-alive 5 \
     --max-requests 1000 \
     --max-requests-jitter 100 \
+    --preload \
     --access-logfile - \
     --error-logfile - \
     --capture-output \
