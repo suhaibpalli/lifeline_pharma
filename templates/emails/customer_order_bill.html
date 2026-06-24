@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body { font-family: Arial, sans-serif; color: #0f172a; margin: 0; padding: 0; background: #f8fafc; }
+  .container { max-width: 600px; margin: 30px auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+  .header { background: #0c7ff2; padding: 24px 32px; }
+  .header h1 { color: #ffffff; margin: 0; font-size: 22px; }
+  .body { padding: 32px; }
+  .section-title { font-size: 14px; font-weight: bold; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin: 24px 0 12px; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 8px 12px; background: #f1f5f9; font-size: 13px; color: #64748b; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+  .summary-row td { border: none; padding: 4px 12px; }
+  .total-row td { font-weight: bold; font-size: 16px; color: #0c7ff2; border-top: 2px solid #0c7ff2; padding-top: 8px; }
+  .footer { background: #f8fafc; padding: 16px 32px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Lifeline Healthcare — Order Bill</h1>
+  </div>
+  <div class="body">
+    <p>Dear <strong>{{ customer_name }}</strong>,</p>
+    <p>Thank you for your order! Here is your bill summary.</p>
+
+    <div class="section-title">Order Details</div>
+    <table>
+      <tr><td><strong>Order Number</strong></td><td>#{{ order.order_number }}</td></tr>
+      <tr><td><strong>Order Date</strong></td><td>{{ order.created_at|date:"d M Y, h:i A" }}</td></tr>
+      <tr><td><strong>Payment Method</strong></td><td>{{ order.get_payment_method_display }}</td></tr>
+      <tr><td><strong>Status</strong></td><td>{{ order.get_status_display }}</td></tr>
+    </table>
+
+    <div class="section-title">Items Ordered</div>
+    <table>
+      <tr>
+        <th>Product</th>
+        <th>Qty</th>
+        <th>Price</th>
+      </tr>
+      {% for item in order_items %}
+      <tr>
+        <td>{{ item.product.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>₹{{ item.total_price }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <div class="section-title">Price Summary</div>
+    <table>
+      <tr class="summary-row"><td>Subtotal</td><td>₹{{ order.subtotal }}</td></tr>
+      <tr class="summary-row"><td>Delivery</td><td>₹{{ order.delivery_charge }}</td></tr>
+      <tr class="summary-row"><td>Discount</td><td>- ₹{{ order.discount_amount }}</td></tr>
+      <tr class="total-row"><td>Total</td><td>₹{{ order.total_amount }}</td></tr>
+    </table>
+
+    <div class="section-title">Delivery Address</div>
+    <p>
+      {{ order.delivery_address.name }}<br>
+      {{ order.delivery_address.address_line_1 }}{% if order.delivery_address.address_line_2 %}, {{ order.delivery_address.address_line_2 }}{% endif %}<br>
+      {{ order.delivery_address.city }}, {{ order.delivery_address.state }} - {{ order.delivery_address.pincode }}
+    </p>
+
+    <p>For any queries, contact us at <a href="mailto:{{ support_email }}">{{ support_email }}</a>.</p>
+  </div>
+  <div class="footer">
+    Thank you for choosing Lifeline Healthcare &mdash; Your trusted online pharmacy.
+  </div>
+</div>
+</body>
+</html>

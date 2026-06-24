@@ -134,6 +134,9 @@ def finalize_online_order(
             notes="Payment confirmed via Razorpay",
             changed_by=order.user,
         )
+        # Send bill to customer
+        from apps.orders.emails import send_customer_order_bill_email
+        send_customer_order_bill_email(order)
     elif payment_id and order.payment_id != payment_id:
         order.payment_id = payment_id
         order.save(update_fields=["payment_id", "updated_at"])

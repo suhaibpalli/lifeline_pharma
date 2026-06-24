@@ -1,0 +1,33 @@
+Dear {{ customer_name }},
+
+Thank you for your order with Lifeline Healthcare!
+
+ORDER BILL
+==========
+Order Number : {{ order.order_number }}
+Order Date   : {{ order.created_at|date:"d M Y, h:i A" }}
+Payment      : {{ order.get_payment_method_display }}
+Status       : {{ order.get_status_display }}
+
+ITEMS ORDERED
+-------------
+{% for item in order_items %}
+{{ item.product.name }} x{{ item.quantity }} — ₹{{ item.total_price }}
+{% endfor %}
+
+PRICE SUMMARY
+-------------
+Subtotal     : ₹{{ order.subtotal }}
+Delivery     : ₹{{ order.delivery_charge }}
+Discount     : ₹{{ order.discount_amount }}
+Total        : ₹{{ order.total_amount }}
+
+DELIVERY ADDRESS
+----------------
+{{ order.delivery_address.name }}
+{{ order.delivery_address.address_line_1 }}{% if order.delivery_address.address_line_2 %}, {{ order.delivery_address.address_line_2 }}{% endif %}
+{{ order.delivery_address.city }}, {{ order.delivery_address.state }} - {{ order.delivery_address.pincode }}
+
+For any queries, contact us at {{ support_email }}.
+
+Thank you for choosing Lifeline Healthcare!

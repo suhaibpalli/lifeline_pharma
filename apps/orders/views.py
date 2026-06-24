@@ -146,6 +146,9 @@ def checkout_view(request):
                             request.session.pop("applied_coupon", None)
 
                         cart.clear()
+                        # Send bill to customer
+                        from apps.orders.emails import send_customer_order_bill_email
+                        send_customer_order_bill_email(order)
                         messages.success(
                             request, f"Order {order.order_number} placed successfully!"
                         )
