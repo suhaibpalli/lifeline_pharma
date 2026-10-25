@@ -30,6 +30,7 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_title"] = "Welcome to Pharma Store"
+        context["catalog_product_count"] = 0
 
         # Get active carousel images
         carousel_images = CarouselImage.objects.filter(is_active=True)
@@ -38,6 +39,7 @@ class HomeView(TemplateView):
         try:
             from apps.products.models import Product
 
+            context["catalog_product_count"] = Product.objects.filter(is_active=True).count()
             featured = list(
                 Product.objects.filter(is_active=True, is_featured=True)
                 .select_related("manufacturer", "category")

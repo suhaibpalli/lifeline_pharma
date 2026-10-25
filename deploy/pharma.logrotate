@@ -8,4 +8,8 @@
     delaycompress
     su suhaib suhaib
     create 0640 suhaib suhaib
+    sharedscripts
+    postrotate
+        /usr/bin/systemctl kill --kill-whom=main --signal=USR1 pharma.service >/dev/null 2>&1 || true
+    endscript
 }

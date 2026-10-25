@@ -74,16 +74,19 @@
                 <p class="text-xs text-slate-500">
                     © {% now "Y" %} {{ site_name }}. All rights reserved.
                 </p>
+                {% if site_settings.gst_number or site_settings.drug_license_number %}
                 <p class="text-xs text-slate-500">
-                    GST: 33AABCU9603R1ZM · DL No: TN/ZON/2021/12345
+                    {% if site_settings.gst_number %}GST: {{ site_settings.gst_number }}{% endif %}
+                    {% if site_settings.drug_license_number %} DL No: {{ site_settings.drug_license_number }}{% endif %}
                 </p>
+                {% endif %}
                 <div class="flex items-center justify-center md:justify-end gap-5 text-xs text-slate-400">
                     <span class="inline-flex items-center gap-1.5"><i class="fas fa-lock text-primary-400"></i> Secure Payments</span>
-                    <span class="inline-flex items-center gap-1.5"><i class="fas fa-certificate text-primary-400"></i> Verified Pharmacy</span>
+                    <span class="inline-flex items-center gap-1.5"><i class="fas fa-phone text-primary-400"></i> Customer Support</span>
                 </div>
             </div>
             <p class="text-[11px] text-slate-600 text-center mt-4 max-w-3xl mx-auto leading-relaxed">
-                Disclaimer: Lifeline Healthcare is a registered pharmacy. All medicines are dispensed by registered pharmacists.
+                Contact Lifeline Healthcare for product, prescription, and delivery enquiries.
             </p>
         </div>
     </div>
