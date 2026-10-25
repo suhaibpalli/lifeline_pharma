@@ -127,6 +127,22 @@ class CoreViewsTestCase(TestCase):
 
 
 class ReadinessTestCase(TestCase):
+    def test_invalid_admin_csrf_shows_safe_retry_page(self):
+        from django.test import Client
+
+        client = Client(enforce_csrf_checks=True)
+        response = client.post('/admin/login/', {'username': 'someone@example.com', 'password': 'invalid'})
+        self.assertEqual(response.status_code, 403)
+        self.assertContains(response, 'Your sign-in page has expired', status_code=403)
+        self.assertNotContains(response, 'DEBUG', status_code=403)
+        self.assertNotContains(response, 'CSRF cookie', status_code=403)
+        self.assertEqual(response['Cache-Control'], 'no-store')
+
+    def test_admin_login_includes_csrf_refresh_and_no_cache(self):
+        response = self.client.get('/admin/login/')
+        self.assertContains(response, 'js/csrf-form.js')
+        self.assertIn('no-store', response['Cache-Control'])
+
     def test_ready_dependencies_return_no_store_without_session(self):
         response = self.client.get('/health/')
         self.assertEqual(response.status_code, 200)

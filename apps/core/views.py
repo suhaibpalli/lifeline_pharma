@@ -231,6 +231,14 @@ def health_check(request):
 
 
 # Error handlers
+def csrf_failure(request, reason=""):
+    """Keep security failures useful to visitors without exposing diagnostics."""
+    retry_url = "/admin/login/?next=/admin/" if request.path.startswith("/admin/") else "/accounts/login/"
+    response = render(request, "errors/403.html", {"retry_url": retry_url}, status=403)
+    response["Cache-Control"] = "no-store"
+    return response
+
+
 def custom_404(request, exception):
     """Custom 404 error page"""
     return render(request, "errors/404.html", status=404)

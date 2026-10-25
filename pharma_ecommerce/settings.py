@@ -461,3 +461,4 @@ else:
     CSRF_COOKIE_SECURE = False
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+CSRF_FAILURE_VIEW = "apps.core.views.csrf_failure"

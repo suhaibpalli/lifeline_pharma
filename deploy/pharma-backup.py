@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import sqlite3
 import subprocess
 import tarfile
 import tempfile
@@ -59,6 +60,13 @@ def main():
                                  'sha256': hashlib.sha256(target.read_bytes()).hexdigest()})
         (folder / 'objects.json').write_text(json.dumps(manifest, indent=2))
         (folder / 'bucket-policy.json').write_text(client.get_bucket_policy(Bucket=bucket)['Policy'])
+        # SQLite's backup API produces a consistent monitoring/configuration
+        # snapshot even while Uptime Kuma is running.
+        kuma = Path('/opt/pharma/uptime-kuma-data/kuma.db')
+        if kuma.exists():
+            with sqlite3.connect(f'file:{kuma}?mode=ro', uri=True) as source:
+                with sqlite3.connect(folder / 'kuma.db') as target:
+                    source.backup(target)
         with tarfile.open(temporary, 'w:gz') as output:
             output.add(folder, arcname='snapshot')
         with tarfile.open(temporary, 'r:gz') as source:

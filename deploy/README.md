@@ -67,6 +67,10 @@ are denied and signed private reads work before reopening.
 Update Uptime Kuma's backend target to the public `/health/` endpoint; the old
 `pharma_django` target is invalid. Do this through its UI or edit its SQLite
 database only while the container is stopped, after taking a backup.
+`deploy/configure-status.py` publishes the existing page through Kuma's native
+custom-domain mapping for `status.lifelinehealthcare.in`. Run it while the
+container is stopped, then start Kuma. `/dashboard` remains authenticated;
+the root domain shows public service health. Preserve historical heartbeats.
 
 ## Daily backups and recovery
 
