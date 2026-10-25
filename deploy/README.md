@@ -41,6 +41,15 @@ Keep `/home/suhaib/pharma/staticfiles` and `/opt/pharma/staticfiles` aligned
 Install the unit files into `/etc/systemd/system/`, `pharma-health` into
 `/usr/local/sbin/`, and `pharma-backup.py` into `/usr/local/libexec/`, owned by
 root. Install the logrotate rule as `/etc/logrotate.d/pharma`.
+Use `install -o root -g root -m 0644` for unit, nginx and logrotate
+configuration files (logrotate rejects group-writable rules), and mode 0750
+for the health and backup executables. For example:
+
+```bash
+sudo install -o root -g root -m 0644 deploy/pharma.logrotate /etc/logrotate.d/pharma
+sudo install -o root -g root -m 0750 deploy/pharma-health /usr/local/sbin/pharma-health
+```
+
 Copy the nginx site/proxy/log-format templates into their corresponding nginx
 directories, run `nginx -t`, then reload. Do not return HTTP 200 for maintenance.
 Enable `pharma-dependencies.service`, `pharma.service`, `pharma-health.timer`
