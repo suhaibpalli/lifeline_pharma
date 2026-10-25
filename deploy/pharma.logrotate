@@ -1,0 +1,11 @@
+/home/suhaib/pharma/logs/*.log {
+    daily
+    rotate 90
+    maxsize 20M
+    missingok
+    notifempty
+    compress
+    delaycompress
+    su suhaib suhaib
+    create 0640 suhaib suhaib
+}

@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily Lifeline database and uploaded-file backup
+
+[Timer]
+OnCalendar=*-*-* 02:30:00 Asia/Kolkata
+Persistent=true
+Unit=pharma-backup.service
+
+[Install]
+WantedBy=timers.target

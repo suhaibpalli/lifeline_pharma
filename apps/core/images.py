@@ -11,16 +11,22 @@ Usage in model save():
     super().save(*args, **kwargs)
 """
 import logging
+import warnings
 from io import BytesIO
 from pathlib import Path
 
 from django.core.files.base import ContentFile
+from django.core.exceptions import ValidationError
 from PIL import Image, ImageOps
 
 logger = logging.getLogger(__name__)
 
 MAX_DIMENSION = 1600  # px — longest side capped here
 WEBP_QUALITY = 82     # 82 is near-lossless for photos, ~10× smaller than raw PNG
+MAX_IMAGE_PIXELS = 12_000_000
+# Bound decoded memory before EXIF transforms/resize load a whole input image.
+Image.MAX_IMAGE_PIXELS = MAX_IMAGE_PIXELS
+warnings.filterwarnings("error", category=Image.DecompressionBombWarning)
 
 
 def convert_to_webp(image_field):
@@ -43,6 +49,8 @@ def convert_to_webp(image_field):
     try:
         image_field.seek(0)
         img = Image.open(image_field)
+        if img.width * img.height > MAX_IMAGE_PIXELS:
+            raise ValidationError("Please upload an image no larger than 12 megapixels.")
         img = ImageOps.exif_transpose(img)  # respect EXIF orientation
 
         if img.mode not in ("RGB", "RGBA"):
@@ -59,6 +67,10 @@ def convert_to_webp(image_field):
 
         new_name = str(Path(name).with_suffix(".webp"))
         return new_name, ContentFile(buf.getvalue())
+    except (Image.DecompressionBombError, Image.DecompressionBombWarning) as exc:
+        raise ValidationError("Please upload an image no larger than 12 megapixels.") from exc
+    except ValidationError:
+        raise
     except Exception:
         logger.exception("convert_to_webp failed for %s — keeping original", name)
         return None

@@ -38,7 +38,7 @@ class Category(TimeStampedModel):
     )
     image = models.ImageField(
         upload_to=category_upload_to,
-        storage=get_default_storage(),
+        storage=get_default_storage,
         null=True,
         blank=True,
     )
@@ -94,7 +94,7 @@ class Manufacturer(TimeStampedModel):
     description = models.TextField(blank=True)
     logo = models.ImageField(
         upload_to=manufacturer_upload_to,
-        storage=get_default_storage(),
+        storage=get_default_storage,
         null=True,
         blank=True,
     )
@@ -223,8 +223,11 @@ class Product(TimeStampedModel):
 
     @property
     def primary_image(self):
-        """Get primary product image"""
-        return self.images.filter(is_primary=True).first()
+        """Return a usable primary image, reusing prefetched gallery rows."""
+        images = getattr(self, "_prefetched_objects_cache", {}).get("images")
+        if images is not None:
+            return next((image for image in images if image.is_primary and image.image), None)
+        return self.images.filter(is_primary=True).exclude(image="").exclude(image__isnull=True).first()
 
     @property
     def average_rating(self):
@@ -248,7 +251,7 @@ class ProductImage(TimeStampedModel):
     )
     image = models.ImageField(
         upload_to=product_upload_to,
-        storage=get_default_storage(),
+        storage=get_default_storage,
         null=True,
         blank=True,
     )

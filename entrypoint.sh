@@ -21,17 +21,4 @@ echo ">>> Collecting static files..."
 python manage.py collectstatic --noinput --clear
 
 echo ">>> Starting Gunicorn..."
-exec gunicorn pharma_ecommerce.wsgi:application \
-    --bind 0.0.0.0:8000 \
-    --workers "${GUNICORN_WORKERS:-4}" \
-    --worker-class sync \
-    --worker-connections 1000 \
-    --timeout "${GUNICORN_TIMEOUT:-120}" \
-    --keep-alive 5 \
-    --max-requests 1000 \
-    --max-requests-jitter 100 \
-    --preload \
-    --access-logfile - \
-    --error-logfile - \
-    --capture-output \
-    --log-level "${GUNICORN_LOG_LEVEL:-info}"
+exec gunicorn --config gunicorn.conf.py pharma_ecommerce.wsgi:application

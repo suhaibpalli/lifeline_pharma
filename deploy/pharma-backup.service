@@ -1,0 +1,10 @@
+[Unit]
+Description=Back up Lifeline database and MinIO objects
+After=postgresql.service pharma-dependencies.service
+Requires=pharma-dependencies.service
+
+[Service]
+Type=oneshot
+UMask=0077
+ExecStart=/home/suhaib/pharma/venv/bin/python /usr/local/libexec/pharma-backup.py
+TimeoutStartSec=15min

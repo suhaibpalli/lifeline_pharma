@@ -283,6 +283,11 @@ if USE_MINIO:
     AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL = None
     AWS_S3_CUSTOM_DOMAIN = config("AWS_S3_CUSTOM_DOMAIN", default=None)
+    MINIO_PUBLIC_ENDPOINT_URL = config(
+        "MINIO_PUBLIC_ENDPOINT_URL",
+        default=(f"https://{AWS_S3_CUSTOM_DOMAIN.split('/')[0]}"
+                 if AWS_S3_CUSTOM_DOMAIN else MINIO_PUBLIC_URL),
+    )
     AWS_S3_OBJECT_PARAMETERS = {
         "CacheControl": "public, max-age=31536000, immutable",
     }
@@ -393,6 +398,11 @@ EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER)
 EMAIL_VALIDATE_CERTS = config("EMAIL_VALIDATE_CERTS", default=True, cast=bool)
+EMAIL_TIMEOUT = config("EMAIL_TIMEOUT", default=10, cast=int)
+
+# Health probes use bounded dependency timeouts and never disclose credentials.
+HEALTHCHECK_STORAGE = config("HEALTHCHECK_STORAGE", default=USE_MINIO, cast=bool)
+STORAGE_HEALTH_TIMEOUT = config("STORAGE_HEALTH_TIMEOUT", default=3, cast=int)
 
 # Logging Configuration
 LOGGING = {
@@ -407,7 +417,7 @@ LOGGING = {
     "handlers": {
         "file": {
             "level": "INFO",
-            "class": "logging.FileHandler",
+            "class": "logging.handlers.WatchedFileHandler",
             "filename": BASE_DIR / "logs" / "django.log",
             "formatter": "verbose",
         },
@@ -433,7 +443,7 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000  # 1 year
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-    SECURE_SSL_REDIRECT = False
+    SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT", default=True, cast=bool)
     SECURE_REDIRECT_EXEMPT = [r'^health/$']
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True

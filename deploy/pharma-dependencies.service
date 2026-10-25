@@ -1,0 +1,15 @@
+[Unit]
+Description=Lifeline Redis, MinIO and monitoring containers
+After=docker.service network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/docker start pharma_redis pharma_minio pharma_uptime
+ExecStop=/usr/bin/docker stop --timeout 30 pharma_uptime pharma_minio pharma_redis
+TimeoutStartSec=90
+TimeoutStopSec=100
+
+[Install]
+WantedBy=multi-user.target

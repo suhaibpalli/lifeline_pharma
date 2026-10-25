@@ -6,6 +6,7 @@ from django.core.validators import MinValueValidator
 from django.urls import reverse
 from django.utils import timezone
 from apps.core.models import TimeStampedModel, get_default_storage
+from apps.core.storage import get_private_storage
 from apps.products.models import Product
 from apps.accounts.models import Address
 
@@ -84,7 +85,7 @@ class Order(TimeStampedModel):
     notes = models.TextField(blank=True)
     prescription_required = models.BooleanField(default=False)
     prescription_image = models.ImageField(
-        upload_to="prescriptions/", storage=get_default_storage(), null=True, blank=True
+        upload_to="prescriptions/", storage=get_private_storage, null=True, blank=True
     )
 
     # Tracking

@@ -38,11 +38,13 @@
                 {% if product.images.count > 1 %}
                 <div class="flex gap-2 overflow-x-auto pb-1">
                     {% for image in product.images.all %}
+                    {% if image.image %}
                     <button type="button"
                             class="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg border-2 border-transparent hover:border-primary-500 overflow-hidden bg-white focus:border-primary-500 transition-colors"
                             onclick="changeMainImage('{{ image.image.url }}')">
                         <img src="{{ image.image.url }}" alt="" loading="lazy" width="80" height="80" class="w-full h-full object-cover">
                     </button>
+                    {% endif %}
                     {% endfor %}
                 </div>
                 {% endif %}

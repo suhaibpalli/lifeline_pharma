@@ -1,0 +1,8 @@
+[Unit]
+Description=Verify Lifeline backend HTTP readiness and recover failed workers
+After=pharma.service
+ConditionPathExists=!/run/pharma-maintenance
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/pharma-health

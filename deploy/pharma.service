@@ -1,0 +1,30 @@
+[Unit]
+Description=Lifeline Healthcare Django backend
+After=network-online.target postgresql.service docker.service pharma-dependencies.service
+Wants=network-online.target
+Requires=pharma-dependencies.service
+
+[Service]
+User=suhaib
+Group=suhaib
+WorkingDirectory=/home/suhaib/pharma
+EnvironmentFile=/home/suhaib/pharma/.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/home/suhaib/pharma/venv/bin/gunicorn --config /home/suhaib/pharma/gunicorn.conf.py pharma_ecommerce.wsgi:application
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=5
+TimeoutStopSec=40
+KillMode=mixed
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/suhaib/pharma/logs /home/suhaib/pharma/staticfiles
+MemoryHigh=1G
+MemoryMax=1536M
+LimitNOFILE=8192
+
+[Install]
+WantedBy=multi-user.target

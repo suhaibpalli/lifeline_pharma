@@ -1,0 +1,19 @@
+#!/bin/bash
+set -euo pipefail
+[[ ! -e /run/pharma-maintenance ]] || exit 0
+# Never resurrect a service deliberately stopped by an operator.
+systemctl is-active --quiet pharma.service || exit 0
+for attempt in 1 2 3; do
+  if curl --fail --silent --show-error --max-time 12 \
+      -H 'Host: lifelinehealthcare.in' http://127.0.0.1:8000/health/ >/dev/null; then
+    exit 0
+  fi
+  sleep 2
+done
+logger -t pharma-health 'Readiness failed three times; restarting backend and checking dependencies'
+for container in pharma_redis pharma_minio; do
+  if [[ "$(docker inspect -f '{{.State.Running}}' "$container")" != true ]]; then
+    docker start "$container" >/dev/null
+  fi
+done
+systemctl restart pharma.service

@@ -6,6 +6,8 @@ services:
   # Django + Gunicorn
   # ──────────────────────────────────────
   django:
+    # Host production uses pharma.service. Opt in explicitly for a Docker backend.
+    profiles: ["backend"]
     build:
       context: .
       dockerfile: Dockerfile
@@ -17,6 +19,11 @@ services:
     image: lifeline-pharma-django:latest
     container_name: pharma-django
     env_file: .env
+    environment:
+      GUNICORN_BIND: "0.0.0.0:8000"
+      DB_HOST: "host.docker.internal"
+      MINIO_ENDPOINT_URL: "http://minio:9000"
+      REDIS_URL: "redis://redis:6379/1"
     volumes:
       - /opt/pharma/staticfiles:/app/staticfiles
       - /opt/pharma/logs:/app/logs

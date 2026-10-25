@@ -7,6 +7,8 @@ from apps.core.models import (
 )
 from decimal import Decimal
 import datetime
+from unittest.mock import MagicMock, patch
+from django.test import override_settings
 
 class CoreViewsTestCase(TestCase):
     def setUp(self):
@@ -122,3 +124,96 @@ class CoreViewsTestCase(TestCase):
         sub = ContactInquiry.objects.first()
         self.assertEqual(sub.email, 'newsletter@test.com')
         self.assertEqual(sub.subject, 'Newsletter Subscription')
+
+
+class ReadinessTestCase(TestCase):
+    def test_ready_dependencies_return_no_store_without_session(self):
+        response = self.client.get('/health/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {'status': 'ok', 'db': 'ok', 'cache': 'ok'})
+        self.assertEqual(response['Cache-Control'], 'no-store')
+        self.assertNotIn('sessionid', response.cookies)
+
+    @patch('django.db.connection.cursor', side_effect=RuntimeError('secret-connection-string'))
+    def test_database_failure_is_unavailable_without_disclosing_details(self, cursor):
+        response = self.client.get('/health/')
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.json()['db'], 'unavailable')
+        self.assertNotContains(response, 'secret-connection-string', status_code=503)
+
+    @patch('django.core.cache.cache.get', return_value=None)
+    def test_silently_ignored_cache_failure_is_not_healthy(self, cache_get):
+        response = self.client.get('/health/')
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.json()['cache'], 'unavailable')
+
+    @override_settings(HEALTHCHECK_STORAGE=True, MINIO_ENDPOINT_URL='http://127.0.0.1:9000')
+    @patch('urllib.request.build_opener')
+    def test_storage_failure_degrades_readiness(self, opener):
+        opener.return_value.open.side_effect = OSError('private-storage-credentials')
+        response = self.client.get('/health/')
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.json()['storage'], 'unavailable')
+        self.assertNotContains(response, 'private-storage-credentials', status_code=503)
+
+    @override_settings(HEALTHCHECK_STORAGE=True, MINIO_ENDPOINT_URL='http://127.0.0.1:9000')
+    @patch('urllib.request.build_opener')
+    def test_ready_storage_is_included(self, opener):
+        opener.return_value.open.return_value.__enter__.return_value.status = 200
+        response = self.client.get('/health/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['storage'], 'ok')
+
+    def test_storefront_browsing_does_not_create_guest_carts_or_sessions(self):
+        from apps.cart.models import Cart
+        from django.contrib.sessions.models import Session
+
+        for path in ['/', '/products/', '/about/']:
+            self.assertEqual(self.client.get(path).status_code, 200)
+        self.assertEqual(Cart.objects.count(), 0)
+        self.assertEqual(Session.objects.count(), 0)
+
+
+class UploadSafetyTestCase(TestCase):
+    def test_image_conversion_preserves_valid_upload(self):
+        from io import BytesIO
+        from PIL import Image
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from .images import convert_to_webp
+
+        output = BytesIO()
+        Image.new('RGB', (32, 24), 'white').save(output, format='PNG')
+        result = convert_to_webp(SimpleUploadedFile('test.png', output.getvalue()))
+        self.assertEqual(result[0], 'test.webp')
+        with Image.open(result[1]) as image:
+            self.assertEqual(image.size, (32, 24))
+            self.assertEqual(image.format, 'WEBP')
+
+    @patch('apps.core.images.Image.open')
+    def test_oversized_image_is_rejected_before_transform(self, open_image):
+        from django.core.exceptions import ValidationError
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from .images import convert_to_webp
+
+        open_image.return_value.width = 4000
+        open_image.return_value.height = 4000
+        with self.assertRaises(ValidationError):
+            convert_to_webp(SimpleUploadedFile('oversized.png', b'test'))
+
+    @override_settings(MINIO_PUBLIC_ENDPOINT_URL='https://media.example.test')
+    def test_private_media_urls_are_signed_for_public_host(self):
+        from urllib.parse import urlsplit, parse_qs
+        from .storage import PrivateMediaStorage
+
+        storage = PrivateMediaStorage(
+            bucket_name='private-test-bucket', endpoint_url='http://minio:9000',
+            access_key='test-key', secret_key='test-secret', region_name='us-east-1',
+        )
+        url = urlsplit(storage.url('prescriptions/test.webp'))
+        self.assertEqual(url.netloc, 'media.example.test')
+        self.assertEqual(url.path, '/private-test-bucket/prescriptions/test.webp')
+        query = parse_qs(url.query)
+        self.assertIn('X-Amz-Signature', query)
+        self.assertEqual(query['X-Amz-Expires'], ['300'])
+        self.assertIsNone(storage.custom_domain)
+        self.assertEqual(storage.object_parameters['CacheControl'], 'private, no-store')

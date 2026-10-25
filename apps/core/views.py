@@ -176,7 +176,9 @@ class TermsOfServiceView(TemplateView):
 
 # Health check endpoint
 def health_check(request):
-    """Used by Docker HEALTHCHECK and Uptime Kuma."""
+    """Report readiness without rendering templates or creating sessions."""
+    from urllib.parse import urlsplit
+    from urllib.request import Request
     from django.db import connection
     from django.core.cache import cache
 
@@ -185,23 +187,45 @@ def health_check(request):
 
     # Database
     try:
-        connection.ensure_connection()
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
         checks["db"] = "ok"
-    except Exception as e:
-        checks["db"] = f"error: {e}"
+    except Exception:
+        checks["db"] = "unavailable"
         status = 503
 
     # Cache / Redis
     try:
         cache.set("health_check", "ok", timeout=5)
-        assert cache.get("health_check") == "ok"
+        if cache.get("health_check") != "ok":
+            raise RuntimeError("Cache round trip failed")
         checks["cache"] = "ok"
-    except Exception as e:
-        checks["cache"] = f"error: {e}"
+    except Exception:
+        checks["cache"] = "unavailable"
+        status = 503
 
-    return JsonResponse(
+    if settings.HEALTHCHECK_STORAGE:
+        try:
+            endpoint = urlsplit(settings.MINIO_ENDPOINT_URL)
+            health_url = f"{endpoint.scheme}://{endpoint.netloc}/minio/health/ready"
+            # Bypass proxy environment variables for this local dependency.
+            from urllib.request import ProxyHandler, build_opener
+            with build_opener(ProxyHandler({})).open(
+                Request(health_url), timeout=settings.STORAGE_HEALTH_TIMEOUT
+            ) as response:
+                if response.status != 200:
+                    raise RuntimeError("Storage is not ready")
+            checks["storage"] = "ok"
+        except Exception:
+            checks["storage"] = "unavailable"
+            status = 503
+
+    response = JsonResponse(
         {"status": "ok" if status == 200 else "degraded", **checks}, status=status
     )
+    response["Cache-Control"] = "no-store"
+    return response
 
 
 # Error handlers

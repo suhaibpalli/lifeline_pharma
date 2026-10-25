@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
 from apps.core.models import TimeStampedModel, get_default_storage
+from apps.core.storage import get_private_storage
 from .managers import CustomUserManager
 
 
@@ -90,7 +91,7 @@ class PatientProfile(TimeStampedModel):
     current_medications = models.JSONField(default=list, blank=True)
     profile_image = models.ImageField(
         upload_to=patient_profile_upload_to,
-        storage=get_default_storage(),
+        storage=get_private_storage,
         null=True,
         blank=True,
     )
@@ -118,13 +119,13 @@ class PharmacyProfile(TimeStampedModel):
     pincode = models.CharField(max_length=6)
     license_document = models.FileField(
         upload_to=pharmacy_document_upload_to,
-        storage=get_default_storage(),
+        storage=get_private_storage,
         null=True,
         blank=True,
     )
     gst_certificate = models.FileField(
         upload_to=pharmacy_document_upload_to,
-        storage=get_default_storage(),
+        storage=get_private_storage,
         null=True,
         blank=True,
     )

@@ -120,7 +120,7 @@ class CarouselImage(TimeStampedModel):
     subtitle = models.CharField(max_length=300, blank=True)
     image = models.ImageField(
         upload_to=carousel_upload_to,
-        storage=get_default_storage(),
+        storage=get_default_storage,
         null=True,
         blank=True,
         help_text="Upload carousel image",
