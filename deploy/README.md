@@ -74,6 +74,32 @@ custom-domain mapping for `status.lifelinehealthcare.in`. Run it while the
 container is stopped, then start Kuma. `/dashboard` remains authenticated;
 the root domain shows public service health. Preserve historical heartbeats.
 
+### Uptime Kuma upgrades
+
+The monitoring image is pinned to stable 2.5.7 and its published manifest digest.
+Upgrade only `uptime-kuma`, using `docker compose up -d --no-deps uptime-kuma`;
+the Django/systemd backend and other containers can continue running.
+
+Before a major upgrade, stop Kuma alone and archive its complete
+`/opt/pharma/uptime-kuma-data` directory, record the old image/configuration, verify
+SQLite integrity and the archive checksum, and keep an off-server copy. Rehearse
+the upgrade against a separate copy with networking and monitors disabled. Never
+interrupt the v1-to-v2 aggregation migration. A rollback requires restoring the
+pre-upgrade data directory along with the old image, not running v1 against the
+migrated database. See the official
+[migration guide](https://github.com/louislam/uptime-kuma/wiki/Migration-From-v1-To-v2).
+The default image runs as root: keep its host data directory owned by root with
+mode 0700 and `kuma.db` mode 0600, since the database contains SMTP credentials.
+
+Verify the dashboard login, custom-domain public page, monitors, history and
+notification assignments after upgrading. SMTP custom templates in v2 use Liquid;
+use `[Lifeline] {{status}} - {{name}}` and retain STARTTLS/certificate validation.
+After backing up and stopping Kuma, `python3 deploy/upgrade-status-notifications.py`
+updates the existing Lifeline email channel without changing its recipients or
+credentials; it refuses to edit a running instance's database.
+Test mail to the configured recipients through Kuma after checking the rendered
+subject. Kuma's 512 MiB limit allows headroom for its migration and aggregation.
+
 ## Daily backups and recovery
 
 `pharma-backup.timer` runs at 02:30 IST, with missed runs caught on startup.

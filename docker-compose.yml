@@ -131,7 +131,7 @@ services:
   # Uptime Kuma — uptime monitoring
   # ──────────────────────────────────────
   uptime-kuma:
-    image: louislam/uptime-kuma:1
+    image: louislam/uptime-kuma:2.5.7@sha256:4b95dbe7ac5343b768f8e04e3035ccd59997872b1a35ab9b0f082d2cc279070e
     container_name: pharma_uptime
     volumes:
       - /opt/pharma/uptime-kuma-data:/app/data
@@ -148,9 +148,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 512M
         reservations:
-          memory: 64M
+          memory: 128M
 
 # ──────────────────────────────────────
 # Networks
