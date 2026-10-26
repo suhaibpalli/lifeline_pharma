@@ -4,6 +4,8 @@ import os
 bind = os.getenv("GUNICORN_BIND", "127.0.0.1:8000")
 workers = int(os.getenv("GUNICORN_WORKERS", "2"))
 worker_class = "sync"
+# systemd manages reloads; its read-only home cannot host Gunicorn's default control socket.
+control_socket_disable = True
 timeout = 60
 graceful_timeout = 30
 keepalive = 5

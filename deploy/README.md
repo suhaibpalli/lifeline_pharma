@@ -21,6 +21,8 @@ The `gunicorn.conf.py` default is two synchronous workers with request-count
 recycling. systemd bounds the group at 1.5 GiB; measure memory under actual
 traffic before changing worker counts. Images above 12 megapixels are rejected
 before decoding/EXIF transforms can allocate large buffers.
+The optional Gunicorn control socket is disabled: systemd owns reload/shutdown,
+and the protected home directory must remain read-only.
 
 ## Validation and deployment
 
