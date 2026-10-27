@@ -54,6 +54,13 @@ sudo install -o root -g root -m 0750 deploy/pharma-health /usr/local/sbin/pharma
 
 Copy the nginx site/proxy/log-format templates into their corresponding nginx
 directories, run `nginx -t`, then reload. Do not return HTTP 200 for maintenance.
+Install `deploy/maintenance.html` as `/home/suhaib/pharma/staticfiles/maintenance.html`
+(also available through `/opt/pharma/staticfiles` on this installation). Keep this
+outside the normal application static source tree so it remains available if
+Gunicorn is unavailable. The Nginx fallback maps upstream 502/503/504 failures to
+HTTP 503, sends `Retry-After: 60` and `Cache-Control: no-store`, and disables
+ETag/conditional-file responses. It must not present the retired "Website Disabled"
+message or become a cached substitute for a working application page.
 Enable `pharma-dependencies.service`, `pharma.service`, `pharma-health.timer`
 and `pharma-backup.timer`. Remove the old password-dependent user restart cron.
 Set host `vm.overcommit_memory=1` for Redis persistence, with the application
