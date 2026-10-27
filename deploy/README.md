@@ -81,6 +81,25 @@ custom-domain mapping for `status.lifelinehealthcare.in`. Run it while the
 container is stopped, then start Kuma. `/dashboard` remains authenticated;
 the root domain shows public service health. Preserve historical heartbeats.
 
+### Google Search Console ownership
+
+The exact root URL `/googlea8903f61b797d278.html` is served directly by Nginx
+for Google's HTML-file ownership verification. Keep its filename and contents
+unchanged, and retain it after verification succeeds so ownership is preserved.
+Install the versioned file before reloading the Nginx configuration:
+
+```bash
+sudo install -d -o root -g root -m 0755 /var/www/lifeline-site-verification
+sudo install -o root -g root -m 0644 deploy/site-verification/googlea8903f61b797d278.html /var/www/lifeline-site-verification/googlea8903f61b797d278.html
+```
+
+Confirm an unauthenticated GET to
+`https://lifelinehealthcare.in/googlea8903f61b797d278.html` returns HTTP 200 with
+the exact file body and no redirect, then click **Verify** in the matching
+Google Search Console URL-prefix property. Submit
+`https://lifelinehealthcare.in/sitemap.xml` through Search Console afterward.
+The verification file proves ownership; Google controls crawling and indexing.
+
 ### Uptime Kuma upgrades
 
 The monitoring image is pinned to stable 2.5.7 and its published manifest digest.
